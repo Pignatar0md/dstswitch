@@ -1,3 +1,15 @@
 .fieldLoader{
     width: 150px;
 }
+.Logo{
+    width: 130px; height: 48px;
+}
+.logout{
+    margin-right: 10px;
+    color: #9d9d9d;
+    
+}
+.logout:hover{
+    color: #fff;
+    text-decoration: none;
+}

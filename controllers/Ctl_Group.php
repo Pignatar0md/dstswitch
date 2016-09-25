@@ -50,85 +50,95 @@ if (!$operation) {
     $jsonGet = json_decode($_GET['json'], true);
     $operation = $jsonGet['op'];
 }
-switch ($operation) {
-    case "getAllGroup":
-        $res = $ctlGroup->traer();
-        foreach ($res as $key => $value) {
-            if (is_array($value)) {
-                foreach ($value as $k => $v) {
-                    $cadena = "";
-                    if ($k == "id") {
-                        $cadena .= "<option value='" . $v . "'>";
-                    } else if ($k == "description") {
-                        $cadena .= $v . "</option>";
+if ($operation) {
+    foreach ($_POST as $key => $value) {
+        $_POST[$key] = str_replace("'", "", $value);
+        $_POST[$key] = str_replace('"', '', $value);
+    }
+    switch ($operation) {
+        case "getAllGroup":
+            $res = $ctlGroup->traer();
+            foreach ($res as $key => $value) {
+                if (is_array($value)) {
+                    foreach ($value as $k => $v) {
+                        $cadena = "";
+                        if ($k == "id") {
+                            $cadena .= "<option value='" . $v . "'>";
+                        } else if ($k == "description") {
+                            $cadena .= $v . "</option>";
+                        }
+                        echo $cadena;
                     }
-                    echo $cadena;
                 }
             }
-        }
-        break;
-    case "getGroupList":
-        $res = $ctlGroup->traer();
-        $id = '';
-        foreach ($res as $key => $value) {
-            if (is_array($value)) {
-                foreach ($value as $k => $v) {
-                    $cadena = "";
-                    if ($k == "id") {
-                        $id = $v;
-                    } elseif ($k == "description") {
-                        $cadena .= "<tr><td>" . $v . "</td>";
-                    } else if ($k == "extension_list") {
-                        $v = explode(',', $v);
-                        for ($f = 0; $f < count($v); $f++) {
-                            $subCadena .= '<span class="label label-primary">' . $v[$f] . '</span> ';
-                        }
-                        $cadena .= '<td>' . $subCadena . '</td>';
-                        $subCadena = null;
-                    } elseif ($k == "pin_list") {
-                        $v = explode(',', $v);
-                        for ($f = 0; $f < count($v); $f++) {
-                            $subCadena .= '<span class="label label-warning">'.$v[$f].'</span> ';
-                        }
-                        $cadena .= '<td>' . $subCadena . '</span></td><td style="text-align:center">
+            break;
+        case "getGroupList":
+            $res = $ctlGroup->traer();
+            $id = '';
+            foreach ($res as $key => $value) {
+                if (is_array($value)) {
+                    foreach ($value as $k => $v) {
+                        $cadena = "";
+                        if ($k == "id") {
+                            $id = $v;
+                        } elseif ($k == "description") {
+                            $cadena .= "<tr><td>" . $v . "</td>";
+                        } else if ($k == "extension_list") {
+                            $v = explode(',', $v);
+                            for ($f = 0; $f < count($v); $f++) {
+                                $subCadena .= '<span class="label label-primary">' . $v[$f] . '</span> ';
+                            }
+                            $cadena .= '<td>' . $subCadena . '</td>';
+                            $subCadena = null;
+                        } elseif ($k == "pin_list") {
+                            $v = explode(',', $v);
+                            for ($f = 0; $f < count($v); $f++) {
+                                $subCadena .= '<span class="label label-warning">' . $v[$f] . '</span> ';
+                            }
+                            $cadena .= '<td>' . $subCadena . '</span></td><td style="text-align:center">
                         <a href="index.php?page=EditGroup&id=' . $id . '" placeholder="editar">
                             <span class="glyphicon glyphicon-edit"></span>
                         </a>
-                        <a id="'.$id.'" class="eliminar" placeholder="eliminar">
+                        <a id="' . $id . '" class="eliminar" placeholder="eliminar">
                             <span class="glyphicon glyphicon-remove"></span>
                         </a>
                         </td></tr>';
-                        $subCadena = null;
+                            $subCadena = null;
+                        }
+                        echo $cadena;
                     }
-                    echo $cadena;
                 }
             }
-        }
-        break;
-    case "saveGroup":
-        $arrayDatos[0] = $jsonGet['name'];
-        $arrayDatos[1] = implode(",", $jsonGet['ext']);
-        $arrayDatos[2] = implode(",", $jsonGet['pin']);
-        $res = $ctlGroup->agregar($arrayDatos);
-        return $res;
-        break;
-    case "updateGroup":
-        $arrayDatos[0] = $jsonGet['id'];
-        $arrayDatos[1] = $jsonGet['name'];
-        $arrayDatos[2] = implode(",", $jsonGet['ext']);
-        $arrayDatos[3] = implode(",", $jsonGet['pin']);
-        $res = $ctlGroup->actualizar($arrayDatos);
-        echo $res;
-        break;
-    case 'deleteGroup':
-        $arrayDatos[0] = $_POST['id'];
-        $res = $ctlGroup->eliminar($arrayDatos);
-        echo $res;
-        break;
+            break;
+        case "saveGroup":
+            $arrayDatos[0] = $jsonGet['name'];
+            $arrayDatos[1] = implode(",", $jsonGet['ext']);
+            $arrayDatos[2] = implode(",", $jsonGet['pin']);
+            $res = $ctlGroup->agregar($arrayDatos);
+            return $res;
+            break;
+        case "updateGroup":
+            $arrayDatos[0] = $jsonGet['id'];
+            $arrayDatos[1] = $jsonGet['name'];
+            $arrayDatos[2] = implode(",", $jsonGet['ext']);
+            $arrayDatos[3] = implode(",", $jsonGet['pin']);
+            $res = $ctlGroup->actualizar($arrayDatos);
+            echo $res;
+            break;
+        case 'deleteGroup':
+            $arrayDatos[0] = $_POST['id'];
+            $res = $ctlGroup->eliminar($arrayDatos);
+            echo $res;
+            break;
+    }
 }
 $id = $_GET['id'];
 $jsonStr = '{';
 if ($id) {
+    foreach ($_GET as $key => $value) {
+        $_GET[$key] = str_replace("'", "", $value);
+        $_GET[$key] = str_replace('"', '', $value);
+    }
     $arr[0] = $id;
     $res = $ctlGroup->traerPorId($arr);
     foreach ($res as $key => $value) {

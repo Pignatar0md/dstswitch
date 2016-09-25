@@ -46,21 +46,27 @@ class Ctl_Exension {
 
 $operation = $_POST['op'];
 $ctlExt = new Ctl_Exension();
-switch ($operation) {
-    case "getAllExt":
-        $res = $ctlExt->traer();
-        foreach ($res as $key => $value) {
-            if(is_array($value)) {
-                foreach ($value as $k => $v) {
-                    $cadena = "";
-                    if($k == "id") {
-                        $cadena .= "<option value='".$v."'>";
-                    } else {
-                        $cadena .= $v."</option>";
+if ($operation) {
+    foreach ($_POST as $key => $value) {
+        $_POST[$key] = str_replace("'", "", $value);
+        $_POST[$key] = str_replace('"', '', $value);
+    }
+    switch ($operation) {
+        case "getAllExt":
+            $res = $ctlExt->traer();
+            foreach ($res as $key => $value) {
+                if (is_array($value)) {
+                    foreach ($value as $k => $v) {
+                        $cadena = "";
+                        if ($k == "id") {
+                            $cadena .= "<option value='" . $v . "'>";
+                        } else {
+                            $cadena .= $v . "</option>";
+                        }
+                        echo $cadena;
                     }
-                    echo $cadena;
                 }
             }
-        }
-    break;
+            break;
+    }
 }

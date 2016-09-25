@@ -9,12 +9,21 @@
     <body>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="static/js/abm.js"></script>
+        <script src="static/js/validate.js"></script>
         <script src="static/js/boxes.js"></script>
         <div class="container-fluid">
             <div class="row-fluid">
                 <?php
-                include_once 'navbar.php';
-                include('helpers/path_helper.php');
+                session_start();
+                if (isset($_SESSION["Usuario"])) {
+                    //echo $_SESSION["Usuario"];
+                    $_SESSION['REMOTE_ADDR'] = $_SERVER['REMOTE_ADDR'];
+                    $_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
+                    include_once 'helpers/navbar.php';
+                    include('helpers/path_helper.php');
+                } else {
+                    include_once 'views/login.php';
+                }
                 ?>
             </div>
             <div class="row-fluid">

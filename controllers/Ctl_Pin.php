@@ -46,37 +46,43 @@ class Ctl_Pin {
 
 $operation = $_POST['op'];
 $ctlPin = new Ctl_Pin();
-switch ($operation) {
-    case "getAllPin":
-        $res = $ctlPin->traer();
-        foreach ($res as $key => $value) {
-            if (is_array($value)) {
-                foreach ($value as $k => $v) {
-                    $cadena = "";
-                    if ($k == "id") {
-                        $cadena .= "<option value='" . $v . "'>";
-                    } elseif ($k == "pin") {
-                        $cadena .= $v . "</option>";
+if ($operation) {
+    foreach ($_POST as $key => $value) {
+        $_POST[$key] = str_replace("'", "", $value);
+        $_POST[$key] = str_replace('"', '', $value);
+    }
+
+    switch ($operation) {
+        case "getAllPin":
+            $res = $ctlPin->traer();
+            foreach ($res as $key => $value) {
+                if (is_array($value)) {
+                    foreach ($value as $k => $v) {
+                        $cadena = "";
+                        if ($k == "id") {
+                            $cadena .= "<option value='" . $v . "'>";
+                        } elseif ($k == "pin") {
+                            $cadena .= $v . "</option>";
+                        }
+                        echo $cadena;
                     }
-                    echo $cadena;
                 }
             }
-        }
-        break;
-    case "getPinList":
-        $res = $ctlPin->traer();
-        $cadena = "";
-        $id = "";
-        foreach ($res as $key => $value) {
-            if (is_array($value)) {
-                foreach ($value as $k => $v) {
-                    if ($k == "id") {
-                        $cadena .= '<tr><td>' . $v . '</td><td>';
-                        $id = $v;
-                    } elseif ($k == "pin") {
-                        $cadena .= $v . '</td><td>';
-                    } elseif ($k == "description") {
-                        $cadena .= $v . '</td><td style="text-align:center">
+            break;
+        case "getPinList":
+            $res = $ctlPin->traer();
+            $cadena = "";
+            $id = "";
+            foreach ($res as $key => $value) {
+                if (is_array($value)) {
+                    foreach ($value as $k => $v) {
+                        if ($k == "id") {
+                            $cadena .= '<tr><td>' . $v . '</td><td>';
+                            $id = $v;
+                        } elseif ($k == "pin") {
+                            $cadena .= $v . '</td><td>';
+                        } elseif ($k == "description") {
+                            $cadena .= $v . '</td><td style="text-align:center">
                         <a href="index.php?page=EditPin&id=' . $id . '" placeholder="editar">
                             <span class="glyphicon glyphicon-edit"></span>
                         </a>
@@ -84,41 +90,46 @@ switch ($operation) {
                             <span class="glyphicon glyphicon-remove"></span>
                         </a>
                         </td></tr>';
+                        }
                     }
                 }
             }
-        }
-        $cadena = substr($cadena, 0, -1);
-        echo $cadena;
-        break;
-    case "savePin":
-        $arrPin[0] = $_POST['pin'];
-        $arrPin[1] = $_POST['name'];
-        if (count($arrPin) > 1) {
-            $res = $ctlPin->agregar($arrPin);
-        } else {
-            $res = var_dump($arrPin);
-        }
-        echo $res;
-        break;
-    case "updatePin":
-        if (isset($_POST['name']) && isset($_POST['pin'])) {
+            $cadena = substr($cadena, 0, -1);
+            echo $cadena;
+            break;
+        case "savePin":
+            $arrPin[0] = $_POST['pin'];
+            $arrPin[1] = $_POST['name'];
+            if (count($arrPin) > 1) {
+                $res = $ctlPin->agregar($arrPin);
+            } else {
+                $res = var_dump($arrPin);
+            }
+            echo $res;
+            break;
+        case "updatePin":
+            if (isset($_POST['name']) && isset($_POST['pin'])) {
+                $arr[0] = $_POST['id'];
+                $arr[1] = $_POST['pin'];
+                $arr[2] = $_POST['name'];
+                $res = $ctlPin->actualizar($arr);
+            }
+            echo $res;
+            break;
+        case "deletePin":
             $arr[0] = $_POST['id'];
-            $arr[1] = $_POST['pin'];
-            $arr[2] = $_POST['name'];
-            $res = $ctlPin->actualizar($arr);
-        }
-        echo $res;
-        break;
-    case "deletePin":
-        $arr[0] = $_POST['id'];
-        $res = $ctlPin->eliminar($arr);
-        echo $res;
-        break;
+            $res = $ctlPin->eliminar($arr);
+            echo $res;
+            break;
+    }
 }
 $id = $_GET['id'];
 $jsonStr = '{';
 if ($id) {
+    foreach ($_GET as $key => $value) {
+        $_GET[$key] = str_replace("'", "", $value);
+        $_GET[$key] = str_replace('"', '', $value);
+    }
     $arr[0] = $id;
     $res = $ctlPin->traerPorId($arr);
     foreach ($res as $key => $value) {
