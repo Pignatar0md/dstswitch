@@ -31,9 +31,10 @@
                 <ul class="dropdown-menu">
                     <li><a href="index.php?page=NewPin">Alta</a></li>
                     <li><a href="index.php?page=ListPin">Listado</a></li>
-                    <!--<li class="divider"></li>
-                    <li><a href="#">Acción #4</a></li>
                     <li class="divider"></li>
+                    <li><a href="index.php?page=ExportPin">Exportar</a></li>
+                    <li><a href="views/Pin/UploadPin.php">Importar</a></li>
+                    <!--<li class="divider"></li>
                     <li><a href="#">Acción #5</a></li> -->
                 </ul>
             </li>

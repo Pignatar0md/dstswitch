@@ -1,6 +1,13 @@
 <?php
 
-include '../models/Mdl_Pin.php';
+if (file_exists('../../models/Mdl_Pin.php')) {
+    $a = '../../models/Mdl_Pin.php';
+} else if (file_exists('../models/Mdl_Pin.php')) {
+    $a = '../models/Mdl_Pin.php';
+} else {
+    $a = '/var/www/html/DstSwitch/models/Mdl_Pin.php';
+}
+include_once $a;
 
 /**
  * Description of Ctl_Pin
@@ -42,6 +49,42 @@ class Ctl_Pin {
         return $res;
     }
 
+    function crearCsv($mtzFile, $separador_campos) {
+        $n = 0;
+        $file = $mtzFile;
+        $gestor = fopen($file, "r");
+        if ($gestor !== FALSE) {
+            $linea_texto = fgets($gestor);
+            $explode_valores = explode($separador_campos, $linea_texto);
+            $cdadColum = count($explode_valores);
+        }
+        $m = $a = 0;
+        $cad = '';
+        $fileTmp = fopen('/var/www/html/DstSwitch/tmpCsvFile.csv', 'w');
+        if ($gestor) {
+            while (($datos = fgetcsv($gestor, 1000, $separador_campos)) !== FALSE) {//crea archivo temporal
+                $m++;
+                while ($a < $cdadColum) {
+                    if ($datos[$a]) {
+                        $cad .= $datos[$a] . ',';
+                    }
+                    $a++;
+                }
+                $cad = substr($cad, 0, -1);
+                $cad .= PHP_EOL;
+                fwrite($fileTmp, $cad);
+                $a = 0;
+            }
+        }
+        fclose($fileTmp);
+        fclose($gestor);
+    }
+
+    function agregarPorCsv() {
+        $res = $this->mdl->insertFromCsv('/var/www/html/DstSwitch/tmpCsvFile.csv');
+        return $res;
+    }
+
 }
 
 $operation = $_POST['op'];
@@ -53,6 +96,20 @@ if ($operation) {
     }
 
     switch ($operation) {
+        case "createCsvFile":
+            $matrizFile = $_FILES['file']['tmp_name'];
+            $res = $ctlPin->crearCsv($matrizFile, ",");
+            echo $res;
+            break;
+        case "importPin":
+            $res = $ctlPin->agregarPorCsv();
+            if ($res === array()) {
+                $res = "<h4><img src='../../static/img/success.png' alt='success'/>&nbsp;&nbsp;Almacenamiento de datos.</h4>";
+            } else {
+                $res = "<h4><img src='../../static/img/error.png' alt='error'/>&nbsp;&nbsp;Almacenamiento de datos.</h4>";
+            }
+            echo $res;
+            break;
         case "getAllPin":
             $res = $ctlPin->traer();
             foreach ($res as $key => $value) {
@@ -147,3 +204,9 @@ if ($id) {
     }
     echo $jsonStr;
 }
+
+//    $boca = $_FILES['file']['tmp_name'];
+//    $matrizFile = $boca;
+//    $res = $ctlPin->crearCsv($matrizFile, ",");
+//    echo $res;
+

@@ -1,7 +1,7 @@
 function validar(valor, type) {
     debugger;
     var ok = true;
-    var textExp = /[!@#$%\^&*\(\)-=+_,<.>/?;:\[\{\}\]'"]/;
+    var textExp = /[!@#$%\^&*\(\)-=+_,<>/?;:\[\{\}\]'"]/;
     if(type == "num") {
         if(isNaN(valor)) {
             ok = false;

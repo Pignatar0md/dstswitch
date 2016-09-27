@@ -66,7 +66,7 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
 <div class="row"><br>
     <div class="col-md-8 col-md-offset-2">
         <table class="table table-striped">
-            <thead><th>Permiso</th><th>Perfil</th><th>Grupo</th><th>Extensiones</th><th>Pines</th><th>Acciones</th></thead>
+            <thead><th>Permiso</th><th>Perfil</th><th>Grupo</th><th>Extensiones</th><th>Pines</th><th style="text-align: center">Acciones</th></thead>
             <tbody id="tablaPermission"></tbody>
         </table>
     </div>

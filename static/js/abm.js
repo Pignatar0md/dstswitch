@@ -77,7 +77,7 @@ $(function () {
         }
         datos.pin = pins;
         datos.ext = exts;
-        if ($("#groupName").val() && datos.length > 0) {
+        if (datos.name) {
             var val1 = validar($("#groupName").val(), "text");
             if (val1) {
                 $.ajax({
@@ -97,7 +97,7 @@ $(function () {
                 alert('Formato de nombre incorrecto');
             }
         } else {
-            alert("Por favor ingrese 'Nombre' y 'Pin'");
+            alert("Por favor ingrese Nombre, pines y extensiones");
         }
     });
     $("#savePin").click(function () {
@@ -111,7 +111,9 @@ $(function () {
                     dataType: "html",
                     data: 'op=savePin&name=' + $("#namePin").val() + "&pin=" + $("#pin").val(),
                     success: function (msg) {
-                        window.location.href = "index.php?page=ListPin";
+                        debugger;
+                        console.log(msg);
+                        //window.location.href = "index.php?page=ListPin";
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         console.log("Error al ejecutar => " + textStatus + " - " + errorThrown);
@@ -149,7 +151,7 @@ $(function () {
         }
     });
     $("#saveProfile").click(function () {
-        if ($("#nameProfile").val() && $("#dual6").val()) {
+        if ($("#nameProfile").val()) {
             var arrdst = document.getElementById('dual6');
             var dsts = new Array();
             var datos = {
@@ -160,7 +162,7 @@ $(function () {
                 dsts[i] = arrdst[i].value;
             }
             datos.dst = dsts;
-            var val1 = validar($("#nameProfile"), "text");
+            var val1 = validar($("#nameProfile").val(), "text");
             if (val1) {
                 $.ajax({
                     url: 'controllers/Ctl_Profile.php',

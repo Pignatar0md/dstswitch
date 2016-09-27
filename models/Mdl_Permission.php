@@ -75,8 +75,8 @@ class Mdl_Permission {
     function select() {
         $sql = "select perm.id, perm.description as permiso, pro.description as perfil, g.description as grupo, 
                 perm.extension_list as ext, perm.pin_list as pin
-                from profile pro join permission perm on pro.id = perm.id_profile 
-                join grupo g on g.id = perm.id_group";
+                from profile pro right join permission perm on pro.id = perm.id_profile 
+                left join grupo g on g.id = perm.id_group";
         try {
             $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
             $query = $cnn->prepare($sql);

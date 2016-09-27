@@ -15,28 +15,8 @@ function obtenerPath() {
     if (array_key_exists($pag, $arraypags)) {
 
         $path = "$arraypags[$pag].php";
-        //echo "$arraypags[$pag].php";
     } else {
         $path = "Inc/Inexistente.php";
     }
     return $path;
 }
-//
-//function MostrarPagina($path) {
-//    $pag = isset($_GET['page']) ? $_GET['page'] : 'inicio';
-//    switch ($pag) {
-//        case 'NewGroup':
-//            $path = header("location: " . $path);
-//            break;
-//        case 'contactos':
-//            $path = header("location: Contactos/contactoslistado.php");
-//            break;
-//        case 'productos':
-//            $path = header("location: Productos/productoslistado.php");
-//            break;
-//        case 'tickets':
-//            $path = header("location: Tickets/ticketslistado.php");
-//            break;
-//    }
-//    include($path);
-//}
