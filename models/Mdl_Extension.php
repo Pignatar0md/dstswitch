@@ -19,7 +19,7 @@ class Mdl_Extension {
     function select() {
         $sql = "select extension, name from users";
         try {
-            $cnn = new PDO($this->argPdo, MySQL_ELX_ELX_USER, MySQL_PASS);
+            $cnn = new PDO($this->argPdo, MySQL_ELX_USER, MySQL_ELX_PASS);
             $query = $cnn->prepare($sql);
             $query->execute();
             $result = $query->fetchAll(PDO::FETCH_ASSOC);
