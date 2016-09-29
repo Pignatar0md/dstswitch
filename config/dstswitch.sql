@@ -56,10 +56,12 @@ DROP TABLE IF EXISTS `grupo`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `grupo` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_profile` int(11) NOT NULL,
   `description` varchar(30) NOT NULL,
   `extension_list` varchar(600) DEFAULT NULL,
   `pin_list` varchar(600) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`id_profile`) REFERENCES profile (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

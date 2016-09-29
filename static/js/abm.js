@@ -77,6 +77,7 @@ $(function () {
         }
         datos.pin = pins;
         datos.ext = exts;
+        datos.profid = $("#comboProfile").val();
         if (datos.name) {
             var val1 = validar($("#groupName").val(), "text");
             if (val1) {

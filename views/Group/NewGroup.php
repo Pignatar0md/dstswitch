@@ -46,6 +46,13 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
     </div><br>
     <div class="row">
         <div class="col-md-3 col-md-offset-4">
+            <select id="comboProfile" class="form-control">
+                <option>Selec. Perfil</option>
+            </select>
+        </div>
+    </div><br>
+    <div class="row">
+        <div class="col-md-3 col-md-offset-4">
             <button id="saveGroup" type="button" class="btn btn-sm btn-success">Guardar</button>
         </div>
     </div>

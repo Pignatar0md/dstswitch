@@ -114,6 +114,7 @@ if ($operation) {
             $arrayDatos[0] = $jsonGet['name'];
             $arrayDatos[1] = implode(",", $jsonGet['ext']);
             $arrayDatos[2] = implode(",", $jsonGet['pin']);
+            $arrayDatos[3] = $jsonGet['profid'];
             $res = $ctlGroup->agregar($arrayDatos);
             return $res;
             break;
