@@ -1,5 +1,12 @@
 CREATE DATABASE  IF NOT EXISTS `dstswitch` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `dstswitch`;
+
+create user 'dstswitch'@'localhost' identified by 'fr33t3chs0lu710ns';
+
+grant all privileges on dstswitch.* to 'dstswitch'@'localhost';
+
+flush privileges;
+
 -- MySQL dump 10.13  Distrib 5.5.50, for debian-linux-gnu (x86_64)
 --
 -- Host: 192.168.99.29    Database: dstswitch

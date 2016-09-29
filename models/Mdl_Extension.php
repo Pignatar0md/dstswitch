@@ -13,13 +13,13 @@ class Mdl_Extension {
     private $argPdo;
 
     function __construct($db) {
-        $this->argPdo = "mysql:host=" . MySQL_HOST . ";dbname=$db;charset=utf8";
+        $this->argPdo = "mysql:host=" . MySQL_ELX_HOST . ";dbname=$db;charset=utf8";
     }
     
     function select() {
-        $sql = "select * from extensions";
+        $sql = "select extension, name from users";
         try {
-            $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
+            $cnn = new PDO($this->argPdo, MySQL_ELX_ELX_USER, MySQL_PASS);
             $query = $cnn->prepare($sql);
             $query->execute();
             $result = $query->fetchAll(PDO::FETCH_ASSOC);

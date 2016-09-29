@@ -58,10 +58,10 @@ if ($operation) {
                 if (is_array($value)) {
                     foreach ($value as $k => $v) {
                         $cadena = "";
-                        if ($k == "id") {
-                            $cadena .= "<option value='" . $v . "'>";
+                        if ($k == "extension") {
+                            $cadena .= "<option value='$v'>$v";
                         } else {
-                            $cadena .= $v . "</option>";
+                            $cadena .= " ($v)</option>";
                         }
                         echo $cadena;
                     }

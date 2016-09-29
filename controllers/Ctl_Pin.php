@@ -118,7 +118,7 @@ if ($operation) {
                         $cadena = "";
                         if ($k == "id") {
                             $cadena .= "<option value='" . $v . "'>";
-                        } elseif ($k == "pin") {
+                        } elseif ($k == "description") {
                             $cadena .= $v . "</option>";
                         }
                         echo $cadena;
@@ -159,9 +159,9 @@ if ($operation) {
             $arrPin[1] = $_POST['name'];
             if (count($arrPin) > 1) {
                 $res = $ctlPin->agregar($arrPin);
-            } else {
+            } /*else {
                 $res = var_dump($arrPin);
-            }
+            }*/
             echo $res;
             break;
         case "updatePin":
