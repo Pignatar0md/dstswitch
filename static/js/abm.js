@@ -111,9 +111,7 @@ $(function () {
                     dataType: "html",
                     data: 'op=savePin&name=' + $("#namePin").val() + "&pin=" + $("#pin").val(),
                     success: function (msg) {
-                        debugger;
-                        console.log(msg);
-                        //window.location.href = "index.php?page=ListPin";
+                       window.location.href = "index.php?page=ListPin";
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         console.log("Error al ejecutar => " + textStatus + " - " + errorThrown);
