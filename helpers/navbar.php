@@ -32,7 +32,7 @@
                     <li><a href="index.php?page=NewPin">Alta</a></li>
                     <li><a href="index.php?page=ListPin">Listado</a></li>
                     <li class="divider"></li>
-                    <li><a href="index.php?page=ExportPin">Exportar</a></li>
+                    <!--<li><a href="index.php?page=ExportPin">Exportar</a></li>-->
                     <li><a href="views/Pin/UploadPin.php">Importar</a></li>
                     <!--<li class="divider"></li>
                     <li><a href="#">Acción #5</a></li> -->
@@ -56,7 +56,7 @@
                     <li><a href="index.php?page=ListProfile">Listado</a></li>
                 </ul>
             </li>
-            <li class="dropdown">
+            <!--<li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     Permisos <b class="caret"></b>
                 </a>
@@ -64,7 +64,7 @@
                     <li><a href="index.php?page=NewPermission">Alta</a></li>
                     <li><a href="index.php?page=ListPermission">Listado</a></li>
                 </ul>
-            </li>
+            </li>-->
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     Reportes <b class="caret"></b>

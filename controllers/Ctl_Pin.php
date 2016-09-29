@@ -159,9 +159,12 @@ if ($operation) {
             $arrPin[1] = $_POST['name'];
             if (count($arrPin) > 1) {
                 $res = $ctlPin->agregar($arrPin);
-            } /*else {
-                $res = var_dump($arrPin);
-            }*/
+            } 
+            if($res === '00000'){
+                $res = "1";
+            } else {
+                $res = "0";
+            }
             echo $res;
             break;
         case "updatePin":

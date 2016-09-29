@@ -111,7 +111,11 @@ $(function () {
                     dataType: "html",
                     data: 'op=savePin&name=' + $("#namePin").val() + "&pin=" + $("#pin").val(),
                     success: function (msg) {
-                       window.location.href = "index.php?page=ListPin";
+                        if (msg === '1') {
+                            alert("Pin existente, por favor ingrese un nuevo y unico pin.");
+                        } else {
+                            window.location.href = "index.php?page=ListPin";
+                        }
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         console.log("Error al ejecutar => " + textStatus + " - " + errorThrown);
@@ -182,7 +186,7 @@ $(function () {
             alert("Por favor ingrese nombre y/o destinos");
         }
     });
-    $("#savePermission").click(function () {
+    /*$("#savePermission").click(function () {
         if ($("#namePermission").val() && $("#comboProfile").val() && $("#comboGroup").val()) {
             var arrExts = document.getElementById("dual2");
             var arrPins = document.getElementById("dual4");
@@ -223,5 +227,5 @@ $(function () {
         } else {
             alert("Por favor ingrese valores");
         }
-    });
+    });*/
 });

@@ -56,11 +56,12 @@ class Mdl_Pin {
             $query->bindParam(":pin", $arrData[0]);
             $query->bindParam(":desc", $arrData[1]);
             $query->execute();
-            $result = $query->fetchAll(PDO::FETCH_ASSOC);
+            if($query->errorCode()) {
+                $result = $query->errorCode();
+            }
             $cnn = NULL;
-            $result = true;
         } catch (PDOException $ex) {
-            return $ex->getMessage();
+            return $ex->getCode();
         }
         return $result;
     }

@@ -76,28 +76,28 @@ UNLOCK TABLES;
 -- Table structure for table `permission`
 --
 
-DROP TABLE IF EXISTS `permission`;
+-- DROP TABLE IF EXISTS `permission`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `permission` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_profile` int(11) NOT NULL,
-  `id_group` int(11) NOT NULL,
-  `description` varchar(30) NOT NULL,
-  `extension_list` varchar(600) DEFAULT NULL,
-  `pin_list` varchar(600) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+-- CREATE TABLE `permission` (
+  -- `id` int(11) NOT NULL AUTO_INCREMENT,
+  -- `id_profile` int(11) NOT NULL,
+  -- `id_group` int(11) NOT NULL,
+  -- `description` varchar(30) NOT NULL,
+  -- `extension_list` varchar(600) DEFAULT NULL,
+  -- `pin_list` varchar(600) DEFAULT NULL,
+  -- PRIMARY KEY (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `permission`
 --
 
-LOCK TABLES `permission` WRITE;
+-- LOCK TABLES `permission` WRITE;
 /*!40000 ALTER TABLE `permission` DISABLE KEYS */;
 /*!40000 ALTER TABLE `permission` ENABLE KEYS */;
-UNLOCK TABLES;
+-- UNLOCK TABLES;
 
 --
 -- Table structure for table `pin`
@@ -110,7 +110,8 @@ CREATE TABLE `pin` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `pin` varchar(8) NOT NULL,
   `description` varchar(30) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE (`pin`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
