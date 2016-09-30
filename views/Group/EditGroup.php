@@ -47,6 +47,13 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
     </div><br>
     <div class="row">
         <div class="col-md-3 col-md-offset-4">
+            <select id="comboProfile" class="form-control">
+                <option>Selec. Perfil</option>
+            </select>
+        </div>
+    </div><br>
+    <div class="row">
+        <div class="col-md-3 col-md-offset-4">
             <button id="updateGroup" type="button" class="btn btn-sm btn-success">Guardar</button>
         </div>
     </div>
@@ -62,6 +69,7 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
             success: function (msg) {
                 var json = JSON.parse(msg);
                 $("#groupName").val(json.name);
+                $("#comboProfile > option[value='" + json.idprofile + "']").attr('selected', 'selected');
                 var arrexts = json.extlist.split(',');
                 var arrpins = json.pinlist.split(',');
                 for (var a = 0; a < arrexts.length; a++) {
@@ -92,7 +100,8 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
             }
             datos.pin = pins;
             datos.ext = exts;
-            if ($("#groupName").val() && datos.length > 0) {
+            datos.profid = $("#comboProfile").val();
+            if ($("#groupName").val() && $("#comboProfile").val()) {
                 val1 = validar($("#groupName").val(), "text");
                 if (val1) {
                     $.ajax({
@@ -101,7 +110,7 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
                         contentType: "application/json",
                         data: {json: JSON.stringify(datos)},
                         success: function (ms) {
-                            window.location.href = "/DstSwitch/views/Group/ListGroup.php";
+                            window.location.href = "index.php?page=ListGroup";
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             debugger;
@@ -112,7 +121,7 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
                     alert('Formato de nombre incorrecto');
                 }
             } else {
-                alert("Por favor ingrese 'Nombre'");
+                alert("Por favor ingrese Nombre y/o Perfil");
             }
         });
     });

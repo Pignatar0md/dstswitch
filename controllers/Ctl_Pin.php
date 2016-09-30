@@ -161,9 +161,9 @@ if ($operation) {
                 $res = $ctlPin->agregar($arrPin);
             } 
             if($res === '00000'){
-                $res = "1";
-            } else {
                 $res = "0";
+            } else {
+                $res = "1";
             }
             echo $res;
             break;

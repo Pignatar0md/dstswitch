@@ -34,7 +34,8 @@ class Mdl_Group {
     }
 
     function update($arrData) {
-        $sql = "update grupo set pin_list = :pin, description = :name, extension_list = :ext where id = :id";
+        $sql = "update grupo set pin_list = :pin, description = :name, extension_list = :ext, "
+                . "id_profile = :profid where id = :id";
         try {
             $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
             $query = $cnn->prepare($sql);
@@ -42,6 +43,7 @@ class Mdl_Group {
             $query->bindParam(":name", $arrData[1]);
             $query->bindParam(":ext", $arrData[2]);
             $query->bindParam(":pin", $arrData[3]);
+            $query->bindParam(":profid", $arrData[4]);
             $query->execute();
             $result = $query->fetchAll(PDO::FETCH_ASSOC);
             $cnn = NULL;
@@ -67,7 +69,8 @@ class Mdl_Group {
     }
     
     function select() {
-        $sql = "select * from grupo";
+        $sql = "select gr.id as id, id_profile,gr.description as description, extension_list, pin_list, 
+                pr.description as descPerfil from grupo gr join profile pr on gr.id_profile = pr.id";
         try {
             $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
             $query = $cnn->prepare($sql);

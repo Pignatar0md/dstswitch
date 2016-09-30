@@ -95,7 +95,10 @@ if ($operation) {
                             for ($f = 0; $f < count($v); $f++) {
                                 $subCadena .= '<span class="label label-warning">' . $v[$f] . '</span> ';
                             }
-                            $cadena .= '<td>' . $subCadena . '</span></td><td style="text-align:center">
+                            $cadena .= '<td>' . $subCadena . '</span></td>';
+                            $subCadena = null;
+                        } elseif ($k == "descPerfil") {
+                            $cadena .= '<td><span class="label label-success">' . $v . '</span></td><td style="text-align:center">
                         <a href="index.php?page=EditGroup&id=' . $id . '" placeholder="editar">
                             <span class="glyphicon glyphicon-edit"></span>
                         </a>
@@ -103,7 +106,7 @@ if ($operation) {
                             <span class="glyphicon glyphicon-remove"></span>
                         </a>
                         </td></tr>';
-                            $subCadena = null;
+                            //   $subCadena = null;
                         }
                         echo $cadena;
                     }
@@ -123,6 +126,7 @@ if ($operation) {
             $arrayDatos[1] = $jsonGet['name'];
             $arrayDatos[2] = implode(",", $jsonGet['ext']);
             $arrayDatos[3] = implode(",", $jsonGet['pin']);
+            $arrayDatos[4] = $jsonGet['profid'];
             $res = $ctlGroup->actualizar($arrayDatos);
             echo $res;
             break;
@@ -151,6 +155,8 @@ if ($id) {
                     $jsonStr .= '"extlist":"' . $v . '",';
                 } elseif ($k == "pin_list") {
                     $jsonStr .= '"pinlist":"' . $v . '",';
+                } elseif ($k == "id_profile") {
+                    $jsonStr .= '"idprofile":"' . $v . '",';
                 }
             }
         }
