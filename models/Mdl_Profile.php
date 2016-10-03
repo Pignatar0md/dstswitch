@@ -102,10 +102,10 @@ class Mdl_Profile {
         $query = $cnn->prepare($sql);
         $query->execute();
 
-        /*$sql = "delete from profile where id = :id";
-        $query = $cnn->prepare($sql);
-        $query->bindParam(":id", $arrData[0]);
-        $query->execute();*/
+        /* $sql = "delete from profile where id = :id";
+          $query = $cnn->prepare($sql);
+          $query->bindParam(":id", $arrData[0]);
+          $query->execute(); */
 
         $sql = "delete from profile_destiny where id = :idpd";
         $query = $cnn->prepare($sql);

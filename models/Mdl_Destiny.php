@@ -88,4 +88,40 @@ class Mdl_Destiny {
         }
         return $result;
     }
+    
+    function selectDstByPin($arrData) {
+        $sql = "select dst.description as destino, perf.id as idPerf, perf.description as nomPerf 
+                from profile perf join grupo gr on perf.id = gr.id_profile join profile_destiny pd 
+                on perf.id = pd.id_profile join destiny dst on pd.id_destiny = dst.id
+                and :pin IN (select p.pin from pin p)";
+        try {
+            $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
+            $query = $cnn->prepare($sql);
+            $query->bindParam(':pin', $arrData[0]);
+            $query->execute();
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);
+            $cnn = NULL;
+        } catch (PDOException $ex) {
+            return $ex->getMessage();
+        }
+        return $result;
+    }
+
+    function selectDstByExt($arrData) {
+        $sql = "select dst.description as destino, perf.id as idPerf, perf.description as nomPerf 
+                from profile perf join grupo gr on perf.id = gr.id_profile join profile_destiny pd 
+                on perf.id = pd.id_profile join destiny dst on pd.id_destiny = dst.id
+                and :ext IN ($arrData[1])";
+        try {
+            $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
+            $query = $cnn->prepare($sql);
+            $query->bindParam(':ext', $arrData[0]);
+            $query->execute();
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);
+            $cnn = NULL;
+        } catch (PDOException $ex) {
+            return $ex->getMessage();
+        }
+        return $result;
+    }
 }

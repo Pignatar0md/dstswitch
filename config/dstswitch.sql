@@ -48,33 +48,6 @@ LOCK TABLES `destiny` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `grupo`
---
-
-DROP TABLE IF EXISTS `grupo`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `grupo` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_profile` int(11) NOT NULL,
-  `description` varchar(30) NOT NULL,
-  `extension_list` varchar(600) DEFAULT NULL,
-  `pin_list` varchar(600) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`id_profile`) REFERENCES profile (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `grupo`
---
-
-LOCK TABLES `grupo` WRITE;
-/*!40000 ALTER TABLE `grupo` DISABLE KEYS */;
-/*!40000 ALTER TABLE `grupo` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `permission`
 --
 
@@ -150,30 +123,6 @@ LOCK TABLES `profile` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `profile_destiny`
---
-
-DROP TABLE IF EXISTS `profile_destiny`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `profile_destiny` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_profile` int(11) NOT NULL,
-  `id_destiny` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `profile_destiny`
---
-
-LOCK TABLES `profile_destiny` WRITE;
-/*!40000 ALTER TABLE `profile_destiny` DISABLE KEYS */;
-/*!40000 ALTER TABLE `profile_destiny` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `user`
 --
 
@@ -198,6 +147,57 @@ INSERT INTO `user` VALUES (1,'adm',AES_ENCRYPT('clave','Freetech123'));
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+--
+-- Table structure for table `profile_destiny`
+--
+
+DROP TABLE IF EXISTS `profile_destiny`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `profile_destiny` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_profile` int(11) NOT NULL,
+  `id_destiny` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `profile_destiny`
+--
+
+LOCK TABLES `profile_destiny` WRITE;
+/*!40000 ALTER TABLE `profile_destiny` DISABLE KEYS */;
+/*!40000 ALTER TABLE `profile_destiny` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `grupo`
+--
+
+DROP TABLE IF EXISTS `grupo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `grupo` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_profile` int(11) NOT NULL,
+  `description` varchar(30) NOT NULL,
+  `extension_list` varchar(600) DEFAULT NULL,
+  `pin_list` varchar(600) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`id_profile`) REFERENCES profile (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `grupo`
+--
+
+LOCK TABLES `grupo` WRITE;
+/*!40000 ALTER TABLE `grupo` DISABLE KEYS */;
+/*!40000 ALTER TABLE `grupo` ENABLE KEYS */;
+UNLOCK TABLES;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

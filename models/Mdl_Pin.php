@@ -127,6 +127,21 @@ class Mdl_Pin {
         }
         return $result;
     }
+    
+    function selectNameByPin($arrData) {
+        $sql = "select name from pin where pin = :pin";
+        try {
+            $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
+            $query = $cnn->prepare($sql);
+            $query->bindParam(':pin', $arrData[0]);
+            $query->execute();
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);
+            $cnn = NULL;
+        } catch (PDOException $ex) {
+            return $ex->getMessage();
+        }
+        return $result;
+    }
 
 }
 
