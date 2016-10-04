@@ -41,6 +41,16 @@ class Ctl_Destiny {
         $res = $this->mdl->update($arr);
         return $res;
     }
+    
+    function traerDstPorExt($arr) {
+        $res = $this->mdl->selectDstByExt($arr);
+        return $res;
+    }
+    
+    function traerDstPorPin($arr) {
+        $res = $this->mdl->selectDstByPin($arr);
+        return $res;
+    }
 
 }
 

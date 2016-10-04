@@ -1,11 +1,17 @@
 <?php
-define('MySQL_HOST', '192.168.99.29');
-define('MySQL_USER', 'root');
-define('MySQL_PASS', 'marcelop');
+$zonahoraria = date_default_timezone_get();
+date_default_timezone_set($zonahoraria);
 
-define('AMI_USER', 'ftsb1ll1n9');
-define('AMI_PASS', 'c0nqu33st4sFreetech');
+define('MySQL_HOST', '');
+define('MySQL_USER', '');
+define('MySQL_PASS', '');
 
-define('MySQL_ELX_HOST', '');
+define('AMI_USER', '');
+define('AMI_PASS', '');
+
+define('MySQL_ELX_HOST', ');
 define('MySQL_ELX_USER', '');
 define('MySQL_ELX_PASS', '');
+
+include_once '/var/lib/asterisk/agi-bin/php-asmanager.php';
+include_once '/var/lib/asterisk/agi-bin/phpagi.php';

@@ -9,7 +9,7 @@ $controllerDst = new Ctl_Destiny();
 $controllerExt = new Ctl_Exension();
 $controllerPin = new Ctl_Pin();
 $boolPin = $argv[1];
-$arrPinExten[0] = $argv[2];
+$arrPinExten[0] = $Agi->get_variable('agi_callerid');
 $res = '';
 $nom = '';
 //$es_pin = $controllerPin->traerPorPin($boolPin);
@@ -53,7 +53,7 @@ foreach ($res as $key => $value) {
     }
 }
 
-$nroDiscado = $Agi->get_variable("agi_extension");
+$nroDiscado = $Agi->get_variable("agi_dnid");
 $toCall = '';
 
 if ($nroDiscado) {
