@@ -12,15 +12,6 @@ $boolPin = $argv[1];
 $arrPinExten[0] = $Agi->get_variable('agi_callerid');
 $res = '';
 $nom = '';
-//$es_pin = $controllerPin->traerPorPin($boolPin);
-//
-//foreach ($es_pin as $key => $value) {
-//    if (is_array($value)) {
-//        foreach ($value as $k => $v) {
-//            $nom = "";
-//        }
-//    }
-//}
 
 if ($boolPin) {
     $res = $controllerDst->traerDstPorPin($arrPinExten);
@@ -53,19 +44,19 @@ foreach ($res as $key => $value) {
     }
 }
 
-$nroDiscado = $Agi->get_variable("agi_dnid");
+$nroDiscado = $Agi->get_variable("agi_dnid", true);
 $toCall = '';
 
 if ($nroDiscado) {
-    if (count($nroDiscado) === 13 && substr($nroDiscado, 0, 1) === 0) {
-        //13 digitos con 0 al inicio = celular larga distancia
+    if (count($nroDiscado) === 12) {
+        //12 digitos = celular larga distancia
         if ($dest == "CelularesInterurbano") {
             $toCall = true;
         } else {
             $toCall = false;
         }
-    } elseif (count($nroDiscado) === 11 && substr($nroDiscado, 0, 1) === 0) {
-        //11 con 0 al inicio = fijo larga distancia   
+    } elseif (count($nroDiscado) === 10 && substr($nroDiscado, 0, 1) === 0) {
+        //10 = fijo larga distancia   
         if ($dest == "FijosInterurbanos") {
             $toCall = true;
         } else {
@@ -85,27 +76,23 @@ if ($nroDiscado) {
         } else {
             $toCall = false;
         }
-    } elseif (count($nroDiscado) === 11 && substr($nroDiscado, 0, 2) === 08) {
-        // 11 digitos de largo comenzando con 08 = 08100 o 0810
+    } elseif (count($nroDiscado) === 10 && substr($nroDiscado, 0, 1) === 8) {
+         //10 digitos de largo comenzando con 8 = 810/ 800
         if ($dest == "CeroOchocientos") {
             $toCall = true;
         } else {
             $toCall = false;
         }
-    } elseif (substr($nroDiscado, 0, 2) === 00) {
-        // empezando con 00 es larga distancia internacional
+    } /*elseif (substr($nroDiscado, 0, 2) === 00) {
+         //empezando con 00 es larga distancia internacional
         if ($dest == "Internacionales") {
             $toCall = true;
         } else {
             $toCall = false;
         }
-    } else {
+    }*/ else {
         $toCall = 404;
     }
 }
 
 $Agi->set_variable("otorga_permiso", $toCall);
-
-//if ($val_1 == 'true') {
-//    $Agi->set_variable("propietario_pin", $val_4);
-//}

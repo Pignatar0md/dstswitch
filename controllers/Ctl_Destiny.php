@@ -1,6 +1,6 @@
 <?php
 
-include '../models/Mdl_Destiny.php';
+include '/var/www/html/DstSwitch/models/Mdl_Destiny.php';
 
 /**
  * Description of Ctl_Destiny
