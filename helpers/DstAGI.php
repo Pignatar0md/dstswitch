@@ -30,7 +30,7 @@ if ($boolPin) {
     }
 
     $arrPinExten[1] = substr($extChain, 0, -1);
-    $res = $controllerDest->traerBoolPermExt($arrPinExten);
+    $res = $controllerDst->traerDstPorExt($arrPinExten);
 }
 
 $dest = '';
@@ -48,22 +48,22 @@ $nroDiscado = $Agi->get_variable("agi_dnid", true);
 $toCall = '';
 
 if ($nroDiscado) {
-    if (strlen($nroDiscado) === 12) {
-        //12 digitos = celular larga distancia
+    if (strlen($nroDiscado) === 13 && substr($nroDiscado, 0, 1) == '0') {
+        //13 digitos con 0 al ppio = celular larga distancia
         if ($dest == "CelularesInterurbano") {
             $toCall = true;
         } else {
             $toCall = false;
         }
-    } elseif (strlen($nroDiscado) === 10 && substr($nroDiscado, 0, 1) === '8') {
-         //10 digitos de largo comenzando con 8 = 810/ 800
+    } elseif (strlen($nroDiscado) === 11 && substr($nroDiscado, 0, 1) === '0') {
+         //11 digitos de largo comenzando con 0 = 0810/0800
         if ($dest == "CeroOchocientos") {
             $toCall = true;
         } else {
             $toCall = false;
         }
-    } elseif (strlen($nroDiscado) === 10) {
-        //10 = fijo larga distancia   
+    } elseif (strlen($nroDiscado) === 11 && substr($nroDiscado, 0, 1) === '0') {
+        //11 digitos comenzando con 0 = fijo larga distancia   
         if ($dest == "FijosInterurbanos") {
             $toCall = true;
         } else {
@@ -83,7 +83,7 @@ if ($nroDiscado) {
         } else {
             $toCall = false;
         }
-    } elseif (strlen($nroDiscado) > '12') {
+    } elseif (strlen($nroDiscado) > '12' && substr($nroDiscado, 0, 2) === '00') {
          //empezando con 00 es larga distancia internacional
         if ($dest == "Internacionales") {
             $toCall = true;
