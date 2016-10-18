@@ -10,7 +10,7 @@ class Ctl_Report {
     private $mdl;
             
     function __construct() {
-        $this->mdl = new Mdl_Report('dstswitch');
+        $this->mdl = new Mdl_Report('Dstswitch');
     }
     //put your code here
     function agregar($arr) {

@@ -14,7 +14,7 @@ class Mdl_Destiny {
     }
 
     function insert($arrData) {
-        $sql = "insert into destiny(description) values(:desc)";
+        $sql = "insert into destiny(descr) values(:desc)";
         try {
             $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
             $query = $cnn->prepare($sql);
@@ -30,12 +30,12 @@ class Mdl_Destiny {
     }
 
     function update($arrData) {
-        $sql = "update destiny set description = :desc where id = :id ";
+        $sql = "update destiny set descr = :desc where id = :id ";
         try {
             $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
             $query = $cnn->prepare($sql);
-            $query->bindParam(":desc", $arrData[1]);
             $query->bindParam(":id", $arrData[0]);
+            $query->bindParam(":desc", $arrData[1]);
             $query->execute();
             $result = $query->fetchAll(PDO::FETCH_ASSOC);
             $cnn = NULL;
@@ -89,11 +89,10 @@ class Mdl_Destiny {
         return $result;
     }
     
-    function selectDstByPin($arrData) {
-        $sql = "select dst.description as destino, perf.id as idPerf, perf.description as nomPerf 
-                from profile perf join grupo gr on perf.id = gr.id_profile join profile_destiny pd 
-                on perf.id = pd.id_profile join destiny dst on pd.id_destiny = dst.id
-                and :pin IN (select p.pin from pin p)";
+    function selectDstByPin($arrData) {// usado para buscar pin y autorizar
+        $sql = "select distinct dst.descr as destino from destiny dst join grupo_dest grpdst on dst.id = grpdst.id_dest 
+                join grupo grp on grpdst.id_grupo = grp.id join pin pn on grp.id = pn.id_grupo
+                where :pin IN (select p.pinNumber from pin p where p.id_grupo = grp.id)";
         try {
             $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
             $query = $cnn->prepare($sql);
@@ -107,15 +106,14 @@ class Mdl_Destiny {
         return $result;
     }
 
-    function selectDstByExt($arrData) {
-        $sql = "select dst.description as destino, perf.id as idPerf, perf.description as nomPerf 
-                from profile perf join grupo gr on perf.id = gr.id_profile join profile_destiny pd 
-                on perf.id = pd.id_profile join destiny dst on pd.id_destiny = dst.id
-                and :ext IN ($arrData[1])";
+    function selectDstByExt($arrData) {// usado para buscar ext y autorizar
+        $sql = "select distinct dst.descr as destino from destiny dst join grupo_dest grpdst on dst.id = grpdst.id_dest 
+                join grupo grp on grpdst.id_grupo = grp.id join grupo_extens grpext on grp.id = grpext.id_grupo
+                where :exten IN (select exten from grupo_extens ge where ge.id_grupo = grp.id)";
         try {
             $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
             $query = $cnn->prepare($sql);
-            $query->bindParam(':ext', $arrData[0]);
+            $query->bindParam(':exten', $arrData[0]);
             $query->execute();
             $result = $query->fetchAll(PDO::FETCH_ASSOC);
             $cnn = NULL;
@@ -125,3 +123,8 @@ class Mdl_Destiny {
         return $result;
     }
 }
+
+/*$md = new Mdl_Destiny('Dstswitch');
+$arrData[0] = 'adsa';
+$res = $md->insert($arrData);
+echo $res;*/

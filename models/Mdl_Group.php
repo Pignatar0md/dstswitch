@@ -1,5 +1,7 @@
 <?php
+
 include_once '../config.php';
+
 /**
  * Description of Mdl_Group
  *
@@ -15,15 +17,12 @@ class Mdl_Group {
     }
 
     function insert($arrData) {
-        $sql = "insert into grupo (pin_list, description, extension_list, id_profile) "
-                . "values(:pin, :name, :ext, :profid)";
+        $sql = "insert into grupo (descr) "
+                . "values(:descr)";
         try {
             $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
             $query = $cnn->prepare($sql);
-            $query->bindParam(":name", $arrData[0]);
-            $query->bindParam(":ext", $arrData[1]);
-            $query->bindParam(":pin", $arrData[2]);
-            $query->bindParam(":profid", $arrData[3]);
+            $query->bindParam(":descr", $arrData[0]);
             $query->execute();
             $result = $query->fetchAll(PDO::FETCH_ASSOC);
             $cnn = NULL;
@@ -33,24 +32,178 @@ class Mdl_Group {
         return $result;
     }
 
-    function update($arrData) {
-        $sql = "update grupo set pin_list = :pin, description = :name, extension_list = :ext, "
-                . "id_profile = :profid where id = :id";
-        try {
-            $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
+    function set($arrData) {
+        $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
+        $sql = "BEGIN";
+        $query = $cnn->prepare($sql);
+        $query->execute();
+
+        foreach ($arrData[1] as $cla => $val) {
+            $sql = "insert into grupo_exten (id_grupo, exten) values ($arrData[0], '$val')";
             $query = $cnn->prepare($sql);
-            $query->bindParam(":id", $arrData[0]);
-            $query->bindParam(":name", $arrData[1]);
-            $query->bindParam(":ext", $arrData[2]);
-            $query->bindParam(":pin", $arrData[3]);
-            $query->bindParam(":profid", $arrData[4]);
             $query->execute();
-            $result = $query->fetchAll(PDO::FETCH_ASSOC);
-            $cnn = NULL;
-        } catch (PDOException $ex) {
-            return $ex->getMessage();
         }
-        return $result;
+        foreach ($arrData[2] as $cla => $val) {
+            $sql = "insert into grupo_dest (id_grupo, id_dest) values ($arrData[0], $val)";
+            $query = $cnn->prepare($sql);
+            $query->execute();
+        }
+        foreach ($arrData[3] as $cla => $val) {
+            $sql = "update pin set id_grupo = $arrData[0] where id = $val";
+            $query = $cnn->prepare($sql);
+            $res = $query->execute();
+        }
+
+        if ($res == 1) {
+            $sql = "COMMIT";
+        } else {
+            $sql = "ROLLBACK";
+        }
+        $query = $cnn->prepare($sql);
+        $query->execute();
+        $cnn = NULL;
+    }
+
+    function Quit($fromDB, $toDB) {
+        //quita de bd si valor (que viene de user) no se encuentra en toBD
+        $arrQuit = array();
+        foreach ($fromDB as $clave => $valor) {
+            if (!(in_array($valor, $toDB))) {
+                $arrQuit[] = $valor;
+            }
+        }
+        return $arrQuit;
+    }
+
+    function Add($fromDB, $toDB) {
+        //agrega a bd si valor (que viene de user) no se encuentra en fromBD
+        $arrAdd = array();
+        foreach ($toDB as $clave => $valor) {
+            if (!(in_array($valor, $fromDB))) {
+                $arrAdd[] = $valor;
+            }
+        }
+        return $arrAdd;
+    }
+
+    function update($arrData) {
+        $id = $arrData[0];
+        $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
+        $sql = "update grupo set descr = :desc where id = :id";
+        $query = $cnn->prepare($sql);
+        $query->bindParam(":id", $id);
+        $query->bindParam(":desc", $arrData[1]);
+        $query->execute();
+        $sql = "select exten from grupo_exten where id_grupo = :id";
+        $query = $cnn->prepare($sql);
+        $query->bindParam(":id", $id);
+        $query->execute();
+        $Extens = $query->fetchAll(PDO::FETCH_ASSOC);
+        if ($Extens) {
+            foreach ($Extens as $clave => $valor) {
+                foreach ($valor as $cla => $val) {
+                    $valorsDeBD[] = $val;
+                }
+                //$arrQuitExt = $this->Quit($valor, $arrData[4]);
+                //$arrAddExt = $this->Add($valor, $arrData[4]);
+            }
+            $arrQuitExt = $this->Quit($valorsDeBD, $arrData[4]);
+            $arrAddExt = $this->Add($valorsDeBD, $arrData[4]);
+            foreach ($arrQuitExt as $cla => $val) {
+                $sql = "delete from grupo_exten where exten = :Ext and id_grupo = :id";
+                $query = $cnn->prepare($sql);
+                $query->bindParam(":id", $id);
+                $query->bindParam(":Ext", $val);
+                $query->execute();
+            }
+            foreach ($arrAddExt as $cla => $val) {
+                $sql = "replace into grupo_exten set exten = :Ext, id_grupo = :id";
+                $query = $cnn->prepare($sql);
+                $query->bindParam(":id", $id);
+                $query->bindParam(":Ext", $val);
+                $query->execute();
+            }
+        } else {
+            foreach ($arrData[4] as $cla => $val) {
+                $sql = "insert into grupo_exten (exten, id_grupo) values (:Ext,:id)";
+                $query = $cnn->prepare($sql);
+                $query->bindParam(":id", $id);
+                $query->bindParam(":Ext", $val);
+                $query->execute();
+            }
+        }
+        $sql = "select id_dest from grupo_dest where id_grupo = :id";
+        $query = $cnn->prepare($sql);
+        $query->bindParam(":id", $id);
+        $query->execute();
+        $Dests = $query->fetchAll(PDO::FETCH_ASSOC);
+        if ($Dests) {
+            foreach ($Dests as $clave => $valor) {
+                foreach ($valor as $cla => $val) {
+                    $valorsDeBD[] = $val;
+                }
+            }
+            $arrQuitDst = $this->Quit($valorsDeBD, $arrData[3]);
+            $arrAddDst = $this->Add($valorsDeBD, $arrData[3]);
+            foreach ($arrQuitDst as $cla => $val) {
+                $sql = "delete from grupo_dest where id_dest = :Dst and id_grupo = :id";
+                $query = $cnn->prepare($sql);
+                $query->bindParam(":id", $id);
+                $query->bindParam(":Dst", $val);
+                $query->execute();
+            }
+            foreach ($arrAddDst as $cla => $val) {
+                $sql = "replace into grupo_dest set id_dest = :Dst, id_grupo = :id";
+                $query = $cnn->prepare($sql);
+                $query->bindParam(":id", $id);
+                $query->bindParam(":Dst", $val);
+                $query->execute();
+            }
+        } else {
+            foreach ($arrData[3] as $cla => $val) {
+                $sql = "insert into grupo_dest (id_dest,id_grupo) values(:Dst,:id)";
+                $query = $cnn->prepare($sql);
+                $query->bindParam(":id", $id);
+                $query->bindParam(":Dst", $val);
+                $query->execute();
+            }
+        }
+        $sql = "select id from pin where id_grupo = :id";
+        $query = $cnn->prepare($sql);
+        $query->bindParam(":id", $arrData[0]);
+        $query->execute();
+        $Pines = $query->fetchAll(PDO::FETCH_ASSOC);
+        if ($Pines) {
+            foreach ($Pines as $clave => $valor) {
+                if (is_array($valor)) {
+                    $arrQuitPin = $this->Quit($valor, $arrData[2]);
+                    $arrAddPin = $this->Add($valor, $arrData[2]);
+                }
+            }
+
+            foreach ($arrQuitPin as $cla => $val) {
+                $sql = "update pin set id_grupo = null where id = :id";
+                $query = $cnn->prepare($sql);
+                $query->bindParam(":id", $val);
+                $query->execute();
+            }
+            foreach ($arrAddPin as $cla => $val) {
+                $sql = "update pin set id_grupo = :idg where id = :idp";
+                $query = $cnn->prepare($sql);
+                $query->bindParam(":idg", $id);
+                $query->bindParam(":idp", $val);
+                $query->execute();
+            }
+        } else {
+            foreach ($arrData[2] as $cla => $val) {
+                $sql = "update pin set id_grupo = :idg where id = :idp";
+                $query = $cnn->prepare($sql);
+                $query->bindParam(":idg", $id);
+                $query->bindParam(":idp", $val);
+                $query->execute();
+            }
+        }
+        $cnn = NULL;
     }
 
     function delete($arrData) {
@@ -67,28 +220,13 @@ class Mdl_Group {
         }
         return $result;
     }
-    
-    function select() {
-        $sql = "select gr.id as id, id_profile,gr.description as description, extension_list, pin_list, 
-                pr.description as descPerfil from grupo gr join profile pr on gr.id_profile = pr.id";
+
+    function select() { // usado para el list group
+        $sql = "select id,descr
+                    from grupo";
         try {
             $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
             $query = $cnn->prepare($sql);
-            $query->execute();
-            $result = $query->fetchAll(PDO::FETCH_ASSOC);
-            $cnn = NULL;
-        } catch (PDOException $ex) {
-            return $ex->getMessage();
-        }
-        return $result;
-    }
-    
-    function selectById($arrData) {
-        $sql = "select * from grupo where id = :id";
-        try {
-            $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
-            $query = $cnn->prepare($sql);
-            $query->bindParam(':id', $arrData[0]);
             $query->execute();
             $result = $query->fetchAll(PDO::FETCH_ASSOC);
             $cnn = NULL;
@@ -98,4 +236,79 @@ class Mdl_Group {
         return $result;
     }
 
+    function selectCmb() { // usado para el list group
+        $sql = "select id, descr from grupo";
+        try {
+            $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
+            $query = $cnn->prepare($sql);
+            $query->execute();
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);
+            $cnn = NULL;
+        } catch (PDOException $ex) {
+            return $ex->getMessage();
+        }
+        return $result;
+    }
+
+    function selectByName($arrData) {
+        $sql = "select id from grupo where descr = :descr";
+        try {
+            $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
+            $query = $cnn->prepare($sql);
+            $query->bindParam(':descr', $arrData[0]);
+            $query->execute();
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);
+            $cnn = NULL;
+        } catch (PDOException $ex) {
+            return $ex->getMessage();
+        }
+        return $result;
+    }
+
+    function selectById($arrData) {
+        $resultArr = array();
+        $id = $arrData[0];
+        try {
+            $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
+            $sql = "select gr.descr as groupName, grex.exten
+                            from  grupo gr join grupo_exten grex on gr.id = grex.id_grupo
+                            where gr.id = :id";
+            $query = $cnn->prepare($sql);
+            $query->bindParam(':id', $id);
+            $query->execute();
+            $resultArr[0] = $query->fetchAll(PDO::FETCH_ASSOC);
+            $sql = "select p.id as pinId,p.pinName as pinName 
+                            from pin p join grupo gr on gr.id = p.id_grupo 
+                            where gr.id = :id";
+            $query = $cnn->prepare($sql);
+            $query->bindParam(':id', $id);
+            $query->execute();
+            $resultArr[1] = $query->fetchAll(PDO::FETCH_ASSOC);
+            $sql = "select dst.id as destId,dst.descr as destName  
+                            from destiny dst join grupo_dest grds on dst.id = grds.id_dest
+                            join grupo gr on grds.id_grupo = gr.id 
+                            where gr.id = :id";
+            $query = $cnn->prepare($sql);
+            $query->bindParam(':id', $id);
+            $query->execute();
+            $resultArr[2] = $query->fetchAll(PDO::FETCH_ASSOC);
+            $cnn = NULL;
+        } catch (PDOException $ex) {
+            return $ex->getMessage();
+        }
+        return $resultArr;
+    }
+
 }
+
+/* $mld = new Mdl_Group('Dstswitch');
+  $arrData[0] = 25;
+  $arrData[1] = array("1003", "1001", "1006");
+  $arrData[2] = array(7, 8);
+  $arrData[3] = array(1);
+  $res = $mld->set($arrData);
+  echo $res; */
+/*$mld = new Mdl_Group('Dstswitch');
+$arrData[0] = 31;
+$res = $mld->selectById($arrData);
+echo var_dump($res);*/

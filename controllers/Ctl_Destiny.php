@@ -1,6 +1,6 @@
 <?php
 
-include '/var/www/html/DstSwitch/models/Mdl_Destiny.php';
+include '/var/www/html/dstswitch/models/Mdl_Destiny.php';
 
 /**
  * Description of Ctl_Destiny
@@ -13,10 +13,9 @@ class Ctl_Destiny {
     private $mdl;
 
     function __construct() {
-        $this->mdl = new Mdl_Destiny('dstswitch');
+        $this->mdl = new Mdl_Destiny('Dstswitch');
     }
 
-    //put your code here
     function agregar($arr) {
         $res = $this->mdl->insert($arr);
         return $res;
@@ -54,6 +53,9 @@ class Ctl_Destiny {
 
 }
 
+/*$_POST['op'] = 'saveDestiny';
+$_POST["name"] = "sdsdsdsd";*/
+
 $operation = $_POST['op'];
 $ctlDest = new Ctl_Destiny();
 if ($operation) {
@@ -70,7 +72,7 @@ if ($operation) {
                         $cadena = "";
                         if ($k == "id") {
                             $cadena .= "<option value='" . $v . "'>";
-                        } elseif ($k == "description") {
+                        } elseif ($k == "descr") {
                             $cadena .= $v . "</option>";
                         }
                         echo $cadena;
@@ -88,7 +90,7 @@ if ($operation) {
                         if ($k == "id") {
                             $cadena .= '<tr><td>' . $v . '</td><td>';
                             $id = $v;
-                        } elseif ($k == "description") {
+                        } elseif ($k == "descr") {
                             $cadena .= $v . '</td><td style="text-align:center">
                         <a href="index.php?page=EditDestiny&id=' . $id . '" placeholder="editar">
                             <span class="glyphicon glyphicon-edit"></span>
@@ -140,7 +142,7 @@ if ($id) {
             foreach ($value as $k => $v) {
                 if ($k == "id") {
                     $jsonStr .= '"id":"' . $v . '",';
-                } else if ($k == "description") {
+                } else if ($k == "descr") {
                     $jsonStr .= '"name":"' . $v . '"}';
                 }
             }

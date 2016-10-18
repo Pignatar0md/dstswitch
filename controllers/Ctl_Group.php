@@ -13,12 +13,16 @@ class Ctl_Group {
     private $mdl;
 
     function __construct() {
-        $this->mdl = new Mdl_Group('dstswitch');
+        $this->mdl = new Mdl_Group('Dstswitch');
     }
 
-    //put your code here
     function agregar($arr) {
         $res = $this->mdl->insert($arr);
+        return $res;
+    }
+
+    function configurar($arr) {
+        $res = $this->mdl->set($arr);
         return $res;
     }
 
@@ -37,12 +41,23 @@ class Ctl_Group {
         return $res;
     }
 
+    function traerCombo() {
+        $res = $this->mdl->selectCmb();
+        return $res;
+    }
+
+    function traerPorNom($arr) {
+        $res = $this->mdl->selectByName($arr);
+        return $res;
+    }
+
     function actualizar($arr) {
         $res = $this->mdl->update($arr);
         return $res;
     }
 
 }
+
 
 $operation = $_POST['op'];
 $ctlGroup = new Ctl_Group();
@@ -56,15 +71,38 @@ if ($operation) {
         $_POST[$key] = str_replace('"', '', $value);
     }
     switch ($operation) {
+        case 'confGroup':
+            $arrayDatos[0] = $jsonGet['id'];
+            $arrayDatos[1] = $jsonGet['ext'];
+            $arrayDatos[2] = $jsonGet['dst'];
+            $arrayDatos[3] = $jsonGet['pin'];
+            $res = $ctlGroup->configurar($arrayDatos);
+            echo $res;
+            break;
+        case "getGroupId":
+            $arrDatos[] = $jsonGet['name'];
+            $res = $ctlGroup->traerPorNom($arrDatos);
+            $jsonStr = '{';
+            foreach ($res as $key => $val) {
+                if (is_array($val)) {
+                    foreach ($val as $k => $v) {
+                        if ($k == "id") {
+                            $jsonStr .= '"id":"' . $v . '",';
+                        }
+                    }
+                }
+            }
+            echo substr($jsonStr, 0, -1) . '}';
+            break;
         case "getAllGroup":
-            $res = $ctlGroup->traer();
+            $res = $ctlGroup->traerCombo();
             foreach ($res as $key => $value) {
                 if (is_array($value)) {
                     foreach ($value as $k => $v) {
                         $cadena = "";
                         if ($k == "id") {
                             $cadena .= "<option value='" . $v . "'>";
-                        } else if ($k == "description") {
+                        } else if ($k == "descr") {
                             $cadena .= $v . "</option>";
                         }
                         echo $cadena;
@@ -81,32 +119,16 @@ if ($operation) {
                         $cadena = "";
                         if ($k == "id") {
                             $id = $v;
-                        } elseif ($k == "description") {
-                            $cadena .= "<tr><td>" . $v . "</td>";
-                        } else if ($k == "extension_list") {
-                            $v = explode(',', $v);
-                            for ($f = 0; $f < count($v); $f++) {
-                                $subCadena .= '<span class="label label-primary">' . $v[$f] . '</span> ';
-                            }
-                            $cadena .= '<td>' . $subCadena . '</td>';
-                            $subCadena = null;
-                        } elseif ($k == "pin_list") {
-                            $v = explode(',', $v);
-                            for ($f = 0; $f < count($v); $f++) {
-                                $subCadena .= '<span class="label label-warning">' . $v[$f] . '</span> ';
-                            }
-                            $cadena .= '<td>' . $subCadena . '</span></td>';
-                            $subCadena = null;
-                        } elseif ($k == "descPerfil") {
-                            $cadena .= '<td><span class="label label-success">' . $v . '</span></td><td style="text-align:center">
-                        <a href="index.php?page=EditGroup&id=' . $id . '" placeholder="editar">
+                        } elseif ($k == "descr") {
+                            $cadena .= '<tr><td>' . $v . '</td><td style="text-align:center">
+                        <a href="index.php?page=EditGroup&id=' . $id . '" placeholder="editar nombre">
                             <span class="glyphicon glyphicon-edit"></span>
                         </a>
                         <a id="' . $id . '" class="eliminar" placeholder="eliminar">
                             <span class="glyphicon glyphicon-remove"></span>
                         </a>
-                        </td></tr>';
-                            //   $subCadena = null;
+                        </td>
+                        </tr>';
                         }
                         echo $cadena;
                     }
@@ -115,18 +137,15 @@ if ($operation) {
             break;
         case "saveGroup":
             $arrayDatos[0] = $jsonGet['name'];
-            $arrayDatos[1] = implode(",", $jsonGet['ext']);
-            $arrayDatos[2] = implode(",", $jsonGet['pin']);
-            $arrayDatos[3] = $jsonGet['profid'];
             $res = $ctlGroup->agregar($arrayDatos);
             return $res;
             break;
         case "updateGroup":
             $arrayDatos[0] = $jsonGet['id'];
             $arrayDatos[1] = $jsonGet['name'];
-            $arrayDatos[2] = implode(",", $jsonGet['ext']);
-            $arrayDatos[3] = implode(",", $jsonGet['pin']);
-            $arrayDatos[4] = $jsonGet['profid'];
+            $arrayDatos[2] = $jsonGet['pin'];
+            $arrayDatos[3] = $jsonGet['dst'];
+            $arrayDatos[4] = $jsonGet['ext'];
             $res = $ctlGroup->actualizar($arrayDatos);
             echo $res;
             break;
@@ -137,6 +156,7 @@ if ($operation) {
             break;
     }
 }
+//$_GET['id'] = 31;
 $id = $_GET['id'];
 $jsonStr = '{';
 if ($id) {
@@ -146,20 +166,33 @@ if ($id) {
     }
     $arr[0] = $id;
     $res = $ctlGroup->traerPorId($arr);
+    $subcadPin = $subcadDst = $subcadExt = '';
+    $c=$b=$i=0;
     foreach ($res as $key => $value) {
         if (is_array($value)) {
             foreach ($value as $k => $v) {
-                if ($k == "description") {
-                    $jsonStr .= '"name":"' . $v . '",';
-                } elseif ($k == "extension_list") {
-                    $jsonStr .= '"extlist":"' . $v . '",';
-                } elseif ($k == "pin_list") {
-                    $jsonStr .= '"pinlist":"' . $v . '",';
-                } elseif ($k == "id_profile") {
-                    $jsonStr .= '"idprofile":"' . $v . '",';
+                if(is_array($v)) {
+                    foreach ($v as $clave => $valor) {
+                        if($clave == "groupName") {
+                            $nomGrupo = $valor;
+                        } elseif ($clave == "exten") {
+                            $subcadExt .= '"'.$i.'":"'.$valor.'",';
+                            $i++;
+                        } elseif ($clave == "pinId") {
+                            $subcadPin .= '"'.$b.'":"'.$valor.'",';
+                            $b++;
+                        } elseif ($clave == "destId") {
+                            $subcadDst .= '"'.$c.'":"'.$valor.'",';
+                            $c++;
+                        } 
+                    }
                 }
             }
         }
     }
-    echo substr($jsonStr, 0, -1) . '}';
+    $subcadDst = substr($subcadDst, 0, -1);
+    $subcadExt = substr($subcadExt, 0, -1);
+    $subcadPin = substr($subcadPin, 0, -1);
+    $jsonStr .= '"nomgrupo":"'.$nomGrupo.'","extensiones":[{'.$subcadExt.'}],"pines":[{'.$subcadPin.'}],"destinos":[{'.$subcadDst.'}]}';
+    echo $jsonStr;
 }

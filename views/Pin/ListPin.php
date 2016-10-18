@@ -66,7 +66,7 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
 <div class="row"><br>
     <div class="col-md-6 col-md-offset-3">
         <table class="table table-striped">
-            <thead><th>#</th><th>Pin</th><th>Nombre</th><th>Acciones</th></thead>
+            <thead><th>#</th><th>Pin</th><th>Nombre</th><th style="text-align: center">Acciones</th></thead>
             <tbody id="tablaPin"></tbody>
         </table>
     </div>

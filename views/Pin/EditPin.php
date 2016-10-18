@@ -37,7 +37,7 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
             dataType: "html",
             data: 'id=' + id,
             success: function (msg) {
-                debugger;console.log(msg);
+                console.log(msg);
                 var json = JSON.parse(msg);
                 $("#idPin").val(json.id);
                 $("#namePin").val(json.name);

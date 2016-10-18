@@ -5,7 +5,7 @@ if (file_exists('../../models/Mdl_Pin.php')) {
 } else if (file_exists('../models/Mdl_Pin.php')) {
     $a = '../models/Mdl_Pin.php';
 } else {
-    $a = '/var/www/html/DstSwitch/models/Mdl_Pin.php';
+    $a = '/var/www/html/dstswitch/models/Mdl_Pin.php';
 }
 include_once $a;
 
@@ -20,7 +20,7 @@ class Ctl_Pin {
     private $mdl;
 
     function __construct() {
-        $this->mdl = new Mdl_Pin('dstswitch');
+        $this->mdl = new Mdl_Pin('Dstswitch');
     }
 
     //put your code here
@@ -36,6 +36,11 @@ class Ctl_Pin {
 
     function traer() {
         $res = $this->mdl->select();
+        return $res;
+    }
+    
+    function traerLista() {
+        $res = $this->mdl->selectList();
         return $res;
     }
 
@@ -123,7 +128,7 @@ if ($operation) {
                         $cadena = "";
                         if ($k == "id") {
                             $cadena .= "<option value='" . $v . "'>";
-                        } elseif ($k == "description") {
+                        } elseif ($k == "pinName") {
                             $cadena .= $v . "</option>";
                         }
                         echo $cadena;
@@ -132,7 +137,7 @@ if ($operation) {
             }
             break;
         case "getPinList":
-            $res = $ctlPin->traer();
+            $res = $ctlPin->traerLista();
             $cadena = "";
             $id = "";
             foreach ($res as $key => $value) {
@@ -141,9 +146,9 @@ if ($operation) {
                         if ($k == "id") {
                             $cadena .= '<tr><td>' . $v . '</td><td>';
                             $id = $v;
-                        } elseif ($k == "pin") {
+                        } elseif ($k == "pinNumber") {
                             $cadena .= $v . '</td><td>';
-                        } elseif ($k == "description") {
+                        } elseif ($k == "pinName") {
                             $cadena .= $v . '</td><td style="text-align:center">
                         <a href="index.php?page=EditPin&id=' . $id . '" placeholder="editar">
                             <span class="glyphicon glyphicon-edit"></span>
@@ -162,6 +167,7 @@ if ($operation) {
         case "savePin":
             $arrPin[0] = $_POST['pin'];
             $arrPin[1] = $_POST['name'];
+            $arrPin[2] = $_POST['group'];
             if (count($arrPin) > 1) {
                 $res = $ctlPin->agregar($arrPin);
             } 
@@ -202,10 +208,13 @@ if ($id) {
             foreach ($value as $k => $v) {
                 if ($k == "id") {
                     $jsonStr .= '"id":"' . $v . '",';
-                } else if ($k == "pin") {
+                } else if ($k == "pinNumber") {
                     $jsonStr .= '"pin":"' . $v . '",';
-                } else if ($k == "description") {
-                    $jsonStr .= '"name":"' . $v . '"}';
+                } else if ($k == "pinName") {
+                    $jsonStr .= '"name":"' . $v . '",';
+                }
+                 else if ($k == "id_grupo") {
+                    $jsonStr .= '"groupid":"' . $v . '"}';
                 }
             }
         }

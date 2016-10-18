@@ -27,7 +27,6 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
             $("#modalConfirm").modal('show');
             var id = this.id;
             $("#delOk").click(function () {
-                debugger;
                 $.ajax({
                     url: 'controllers/Ctl_Group.php',
                     type: 'POST',
@@ -64,9 +63,9 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
         </div>
     </div>
     <div class="row"><br>
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-3 col-md-offset-4">
             <table class="table table-striped">
-                <thead><th>Grupo</th><th>Extensiones</th><th>Pines</th><th>Perfil</th><th style="text-align: center">Acciones</th></thead>
+                <thead><th>Grupo</th><th style="text-align: center">Acciones</th></thead>
                 <tbody id="tablaGroup"></tbody>
             </table>
         </div>

@@ -10,51 +10,53 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
 ?>
 <form><br>
     <div class="row">
-        <div class="col-md-3 col-md-offset-4">
+        <div class="col-sm-3 col-md-offset-2">
             <input type="hidden" id="idGroup"  value="<?php echo $_GET['id'] ?>"/>
-            <input type="text" class="form-control" id="groupName" placeholder="Nombre grupo"/>
+            <input type="text" id="nameGroup" class="form-control" placeholder="nombre de grupo"/>
         </div>
     </div><br>
     <div class="row">
-        <div class="col-sm-5 col-md-offset-4">
+        <div class="col-sm-2 col-md-offset-2">
             <label>Extensiones</label>
+        </div>
+        <div class="col-sm-2 col-md-offset-2">
+            <label>Destinos</label>
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-5 col-md-offset-4">
+        <div class="col-sm-4 col-md-offset-2">
             <select id="dual1" name="extselect" multiple="multiple" class="fieldLoader" size='8'>
             </select>
-            <input id="anadirExt" class="btn btn-sm btn-success" type="button" value="->"/>
-            <input id="quitarExt" class="btn btn-sm btn-success" type="button" value="<-"/>
+            <input id="anadirExt" class="btn btn-sm btn-warning" type="button" value="->"/>
+            <input id="quitarExt" class="btn btn-sm btn-warning" type="button" value="<-"/>
             <select id="dual2" multiple="multiple" name="extselected[]" class="fieldLoader" size='8'>
             </select>
         </div>
+        <div class="col-sm-4">
+            <select id="dual5" name="destselect" multiple="multiple" class="fieldLoader" size='8'>
+            </select>
+            <input id="anadirDst" class="btn btn-sm btn-warning" type="button" value="->"/>
+            <input id="quitarDst" class="btn btn-sm btn-warning" type="button" value="<-"/>
+            <select id="dual6" multiple="multiple" name="destselected[]" class="fieldLoader" size='8'>
+            </select>
+        </div>
     </div><br>
     <div class="row">
-        <div class="col-sm-5 col-md-offset-4">
+        <div class="col-sm-2 col-md-offset-2">
             <label>Pines</label>
         </div>
-    </div>
+    </div><br>
     <div class="row">
-        <div class="col-sm-5 col-md-offset-4">
+        <div class="col-sm-4 col-md-offset-2">
             <select id="dual3" name="pinselect" multiple="multiple" class="fieldLoader" size='8'>
             </select>
-            <input id="anadirPin" class="btn btn-sm btn-success" type="button" value="->"/>
-            <input id="quitarPin" class="btn btn-sm btn-success" type="button" value="<-"/>
+            <input id="anadirPin" class="btn btn-sm btn-warning" type="button" value="->"/>
+            <input id="quitarPin" class="btn btn-sm btn-warning" type="button" value="<-"/>
             <select id="dual4" multiple="multiple" name="pinselected[]" class="fieldLoader" size='8'>
             </select>
-        </div>
-    </div><br>
-    <div class="row">
-        <div class="col-md-3 col-md-offset-4">
-            <select id="comboProfile" class="form-control">
-                <option>Selec. Perfil</option>
-            </select>
-        </div>
-    </div><br>
-    <div class="row">
-        <div class="col-md-3 col-md-offset-4">
-            <button id="updateGroup" type="button" class="btn btn-sm btn-success">Guardar</button>
+        </div><br><br><br><br><br><br>
+        <div class="col-md-3">
+            <button id="updateGroup" type="button" class="btn btn-sm btn-success">Actualizar</button>
         </div>
     </div>
 </form>
@@ -68,10 +70,23 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
             data: 'id=' + id,
             success: function (msg) {
                 var json = JSON.parse(msg);
-                $("#groupName").val(json.name);
-                $("#comboProfile > option[value='" + json.idprofile + "']").attr('selected', 'selected');
-                var arrexts = json.extlist.split(',');
-                var arrpins = json.pinlist.split(',');
+                $("#nameGroup").val(json.nomgrupo);
+                var Jarrexts = json.extensiones[0];
+                var Jarrpins = json.pines[0];
+                var Jarrdsts = json.destinos[0];
+
+                var arrexts = [];
+                for (var x in Jarrexts) {
+                    arrexts.push(Jarrexts[x]);
+                }
+                var arrpins = [];
+                for (var x in Jarrpins) {
+                    arrpins.push(Jarrpins[x]);
+                }
+                var arrdsts = [];
+                for (var x in Jarrdsts) {
+                    arrdsts.push(Jarrdsts[x]);
+                }
                 for (var a = 0; a < arrexts.length; a++) {
                     var opt = quitAndMake(arrexts[a], $("#dual1"));
                     $("#dual2").append(opt);
@@ -79,6 +94,10 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
                 for (var a = 0; a < arrpins.length; a++) {
                     var opt = quitAndMake(arrpins[a], $("#dual3"));
                     $("#dual4").append(opt);
+                }
+                for (var a = 0; a < arrdsts.length; a++) {
+                    var opt = quitAndMake(arrdsts[a], $("#dual5"));
+                    $("#dual6").append(opt);
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -88,41 +107,38 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
         });
         $("#updateGroup").click(function () {
             var datos = {op: 'updateGroup',
-                id: $("#idGroup").val(),
-                name: $("#groupName").val()};
+                id: $("#idGroup").val()};
+            datos.name = $("#nameGroup").val();
+            var dsts = [];
+            for (i = 0; i < $("#dual6")[0].length; i++) {
+                dsts[i] = $("#dual6").children()[i].value;
+            }
             var pins = [];
             for (i = 0; i < $("#dual4")[0].length; i++) {
-                pins[i] = $("#dual4").children()[i].innerHTML;
+                pins[i] = $("#dual4").children()[i].value;
             }
             var exts = [];
             for (i = 0; i < $("#dual2")[0].length; i++) {
-                exts[i] = $("#dual2").children()[i].innerHTML;
+                exts[i] = $("#dual2").children()[i].value;
             }
+            datos.dst = dsts;
             datos.pin = pins;
             datos.ext = exts;
-            datos.profid = $("#comboProfile").val();
-            if ($("#groupName").val() && $("#comboProfile").val()) {
-                val1 = validar($("#groupName").val(), "text");
-                if (val1) {
-                    $.ajax({
-                        url: 'controllers/Ctl_Group.php',
-                        type: 'GET',
-                        contentType: "application/json",
-                        data: {json: JSON.stringify(datos)},
-                        success: function (ms) {
-                            window.location.href = "index.php?page=ListGroup";
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            debugger;
-                            console.log("Error al ejecutar => " + textStatus + " - " + errorThrown);
-                        }
-                    });
-                } else {
-                    alert('Formato de nombre incorrecto');
-                }
-            } else {
-                alert("Por favor ingrese Nombre y/o Perfil");
-            }
+            
+                $.ajax({
+                    url: 'controllers/Ctl_Group.php',
+                    type: 'GET',
+                    contentType: "application/json",
+                    data: {json: JSON.stringify(datos)},
+                    success: function (msg) {
+                        debugger;
+                        //window.location.href = "index.php?page=ListGroup";
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        debugger;
+                        console.log("Error al ejecutar => " + textStatus + " - " + errorThrown);
+                    }
+                });
         });
     });
 </script>

@@ -1,12 +1,12 @@
 <?php
 
-include_once '../models/Mdl_Pin.php';
+//include_once '../models/Mdl_Pin.php';
 if (isset($_GET['file'])) {
     $enlace = $_GET['file'] ? $_GET['file'] : '';
     $content_type = '';
     if ($_GET['task'] == 'Ej') {
         $content_type = 'text/csv';
-        download_file($_SERVER['DOCUMENT_ROOT'] . '/DstSwitch/' . $enlace, 'csvEj.csv', $content_type);
+        download_file($_SERVER['DOCUMENT_ROOT'] . '/dstswitch/' . $enlace, 'csvEj.csv', $content_type);
     } elseif ($_GET['task'] == 'export') {
         $content_type = 'text/csv';
         download_file('/tmp/' . $enlace, $enlace, $content_type);

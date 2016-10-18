@@ -3,7 +3,7 @@
 if (file_exists('../config.php')) {
     $z = '../config.php';
 } else {
-    $z = '/var/www/html/DstSwitch/config.php';
+    $z = '/var/www/html/dstswitch/config.php';
 }
 //echo $z;
 include $z;
@@ -30,7 +30,7 @@ class Mdl_Pin {
             try {
                 $linea = fgets($fileLoc);
                 $linea = explode(',', $linea);
-                $sql = "insert into pin(pin, description) values(:pin, :desc)";
+                $sql = "insert into pin(pinNumber, pinName) values(:pin, :desc)";
                 $query = $cnn->prepare($sql);
                 if ($linea[0] && $linea[1]) {
                     $query->bindParam(":pin", $linea[0]);
@@ -49,12 +49,13 @@ class Mdl_Pin {
     }
 
     function insert($arrData) {
-        $sql = "insert into pin (pin, description) values(:pin, :desc)";
+        $sql = "insert into pin (pinNumber, pinName, id_grupo) values(:pin, :desc, :groupid)";
         try {
             $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
             $query = $cnn->prepare($sql);
             $query->bindParam(":pin", $arrData[0]);
             $query->bindParam(":desc", $arrData[1]);
+            $query->bindParam(":groupid", $arrData[2]);
             $query->execute();
             if($query->errorCode()) {
                 $result = $query->errorCode();
@@ -67,7 +68,7 @@ class Mdl_Pin {
     }
 
     function update($arrData) {
-        $sql = "update pin set pin = :pin, description = :desc "
+        $sql = "update pin set pinNumber = :pin, pinName = :desc "
                 . "where id = :id";
         try {
             $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
@@ -112,6 +113,20 @@ class Mdl_Pin {
         }
         return $result;
     }
+    
+    function selectList() {
+        $sql = "select id, pinNumber, pinName from pin";
+        try {
+            $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
+            $query = $cnn->prepare($sql);
+            $query->execute();
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);
+            $cnn = NULL;
+        } catch (PDOException $ex) {
+            return $ex->getMessage();
+        }
+        return $result;
+    }
 
     function selectById($arrData) {
         $sql = "select * from pin where id = :id";
@@ -129,7 +144,7 @@ class Mdl_Pin {
     }
     
     function selectNameByPin($arrData) {
-        $sql = "select name from pin where pin = :pin";
+        $sql = "select pinName from pin where pinNumber = :pin";
         try {
             $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
             $query = $cnn->prepare($sql);

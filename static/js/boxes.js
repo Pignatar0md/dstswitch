@@ -133,7 +133,7 @@ function quitarDestinos() {
 function quitAndMake(value, dualToQuit) {
     var optToReturn;
     for (i = 0; i < dualToQuit[0].length; i++) {
-        if (dualToQuit.children()[i].innerHTML == $.trim(value)) {
+        if (dualToQuit.children()[i].value == $.trim(value)) {
             optToReturn = dualToQuit.children()[i];
             dualToQuit.children()[i].parentNode.removeChild(dualToQuit.children()[i]);
             break;

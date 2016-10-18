@@ -1,5 +1,4 @@
 function validar(valor, type) {
-    debugger;
     var ok = true;
     var textExp = /[!@#$%\^&*\(\)-=+_,<>/?;:\[\{\}\]'"]/;
     if(type == "num") {

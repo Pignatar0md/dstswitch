@@ -49,24 +49,6 @@
             </li>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    Perfiles <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a href="index.php?page=NewProfile">Alta</a></li>
-                    <li><a href="index.php?page=ListProfile">Listado</a></li>
-                </ul>
-            </li>
-            <!--<li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    Permisos <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a href="index.php?page=NewPermission">Alta</a></li>
-                    <li><a href="index.php?page=ListPermission">Listado</a></li>
-                </ul>
-            </li>-->
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     Reportes <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu">

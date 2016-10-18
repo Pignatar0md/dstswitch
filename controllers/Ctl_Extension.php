@@ -1,6 +1,6 @@
 <?php
 
-include_once '/var/www/html/DstSwitch/models/Mdl_Extension.php';
+include_once '/var/www/html/dstswitch/models/Mdl_Extension.php';
 
 /**
  * Description of Ctl_Exension

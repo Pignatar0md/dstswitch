@@ -9,7 +9,7 @@ if (isset($_POST["login"])) {
     $dataAuth[0] = $_POST["usuario"];
     $dataAuth[1] = $_POST["clave"];
     if ($dataAuth[0] && $dataAuth[1]) {
-        $mdlUser = new Mdl_User('dstswitch');
+        $mdlUser = new Mdl_User('Dstswitch');
         $result = $mdlUser->Autenticar($dataAuth);
         $user = '';
         $id = '';
