@@ -37,35 +37,35 @@ if ($nroDiscado) {
         } else {
             $toCall = 'false';
         }
-    } elseif (strlen($nroDiscado) === 13 && substr($nroDiscado, 0, 2) === '08') {
+    } elseif (strlen($nroDiscado) === 13 && substr($nroDiscado, 1, 2) === '08') {
         //11 digitos de largo comenzando con 0 = 0810/0800
         if (in_array("CeroOchocientos", $dest)) {
             $toCall = 'true';
         } else {
             $toCall = 'false';
         }
-    } elseif (strlen($nroDiscado) === 11 && substr($nroDiscado, 0, 1) === '0') {
+    } elseif (strlen($nroDiscado) === 13 && substr($nroDiscado, 1, 1) === '0') {
         //11 digitos comenzando con 0 = fijo larga distancia   
         if (in_array("FijosInterurbanos", $dest)) {
             $toCall = 'true';
         } else {
             $toCall = 'false';
         }
-    } elseif (strlen($nroDiscado) === 7) {
+    } elseif (strlen($nroDiscado) === 9) {
         //7 digitos de largo = fijo local
         if (in_array("FijosLocales", $dest)) {
             $toCall = 'true';
         } else {
             $toCall = 'false';
         }
-    } elseif (strlen($nroDiscado) === 9 && substr($nroDiscado, 0, 2) === '15') {
+    } elseif (strlen($nroDiscado) === 11 && substr($nroDiscado, 1, 2) === '15') {
         //9 digitos de largo con 15 = celular local
         if (in_array("CelularesUrbanos", $dest)) {
             $toCall = 'true';
         } else {
             $toCall = 'false';
         }
-    } elseif (strlen($nroDiscado) > '12' && substr($nroDiscado, 0, 2) === '00') {
+    } elseif (strlen($nroDiscado) > 14 && substr($nroDiscado, 1, 2) === '00') {
         //empezando con 00 es larga distancia internacional
         if (in_array("Internacionales", $dest)) {
             $toCall = 'true';
