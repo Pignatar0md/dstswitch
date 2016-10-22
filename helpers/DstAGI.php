@@ -1,18 +1,17 @@
--#!/usr/bin/php -q
+#!/usr/bin/php -q
 <?php
 include '/var/www/html/dstswitch/config.php';
 include '/var/www/html/dstswitch/controllers/Ctl_Destiny.php';
 $Agi = new AGI();
 $controllerDst = new Ctl_Destiny();
-$boolPin = '';//$argv[1]; // pin del llamante
+$boolPin = $argv[1]; // pin del llamante
 $res = '';
-$nom = '';
 
 if ($boolPin) {
     $arrPinExten[0] = $boolPin;
     $res = $controllerDst->traerDstPorPin($arrPinExten);
 } else {
-    $arrPinExten[0] = 1003;//$argv[3];//Agi->get_variable('agi_callerid'); // extension del llamante
+    $arrPinExten[0] = $argv[3];//Agi->get_variable('agi_callerid'); // extension del llamante
     $res = $controllerDst->traerDstPorExt($arrPinExten);
 }
 
@@ -27,7 +26,7 @@ foreach ($res as $key => $value) {
     }
 }
 
-$nroDiscado = 6285260;//$argv[2]; // numero a llamar
+$nroDiscado = $argv[2]; // numero a llamar
 $toCall = '';
 
 if ($nroDiscado) {
