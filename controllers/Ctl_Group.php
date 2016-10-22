@@ -59,7 +59,7 @@ class Ctl_Group {
 }
 
 
-$operation = $_POST['op'];
+$operation =  isset($_POST['op']) ? $_POST['op'] : '';
 $ctlGroup = new Ctl_Group();
 if (!$operation) {
     $jsonGet = json_decode($_GET['json'], true);
@@ -157,7 +157,7 @@ if ($operation) {
     }
 }
 //$_GET['id'] = 31;
-$id = $_GET['id'];
+$id = isset($_GET['id']) ? $_GET['id'] : ''; 
 $jsonStr = '{';
 if ($id) {
     foreach ($_GET as $key => $value) {

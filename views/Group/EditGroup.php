@@ -132,7 +132,7 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
                     data: {json: JSON.stringify(datos)},
                     success: function (msg) {
                         debugger;
-                        //window.location.href = "index.php?page=ListGroup";
+                        window.location.href = "index.php?page=ListGroup";
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         debugger;

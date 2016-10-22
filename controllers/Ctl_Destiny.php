@@ -56,7 +56,7 @@ class Ctl_Destiny {
 /*$_POST['op'] = 'saveDestiny';
 $_POST["name"] = "sdsdsdsd";*/
 
-$operation = $_POST['op'];
+$operation = isset($_POST['op']) ? $_POST['op'] : '';
 $ctlDest = new Ctl_Destiny();
 if ($operation) {
     foreach ($_POST as $key => $value) {
@@ -128,7 +128,7 @@ if ($operation) {
             break;
     }
 }
-$id = $_GET['id'];
+$id = isset($_GET['id']) ? $_GET['id'] : '';
 $jsonStr = '{';
 if ($id) {
     foreach ($_GET as $key => $value) {
@@ -150,3 +150,9 @@ if ($id) {
     }
     echo $jsonStr;
 }
+//debug
+//$ctl = new Ctl_Destiny();
+//$arr[0] = 1003;
+//$arr[1] = '1002,1003';
+//$res = $ctl->traerDstPorExt($arr);
+//echo var_dump($res);

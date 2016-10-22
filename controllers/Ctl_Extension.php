@@ -44,7 +44,7 @@ class Ctl_Exension {
 
 }
 
-$operation = $_POST['op'];
+$operation =  isset($_POST['op']) ? $_POST['op'] : '';
 $ctlExt = new Ctl_Exension();
 if ($operation) {
     foreach ($_POST as $key => $value) {

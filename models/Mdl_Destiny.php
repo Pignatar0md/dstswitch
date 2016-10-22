@@ -108,8 +108,8 @@ class Mdl_Destiny {
 
     function selectDstByExt($arrData) {// usado para buscar ext y autorizar
         $sql = "select distinct dst.descr as destino from destiny dst join grupo_dest grpdst on dst.id = grpdst.id_dest 
-                join grupo grp on grpdst.id_grupo = grp.id join grupo_extens grpext on grp.id = grpext.id_grupo
-                where :exten IN (select exten from grupo_extens ge where ge.id_grupo = grp.id)";
+                join grupo grp on grpdst.id_grupo = grp.id join grupo_exten grpext on grp.id = grpext.id_grupo
+                where :exten IN (select exten from grupo_exten ge where ge.id_grupo = grp.id)";
         try {
             $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
             $query = $cnn->prepare($sql);
@@ -125,6 +125,7 @@ class Mdl_Destiny {
 }
 
 /*$md = new Mdl_Destiny('Dstswitch');
-$arrData[0] = 'adsa';
-$res = $md->insert($arrData);
-echo $res;*/
+$arrData[0] = 1003;
+//$arrData[1] = '1001,1003,1002';
+$res = $md->selectDstByExt($arrData);
+echo var_dump($res);*/

@@ -97,7 +97,7 @@ class Ctl_Pin {
 
 }
 
-$operation = $_POST['op'];
+$operation =  isset($_POST['op']) ? $_POST['op'] : '';
 $ctlPin = new Ctl_Pin();
 if ($operation) {
     foreach ($_POST as $key => $value) {
@@ -194,7 +194,7 @@ if ($operation) {
             break;
     }
 }
-$id = $_GET['id'];
+$id = isset($_GET['id']) ? $_GET['id'] : ''; 
 $jsonStr = '{';
 if ($id) {
     foreach ($_GET as $key => $value) {
