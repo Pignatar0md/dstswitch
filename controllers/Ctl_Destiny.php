@@ -1,7 +1,7 @@
 <?php
 
 include '/var/www/html/dstswitch/models/Mdl_Destiny.php';
-
+include '../helpers/json_helper.php';
 /**
  * Description of Ctl_Destiny
  *

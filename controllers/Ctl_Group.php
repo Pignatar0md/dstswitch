@@ -1,6 +1,7 @@
 <?php
 
 include '../models/Mdl_Group.php';
+include '../helpers/json_helper.php';
 
 /**
  * Description of Ctl_Group

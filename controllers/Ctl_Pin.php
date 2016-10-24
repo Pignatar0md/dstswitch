@@ -8,6 +8,7 @@ if (file_exists('../../models/Mdl_Pin.php')) {
     $a = '/var/www/html/dstswitch/models/Mdl_Pin.php';
 }
 include_once $a;
+include '../helpers/json_helper.php';
 
 /**
  * Description of Ctl_Pin
