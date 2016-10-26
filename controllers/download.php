@@ -1,6 +1,5 @@
 <?php
 
-//include_once '../models/Mdl_Pin.php';
 if (isset($_GET['file'])) {
     $enlace = $_GET['file'] ? $_GET['file'] : '';
     $content_type = '';

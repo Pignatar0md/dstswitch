@@ -1,7 +1,7 @@
 <?php
 
-include '../models/Mdl_Group.php';
-include '../helpers/json_helper.php';
+include '/var/www/html/dstswitch/models/Mdl_Group.php';
+include '/var/www/html/dstswitch/helpers/json_helper.php';
 
 /**
  * Description of Ctl_Group
@@ -34,6 +34,11 @@ class Ctl_Group {
 
     function traer() {
         $res = $this->mdl->select();
+        return $res;
+    }
+    
+    function traerIdGrupo($arr) {
+        $res = $this->mdl->selectGroupId($arr);
         return $res;
     }
 
@@ -77,6 +82,7 @@ if ($operation) {
             $arrayDatos[1] = $jsonGet['ext'];
             $arrayDatos[2] = $jsonGet['dst'];
             $arrayDatos[3] = $jsonGet['pin'];
+            $arrayDatos[4] = $jsonGet['billing'];
             $res = $ctlGroup->configurar($arrayDatos);
             echo $res;
             break;
@@ -147,6 +153,7 @@ if ($operation) {
             $arrayDatos[2] = $jsonGet['pin'];
             $arrayDatos[3] = $jsonGet['dst'];
             $arrayDatos[4] = $jsonGet['ext'];
+            $arrayDatos[5] = $jsonGet['billing'];
             $res = $ctlGroup->actualizar($arrayDatos);
             echo $res;
             break;
@@ -185,6 +192,9 @@ if ($id) {
                         } elseif ($clave == "destId") {
                             $subcadDst .= '"'.$c.'":"'.$valor.'",';
                             $c++;
+                        } elseif ($clave == "id_tar_dest") {
+                            $tarifaGrupo = '"tarifa":"'.$valor.'",';
+                            $c++;
                         } 
                     }
                 }
@@ -194,6 +204,6 @@ if ($id) {
     $subcadDst = substr($subcadDst, 0, -1);
     $subcadExt = substr($subcadExt, 0, -1);
     $subcadPin = substr($subcadPin, 0, -1);
-    $jsonStr .= '"nomgrupo":"'.$nomGrupo.'","extensiones":[{'.$subcadExt.'}],"pines":[{'.$subcadPin.'}],"destinos":[{'.$subcadDst.'}]}';
+    $jsonStr .= $tarifaGrupo.'"nomgrupo":"'.$nomGrupo.'","extensiones":[{'.$subcadExt.'}],"pines":[{'.$subcadPin.'}],"destinos":[{'.$subcadDst.'}]}';
     echo $jsonStr;
 }

@@ -1,5 +1,6 @@
 <?php
-
+//ini_set('display_errors', 'On');
+//error_reporting(E_ALL);
 include_once '../config.php';
 
 /**
@@ -17,14 +18,13 @@ class Mdl_Group {
     }
 
     function insert($arrData) {
-        $sql = "insert into grupo (descr) "
-                . "values(:descr)";
+        $sql = "insert into grupo (descr, id_tar_dest) "
+                . "values(:descr, NULL)";
         try {
             $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
             $query = $cnn->prepare($sql);
             $query->bindParam(":descr", $arrData[0]);
-            $query->execute();
-            $result = $query->fetchAll(PDO::FETCH_ASSOC);
+            $result = $query->execute();
             $cnn = NULL;
         } catch (PDOException $ex) {
             return $ex->getMessage();
@@ -53,6 +53,10 @@ class Mdl_Group {
             $query = $cnn->prepare($sql);
             $res = $query->execute();
         }
+
+        $sql = "update grupo set id_tar_dest = $arrData[4] where id = $arrData[0]";
+        $query = $cnn->prepare($sql);
+        $res = $query->execute();
 
         if ($res == 1) {
             $sql = "COMMIT";
@@ -104,8 +108,6 @@ class Mdl_Group {
                 foreach ($valor as $cla => $val) {
                     $valorsDeBD[] = $val;
                 }
-                //$arrQuitExt = $this->Quit($valor, $arrData[4]);
-                //$arrAddExt = $this->Add($valor, $arrData[4]);
             }
             $arrQuitExt = $this->Quit($valorsDeBD, $arrData[4]);
             $arrAddExt = $this->Add($valorsDeBD, $arrData[4]);
@@ -203,6 +205,12 @@ class Mdl_Group {
                 $query->execute();
             }
         }
+        //
+        $sql = "update grupo set id_tar_dest = :idtd where id = :id";
+        $query = $cnn->prepare($sql);
+        $query->bindParam(":id", $id);
+        $query->bindParam(":idtd", $arrData[5]);
+        $query->execute();
         $cnn = NULL;
     }
 
@@ -227,6 +235,22 @@ class Mdl_Group {
         try {
             $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
             $query = $cnn->prepare($sql);
+            $query->execute();
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);
+            $cnn = NULL;
+        } catch (PDOException $ex) {
+            return $ex->getMessage();
+        }
+        return $result;
+    }
+
+    function selectGroupId($arrData) { // usado para DstAGI
+        $sql = "select id_grupo
+                    from grupo_exten where exten = :exten";
+        try {
+            $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
+            $query = $cnn->prepare($sql);
+            $query->bindParam(":exten", $arrData[0]);
             $query->execute();
             $result = $query->fetchAll(PDO::FETCH_ASSOC);
             $cnn = NULL;
@@ -292,6 +316,12 @@ class Mdl_Group {
             $query->bindParam(':id', $id);
             $query->execute();
             $resultArr[2] = $query->fetchAll(PDO::FETCH_ASSOC);
+            $sql = "select id_tar_dest from grupo 
+                            where id = :id";
+            $query = $cnn->prepare($sql);
+            $query->bindParam(':id', $id);
+            $query->execute();
+            $resultArr[3] = $query->fetchAll(PDO::FETCH_ASSOC);
             $cnn = NULL;
         } catch (PDOException $ex) {
             return $ex->getMessage();
@@ -301,14 +331,7 @@ class Mdl_Group {
 
 }
 
-/* $mld = new Mdl_Group('Dstswitch');
-  $arrData[0] = 25;
-  $arrData[1] = array("1003", "1001", "1006");
-  $arrData[2] = array(7, 8);
-  $arrData[3] = array(1);
-  $res = $mld->set($arrData);
-  echo $res; */
 /*$mld = new Mdl_Group('Dstswitch');
-$arrData[0] = 31;
-$res = $mld->selectById($arrData);
+$arrData[0] = "bla";
+$res = $mld->insert($arrData);
 echo var_dump($res);*/

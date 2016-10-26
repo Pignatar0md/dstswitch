@@ -1,5 +1,18 @@
 $(function () {
     $.ajax({
+        url: 'controllers/Ctl_Billing.php',
+        type: 'POST',
+        dataType: "html",
+        data: "op=getAllBilling",
+        success: function (msg) {
+            $("#billing").html(msg);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            debugger;
+            console.log("Error al ejecutar => " + textStatus + " - " + errorThrown);
+        }
+    });
+    $.ajax({
         url: 'controllers/Ctl_Extension.php',
         type: 'POST',
         dataType: "html",
@@ -55,37 +68,37 @@ $(function () {
     $("#confGroup").click(function () {
         var datos = {op: 'confGroup',
             id: $("#GroupId").val()};
-            datos.name = $("#GroupName").val();
-            var dsts = [];
-            for (i = 0; i < $("#dual6")[0].length; i++) {
-                dsts[i] = $("#dual6").children()[i].value;
-            }
-            var pins = [];
-            for (i = 0; i < $("#dual4")[0].length; i++) {
-                pins[i] = $("#dual4").children()[i].value;
-            }
-            var exts = [];
-            for (i = 0; i < $("#dual2")[0].length; i++) {
-                exts[i] = $("#dual2").children()[i].value;
-            }
-            datos.dst = dsts;
-            datos.pin = pins;
-            datos.ext = exts;
-            if (datos.dst.length > 0 && (datos.pin.length > 0 || datos.ext.length > 0)) {
-                $.ajax({
-                    url: 'controllers/Ctl_Group.php',
-                    type: 'GET',
-                    contentType: "application/json",
-                    data: {json: JSON.stringify(datos)},
-                    success: function (msg) {
-                        debugger;
-                        window.location.href = "index.php?page=ListGroup";
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        debugger;
-                        console.log("Error al ejecutar => " + textStatus + " - " + errorThrown);
-                    }
-                });
+        datos.name = $("#GroupName").val();
+        var dsts = [];
+        for (i = 0; i < $("#dual6")[0].length; i++) {
+            dsts[i] = $("#dual6").children()[i].value;
+        }
+        var pins = [];
+        for (i = 0; i < $("#dual4")[0].length; i++) {
+            pins[i] = $("#dual4").children()[i].value;
+        }
+        var exts = [];
+        for (i = 0; i < $("#dual2")[0].length; i++) {
+            exts[i] = $("#dual2").children()[i].value;
+        }
+        datos.dst = dsts;
+        datos.pin = pins;
+        datos.ext = exts;
+        datos.billing = $("#billing").val();
+        if (datos.dst.length > 0 && (datos.pin.length > 0 || datos.ext.length > 0)) {
+            $.ajax({
+                url: 'controllers/Ctl_Group.php',
+                type: 'GET',
+                contentType: "application/json",
+                data: {json: JSON.stringify(datos)},
+                success: function (msg) {
+                    window.location.href = "index.php?page=ListGroup";
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    debugger;
+                    console.log("Error al ejecutar => " + textStatus + " - " + errorThrown);
+                }
+            });
         } else {
             alert("Por favor ingrese pines y/o extensiones");
         }
@@ -157,7 +170,6 @@ $(function () {
                     dataType: "html",
                     data: 'op=saveDestiny&name=' + $("#nameDest").val(),
                     success: function (msg) {
-                        debugger;
                         window.location.href = "index.php?page=ListDestiny";
                     },
                     error: function (jqXHR, textStatus, errorThrown) {

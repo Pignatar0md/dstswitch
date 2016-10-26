@@ -2,17 +2,24 @@
 <?php
 include '/var/www/html/dstswitch/config.php';
 include '/var/www/html/dstswitch/controllers/Ctl_Destiny.php';
+include '/var/www/html/dstswitch/controllers/Ctl_Pin.php';
+include '/var/www/html/dstswitch/controllers/Ctl_Group.php';
+
 $Agi = new AGI();
 $controllerDst = new Ctl_Destiny();
+$controllerPin = new Ctl_Pin();
+$controllerGrp = new Ctl_Group();
 $boolPin = $argv[1]; // pin del llamante
-$res = '';
+$idgrupo = $res = '';
 
 if ($boolPin) {
     $arrPinExten[0] = $boolPin;
     $res = $controllerDst->traerDstPorPin($arrPinExten);
+    $idgrupo = $controllerPin->traerIdGrupo($arrPinExten);
 } else {
     $arrPinExten[0] = $argv[3];//Agi->get_variable('agi_callerid'); // extension del llamante
     $res = $controllerDst->traerDstPorExt($arrPinExten);
+    $idgrupo = $controllerGrp->traerIdGrupo($arrPinExten);
 }
 
 $dest = '';
@@ -25,7 +32,15 @@ foreach ($res as $key => $value) {
         }
     }
 }
-
+foreach ($idgrupo as $key => $value) {
+    if (is_array($value)) {
+        foreach ($value as $k => $v) {
+            if ($k == "id_grupo") {
+                $idgrupo = $v;
+            }
+        }
+    }
+}
 $nroDiscado = $argv[2]; // numero a llamar
 $toCall = '';
 
@@ -76,4 +91,5 @@ if ($nroDiscado) {
         $toCall = 404;
     }
 }
+$Agi->set_variable("id_grupo", $idgrupo[0]);
 $Agi->set_variable("otorga_permiso", $toCall);

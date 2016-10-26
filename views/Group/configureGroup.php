@@ -1,5 +1,19 @@
 <script>
     $(function () {
+        /*$.ajax({
+            url: 'controllers/Ctl_Billing.php',
+            type: 'POST',
+            dataType: "html",
+            data: "op=getAllBilling",
+            success: function (msg) {
+                $("#billing").html(msg);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                debugger;
+                console.log("Error al ejecutar => " + textStatus + " - " + errorThrown);
+            }
+        });*/
+        
         var name = $("#GroupName").html();
         var datos = {
             op: "getGroupId",
@@ -11,7 +25,6 @@
             contentType: "application/json",
             data: {json: JSON.stringify(datos)},
             success: function (msg) {
-                debugger;
                 var json = JSON.parse(msg);
                 $("#GroupId").val(json.id);
             },
@@ -68,8 +81,16 @@
             <input id="quitarPin" class="btn btn-sm btn-warning" type="button" value="<-"/>
             <select id="dual4" multiple="multiple" name="pinselected[]" class="fieldLoader" size='8'>
             </select>
-        </div><br><br><br><br><br><br>
-        <div class="col-md-3">
+        </div><br>
+        <div class="col-sm-1">
+            <label>tarifa</label>
+        </div>
+        <div class="col-md-2">
+            <select id="billing" class="form-control">
+            </select>
+        </div><br>
+        <br><br><br><br>
+        <div class="col-md-2 col-md-offset-2">
             <button id="confGroup" type="button" class="btn btn-sm btn-success">Guardar</button>
         </div>
     </div>

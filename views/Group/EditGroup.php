@@ -54,9 +54,17 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
             <input id="quitarPin" class="btn btn-sm btn-warning" type="button" value="<-"/>
             <select id="dual4" multiple="multiple" name="pinselected[]" class="fieldLoader" size='8'>
             </select>
-        </div><br><br><br><br><br><br>
-        <div class="col-md-3">
-            <button id="updateGroup" type="button" class="btn btn-sm btn-success">Actualizar</button>
+        </div><br>
+        <div class="col-sm-1">
+            <label>tarifa</label>
+        </div>
+        <div class="col-md-2">
+            <select id="billing" class="form-control">
+            </select>
+        </div><br>
+        <br><br><br><br>
+        <div class="col-md-2 col-md-offset-2">
+            <button id="updateGroup" type="button" class="btn btn-sm btn-success">Guardar</button>
         </div>
     </div>
 </form>
@@ -71,10 +79,10 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
             success: function (msg) {
                 var json = JSON.parse(msg);
                 $("#nameGroup").val(json.nomgrupo);
+                $("#billing option[value='"+json.tarifa+"']").prop('selected', true);
                 var Jarrexts = json.extensiones[0];
                 var Jarrpins = json.pines[0];
                 var Jarrdsts = json.destinos[0];
-
                 var arrexts = [];
                 for (var x in Jarrexts) {
                     arrexts.push(Jarrexts[x]);
@@ -124,21 +132,22 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
             datos.dst = dsts;
             datos.pin = pins;
             datos.ext = exts;
-            
-                $.ajax({
-                    url: 'controllers/Ctl_Group.php',
-                    type: 'GET',
-                    contentType: "application/json",
-                    data: {json: JSON.stringify(datos)},
-                    success: function (msg) {
-                        debugger;
-                        window.location.href = "index.php?page=ListGroup";
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        debugger;
-                        console.log("Error al ejecutar => " + textStatus + " - " + errorThrown);
-                    }
-                });
+            debugger;
+            datos.billing = $("#billing").val();
+            $.ajax({
+                url: 'controllers/Ctl_Group.php',
+                type: 'GET',
+                contentType: "application/json",
+                data: {json: JSON.stringify(datos)},
+                success: function (msg) {
+                    debugger;
+                    window.location.href = "index.php?page=ListGroup";
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    debugger;
+                    console.log("Error al ejecutar => " + textStatus + " - " + errorThrown);
+                }
+            });
         });
     });
 </script>

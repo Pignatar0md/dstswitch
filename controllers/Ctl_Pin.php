@@ -40,6 +40,11 @@ class Ctl_Pin {
         return $res;
     }
     
+    function traerIdGrupo($arr) {
+        $res = $this->mdl->selectGroupId($arr);
+        return $res;
+    }
+    
     function traerLista() {
         $res = $this->mdl->selectList();
         return $res;
