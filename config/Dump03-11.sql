@@ -28,7 +28,7 @@ CREATE TABLE `destiny` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `descr` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,6 +37,7 @@ CREATE TABLE `destiny` (
 
 LOCK TABLES `destiny` WRITE;
 /*!40000 ALTER TABLE `destiny` DISABLE KEYS */;
+INSERT INTO `destiny` VALUES (1,'FijosLocales'),(2,'CelularesLocales'),(3,'CelularesInterurbanos'),(4,'FijosInterurbanos'),(5,'Internacionales'),(6,'CeroOchocientos');
 /*!40000 ALTER TABLE `destiny` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -50,11 +51,8 @@ DROP TABLE IF EXISTS `grupo`;
 CREATE TABLE `grupo` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `descr` varchar(45) NOT NULL,
-  `id_tar_dest` int(11) NULL,
-  PRIMARY KEY (`id`),
-  KEY `id_tar_dest` (`id_tar_dest`),
-  CONSTRAINT `grupo_ibfk_1` FOREIGN KEY (`id_tar_dest`) REFERENCES `tarifa_destino` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -159,7 +157,7 @@ CREATE TABLE `tarifa` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `descr` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -182,13 +180,16 @@ CREATE TABLE `tarifa_destino` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_destino` int(11) NOT NULL,
   `id_tarifa` int(11) NOT NULL,
+  `id_grupo` int(11) DEFAULT NULL,
   `precio` float(5,2) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_destino` (`id_destino`),
   KEY `id_tarifa` (`id_tarifa`),
+  KEY `id_grupo` (`id_grupo`),
+  CONSTRAINT `tarifa_destino_ibfk_1` FOREIGN KEY (`id_destino`) REFERENCES `destiny` (`id`),
   CONSTRAINT `tarifa_destino_ibfk_2` FOREIGN KEY (`id_tarifa`) REFERENCES `tarifa` (`id`),
-  CONSTRAINT `tarifa_destino_ibfk_1` FOREIGN KEY (`id_destino`) REFERENCES `destiny` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  CONSTRAINT `tarifa_destino_ibfk_3` FOREIGN KEY (`id_grupo`) REFERENCES `grupo` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -221,7 +222,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'admin','�4n;��U����V�');
+INSERT INTO `user` VALUES (1,'admin',aes_encrypt('clave','admin'));
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -234,4 +235,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-10-25 17:15:08
+-- Dump completed on 2016-11-03 17:20:09
