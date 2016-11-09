@@ -52,8 +52,8 @@
                     Reportes <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu">
-                    <!--<li><a href="#">A</a></li>
-                    <li><a href="#">L</a></li>
+                    <li><a href="index.php?page=ReportMenu">Consultar</a></li>
+                    <!--<li><a href="#">L</a></li>
                     <li><a href="#">Acción #4</a></li>
                     <li><a href="#">Acción #5</a></li>-->
                 </ul>

@@ -175,9 +175,3 @@ class Mdl_Pin {
     }
 
 }
-
-//$a = new Mdl_Pin('dstswitch');
-//$arrData[0] = '2312313123';
-//$arrData[1] = 'Juana';
-//$file = "/var/www/html/DstSwitch/tmpCsvFile.csv";
-//$res = $a->insertFromCsv($file);

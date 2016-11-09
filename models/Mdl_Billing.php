@@ -1,65 +1,15 @@
 <?php
-include_once '../config.php';
-/**
- * Description of Mdl_Destiny
- *
- * @author marcelo
- */
+
+include_once '/var/www/html/dstswitch/config.php';
+
 class Mdl_Billing {
-    //put your code here
+
     private $argPdo;
 
     function __construct($db) {
         $this->argPdo = "mysql:host=" . MySQL_HOST . ";dbname=$db;charset=utf8";
     }
 
-    /*function insert($arrData) {
-        $sql = "insert into destiny(descr) values(:desc)";
-        try {
-            $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
-            $query = $cnn->prepare($sql);
-            $query->bindParam(":desc", $arrData[0]);
-            $query->execute();
-            $result = $query->fetchAll(PDO::FETCH_ASSOC);
-            $cnn = NULL;
-            $result = true;
-        } catch (PDOException $ex) {
-            return $ex->getMessage();
-        }
-        return $result;
-    }
-
-    function update($arrData) {
-        $sql = "update destiny set descr = :desc where id = :id ";
-        try {
-            $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
-            $query = $cnn->prepare($sql);
-            $query->bindParam(":id", $arrData[0]);
-            $query->bindParam(":desc", $arrData[1]);
-            $query->execute();
-            $result = $query->fetchAll(PDO::FETCH_ASSOC);
-            $cnn = NULL;
-        } catch (PDOException $ex) {
-            return $ex->getMessage();
-        }
-        return $result;
-    }
-
-    function delete($arrData) {
-        $sql = "delete from destiny where id = :id";
-        try {
-            $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
-            $query = $cnn->prepare($sql);
-            $query->bindParam(":id",$arrData[0]);
-            $query->execute();
-            $result = $query->fetchAll(PDO::FETCH_ASSOC);
-            $cnn = NULL;
-        } catch (PDOException $ex) {
-            return $ex->getMessage();
-        }
-        return $result;
-    }*/
-    
     function select() {
         $sql = "select * from tarifa";
         try {
@@ -73,13 +23,15 @@ class Mdl_Billing {
         }
         return $result;
     }
-    
-    /*function selectById($arrData) {
-        $sql = "select * from destiny where id = :id";
+
+    function getPrice($idg, $idd) {
         try {
             $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
+            $sql = "select precio from tarifa_destino 
+                where id_destino = :Idd and id_grupo = :id";
             $query = $cnn->prepare($sql);
-            $query->bindParam(':id', $arrData[0]);
+            $query->bindParam(":id", $idg);
+            $query->bindParam(":Idd", $idd);
             $query->execute();
             $result = $query->fetchAll(PDO::FETCH_ASSOC);
             $cnn = NULL;
@@ -87,11 +39,26 @@ class Mdl_Billing {
             return $ex->getMessage();
         }
         return $result;
-    }*/
-}
+    }
 
-/*$md = new Mdl_Destiny('Dstswitch');
-$arrData[0] = 1003;
-//$arrData[1] = '1001,1003,1002';
-$res = $md->selectDstByExt($arrData);
-echo var_dump($res);*/
+    function getBillingName($idg) {
+//        $sql = "select tr.descr as billName 
+//            from tarifa tr join tarifa_destino trds on tr.id = trds.id_tarifa 
+//	 						   and trds.id_grupo = :id";
+        $sql = "SELECT distinct trf.descr  as illName
+                FROM tarifa trf join tarifa_destino trds on trf.id = trds.id_tarifa 
+				join grupo gr on trds.id_grupo = gr.id and gr.id = :id";
+        try {
+            $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
+            $query = $cnn->prepare($sql);
+            $query->bindParam(":id", $idg);
+            $query->execute();
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);
+            $cnn = NULL;
+        } catch (PDOException $ex) {
+            return $ex->getMessage();
+        }
+        return $result;
+    }
+
+}

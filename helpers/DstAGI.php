@@ -91,5 +91,5 @@ if ($nroDiscado) {
         $toCall = 404;
     }
 }
-$Agi->set_variable("id_grupo", $idgrupo[0]);
+$Agi->set_variable("id_grupo", $idgrupo);
 $Agi->set_variable("otorga_permiso", $toCall);

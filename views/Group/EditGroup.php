@@ -132,7 +132,6 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
             datos.dst = dsts;
             datos.pin = pins;
             datos.ext = exts;
-            debugger;
             datos.billing = $("#billing").val();
             $.ajax({
                 url: 'controllers/Ctl_Group.php',
@@ -140,7 +139,6 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
                 contentType: "application/json",
                 data: {json: JSON.stringify(datos)},
                 success: function (msg) {
-                    debugger;
                     window.location.href = "index.php?page=ListGroup";
                 },
                 error: function (jqXHR, textStatus, errorThrown) {

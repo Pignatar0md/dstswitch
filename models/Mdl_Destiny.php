@@ -1,12 +1,8 @@
 <?php
 include_once '../config.php';
-/**
- * Description of Mdl_Destiny
- *
- * @author marcelo
- */
+
 class Mdl_Destiny {
-    //put your code here
+    
     private $argPdo;
 
     function __construct($db) {
@@ -123,9 +119,3 @@ class Mdl_Destiny {
         return $result;
     }
 }
-
-/*$md = new Mdl_Destiny('Dstswitch');
-$arrData[0] = 1003;
-//$arrData[1] = '1001,1003,1002';
-$res = $md->selectDstByExt($arrData);
-echo var_dump($res);*/

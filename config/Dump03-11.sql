@@ -103,6 +103,7 @@ CREATE TABLE `grupo_exten` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_grupo` int(11) NOT NULL,
   `exten` varchar(45) NOT NULL,
+  UNIQUE (`exten`), 
   PRIMARY KEY (`id`),
   KEY `id_grupo` (`id_grupo`),
   CONSTRAINT `grupo_exten_ibfk_1` FOREIGN KEY (`id_grupo`) REFERENCES `grupo` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION

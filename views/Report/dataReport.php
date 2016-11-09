@@ -9,8 +9,8 @@ $ctlRep = new Ctl_Report();
 $nomGrupo = $nomTarifa = '';
 //recibo params por POST
 $arrDatos[0] = isset($_POST['group']) ? $_POST['group'] : '';
-$arrDatos[1] = isset($_POST['dateSince']) ? $_POST['dateSince'] : '';
-$arrDatos[2] = isset($_POST['dateTo']) ? $_POST['dateTo'] : '';
+$arrDatos[1] = isset($_POST['dateSince']) ? ReverseAndReplace($_POST['dateSince']) : '';
+$arrDatos[2] = isset($_POST['dateTo']) ? ReverseAndReplace($_POST['dateTo']) : '';
 $arrDatos[3] = isset($_POST['timeSince']) ? $_POST['timeSince'] : '';
 $arrDatos[4] = isset($_POST['timeTo']) ? $_POST['timeTo'] : '';
 //traigo precios para cada tipo de llam. y tarifa a grupo
@@ -140,6 +140,8 @@ foreach ($datosFU as $clave => $valor) {
             $cad .="$val,";
         } else if ($cla == 'src') {
             $cad .="$val,";
+        } else if ($cla == 'userfield') {
+            $cad .="$val,";
         } else if ($cla == 'dst') {
             $cad .="$val,";
         } else if ($cla == 'duration') {
@@ -234,6 +236,13 @@ foreach ($datosI as $clave => $valor) {
     }
     fwrite($fileHandler, $cad);
 }
+
+function ReverseAndReplace($fecha) {
+    $fecha2 = explode('/', $fecha);
+    $fecha = array_reverse($fecha2);
+    $fecha2 = implode('-', $fecha);
+    return $fecha2;
+}
 ?>
 <link rel="stylesheet" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css"/>
 <script src="static/js/abm.js"></script>
@@ -282,6 +291,9 @@ foreach ($datosI as $clave => $valor) {
                             </th>
                             <th>
                                 Interno
+                            </th>
+                            <th>
+                                Pin
                             </th>
                             <th>
                                 Destino

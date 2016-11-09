@@ -35,7 +35,7 @@ class Ctl_Billing {
         $res = $this->mdl->selectById($arr);
         return $res;
     }
-
+    
     function actualizar($arr) {
         $res = $this->mdl->update($arr);
         return $res;

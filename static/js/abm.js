@@ -184,4 +184,7 @@ $(function () {
             alert("Por favor ingrese 'Nombre'");
         }
     });
+    $("#tblReport").on('click', '.detailedReport', function () {
+        $("#modalDetailedRep").modal('show');
+    });
 });

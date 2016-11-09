@@ -18,8 +18,8 @@ class Mdl_Group {
     }
 
     function insert($arrData) {
-        $sql = "insert into grupo (descr, id_tar_dest) "
-                . "values(:descr, NULL)";
+        $sql = "insert into grupo (descr) "
+                . "values(:descr)";
         try {
             $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
             $query = $cnn->prepare($sql);
@@ -54,7 +54,7 @@ class Mdl_Group {
             $res = $query->execute();
         }
 
-        $sql = "update grupo set id_tar_dest = $arrData[4] where id = $arrData[0]";
+        $sql = "update tarifa_destino set id_grupo = $arrData[0] where id_tarifa = $arrData[4]";
         $query = $cnn->prepare($sql);
         $res = $query->execute();
 
@@ -97,7 +97,7 @@ class Mdl_Group {
         $query = $cnn->prepare($sql);
         $query->bindParam(":id", $id);
         $query->bindParam(":desc", $arrData[1]);
-        $query->execute();
+        //$query->execute();
         $sql = "select exten from grupo_exten where id_grupo = :id";
         $query = $cnn->prepare($sql);
         $query->bindParam(":id", $id);
@@ -205,11 +205,10 @@ class Mdl_Group {
                 $query->execute();
             }
         }
-        //
-        $sql = "update grupo set id_tar_dest = :idtd where id = :id";
+        $sql = "update tarifa_destino set id_grupo = :id where id_tarifa = :idt";
         $query = $cnn->prepare($sql);
         $query->bindParam(":id", $id);
-        $query->bindParam(":idtd", $arrData[5]);
+        $query->bindParam(":idt", $arrData[5]);
         $query->execute();
         $cnn = NULL;
     }
@@ -226,12 +225,55 @@ class Mdl_Group {
         } catch (PDOException $ex) {
             return $ex->getMessage();
         }
-        return $result;
+        $sql = "update tarifa_destino set id_grupo = null where id_grupo = :id";
+        try {
+            $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
+            $query = $cnn->prepare($sql);
+            $query->bindParam(":id", $arrData[0]);
+            $query->execute();
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);
+            $cnn = NULL;
+        } catch (PDOException $ex) {
+            return $ex->getMessage();
+        }
+        $sql = "update grupo_dest set id_grupo = null where id_grupo = :id";
+        try {
+            $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
+            $query = $cnn->prepare($sql);
+            $query->bindParam(":id", $arrData[0]);
+            $query->execute();
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);
+            $cnn = NULL;
+        } catch (PDOException $ex) {
+            return $ex->getMessage();
+        }
+        $sql = "update grupo_exten set id_grupo = null where id_grupo = :id";
+        try {
+            $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
+            $query = $cnn->prepare($sql);
+            $query->bindParam(":id", $arrData[0]);
+            $query->execute();
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);
+            $cnn = NULL;
+        } catch (PDOException $ex) {
+            return $ex->getMessage();
+        }
+        $sql = "update pin set id_grupo = null where id_grupo = :id";
+        try {
+            $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
+            $query = $cnn->prepare($sql);
+            $query->bindParam(":id", $arrData[0]);
+            $query->execute();
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);
+            $cnn = NULL;
+        } catch (PDOException $ex) {
+            return $ex->getMessage();
+        }
     }
 
     function select() { // usado para el list group
-        $sql = "select id,descr
-                    from grupo";
+        $sql = "select gr.id as id, gr.descr as descr
+                 from grupo gr";
         try {
             $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
             $query = $cnn->prepare($sql);
@@ -274,7 +316,7 @@ class Mdl_Group {
         return $result;
     }
 
-    function selectByName($arrData) {
+    function selectByName($arrData) {// usado en la creacion del grupo para el setting inicial
         $sql = "select id from grupo where descr = :descr";
         try {
             $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
@@ -289,13 +331,13 @@ class Mdl_Group {
         return $result;
     }
 
-    function selectById($arrData) {
+    function selectById($arrData) { // usado para mostrar los datos para la edicion del grupo
         $resultArr = array();
         $id = $arrData[0];
         try {
             $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
             $sql = "select gr.descr as groupName, grex.exten
-                            from  grupo gr join grupo_exten grex on gr.id = grex.id_grupo
+                            from  grupo gr left join grupo_exten grex on gr.id = grex.id_grupo
                             where gr.id = :id";
             $query = $cnn->prepare($sql);
             $query->bindParam(':id', $id);
@@ -316,8 +358,8 @@ class Mdl_Group {
             $query->bindParam(':id', $id);
             $query->execute();
             $resultArr[2] = $query->fetchAll(PDO::FETCH_ASSOC);
-            $sql = "select id_tar_dest from grupo 
-                            where id = :id";
+            $sql = "select id_tarifa from tarifa_destino 
+                            where id_grupo = :id";
             $query = $cnn->prepare($sql);
             $query->bindParam(':id', $id);
             $query->execute();

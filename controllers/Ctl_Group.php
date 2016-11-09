@@ -64,7 +64,6 @@ class Ctl_Group {
 
 }
 
-
 $operation =  isset($_POST['op']) ? $_POST['op'] : '';
 $ctlGroup = new Ctl_Group();
 if (!$operation) {
@@ -192,7 +191,7 @@ if ($id) {
                         } elseif ($clave == "destId") {
                             $subcadDst .= '"'.$c.'":"'.$valor.'",';
                             $c++;
-                        } elseif ($clave == "id_tar_dest") {
+                        } elseif ($clave == "id_tarifa") {
                             $tarifaGrupo = '"tarifa":"'.$valor.'",';
                             $c++;
                         } 
