@@ -64,7 +64,35 @@ $(function () {
             console.log("Error al ejecutar => " + textStatus + " - " + errorThrown);
         }
     });
-
+    $("#confBill").click(function () {
+        var datos = {op: 'confBilling',
+            id: $("#BillingId").val()};
+        var dest_precio = [];
+        for (i = 0; i < $("#dual6")[0].length; i++) {
+            var dest = $("#dual6").children()[i].value;
+            var a = $("#"+dest).val();
+            dest_precio[dest] = a;
+            
+        }
+        datos.dest_prec = dest_precio;
+         if (datos.dest_prec.length) {
+            $.ajax({
+                url: 'controllers/Ctl_Billing.php',
+                type: 'GET',
+                contentType: "application/json",
+                data: {json: JSON.stringify(datos)},
+                success: function (msg) {
+                    window.location.href = "index.php?page=ListBilling";
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    debugger;
+                    console.log("Error al ejecutar => " + textStatus + " - " + errorThrown);
+                }
+            });
+        } else {
+            alert("Por favor ingrese pines y/o extensiones");
+        }
+    });
     $("#confGroup").click(function () {
         var datos = {op: 'confGroup',
             id: $("#GroupId").val()};
@@ -104,6 +132,32 @@ $(function () {
         }
     });
 
+    $("#saveTarif").click(function () {
+        var datos = {op: 'saveBilling',
+            name: $("#billingName").val()};
+        if (datos.name) {
+            var val1 = validar($("#billingName").val(), "text");
+            if (val1) {
+                $.ajax({
+                    url: 'controllers/Ctl_Billing.php',
+                    type: 'GET',
+                    contentType: "application/json",
+                    data: {json: JSON.stringify(datos)},
+                    success: function (msg) {
+                        window.location.href = "index.php?page=configureBilling&name=" + $("#billingName").val();
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        debugger;
+                        console.log("Error al ejecutar => " + textStatus + " - " + errorThrown);
+                    }
+                });
+            } else {
+                alert('Formato de nombre incorrecto');
+            }
+        } else {
+            alert("Por favor ingrese Nombre");
+        }
+    });
     $("#saveGroup").click(function () {
         var datos = {op: 'saveGroup',
             name: $("#groupName").val()};
@@ -127,7 +181,7 @@ $(function () {
                 alert('Formato de nombre incorrecto');
             }
         } else {
-            alert("Por favor ingrese Nombre, pines y extensiones");
+            alert("Por favor ingrese Nombre");
         }
     });
 

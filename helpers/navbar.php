@@ -58,11 +58,15 @@
                     <li><a href="#">Acción #5</a></li>-->
                 </ul>
             </li>
-            <!--<li class="dropdown">
-                <a  href="index.php?page=Logout" class="logout">
-                    <span class="glyphicon glyphicon-off" placeholder="Salir"></span> Salir
+            <li class="dropdown">
+                <a  href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    Tarifas <b class="caret"></b>
                 </a>
-            </li>-->
+                <ul class="dropdown-menu">
+                    <li><a href="index.php?page=ListBilling">Listado</a></li>
+                    <li><a href="index.php?page=NewBilling">Alta</a></li>
+                </ul>
+            </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li id="logout" class="dropdown">

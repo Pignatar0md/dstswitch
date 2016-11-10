@@ -11,7 +11,8 @@ function obtenerPath() {
         "NewPin"=>"views/Pin/NewPin","ListPin"=>"views/Pin/ListPin","EditPin"=>"views/Pin/EditPin","EditDestiny"=>"views/Destiny/EditDestiny",
         "ListDestiny"=>"views/Destiny/ListDestiny","NewDestiny"=>"views/Destiny/NewDestiny", "configureGroup"=>"views/Group/configureGroup", 
         "ReportMenu"=>"views/Report/ReportMenu","dataReport"=>"views/Report/dataReport","detailedReport"=>"views/Report/detailedReport",
-        "NewBilling" => "views/Billing/NewBilling","ListBilling" => "views/Billing/ListBilling","EditBilling" => "views/Billing/EditBilling");
+        "NewBilling" => "views/Billing/NewBilling","ListBilling" => "views/Billing/ListBilling","EditBilling" => "views/Billing/EditBilling",
+        "configureBilling"=>"views/Billing/configureBilling");
 
     if (array_key_exists($pag, $arraypags)) {
         $path = "$arraypags[$pag].php";
