@@ -113,7 +113,7 @@ $(function () {
         datos.pin = pins;
         datos.ext = exts;
         datos.billing = $("#billing").val();
-        if (datos.dst.length > 0 && (datos.pin.length > 0 || datos.ext.length > 0)) {
+        if (datos.dst.length > 0 && (datos.pin.length > 0 || datos.ext.length > 0 ||datos.dst.length > 0)) {
             $.ajax({
                 url: 'controllers/Ctl_Group.php',
                 type: 'GET',

@@ -73,9 +73,10 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
         $("#updateBill").click(function () {
             var datos = {op: 'updateBilling',
                 id: $("#BillingId").val()};
-            
+
             datos.name = $("#billingName").val();
-            var dest_precio = [];var dests = [];
+            var dest_precio = [];
+            var dests = [];
             for (i = 0; i < $("#dual6")[0].length; i++) {
                 var dest = $("#dual6").children()[i].value;
                 var a = $("#" + dest).val();
@@ -84,19 +85,21 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
             }
             datos.dest_prec = dest_precio;
             datos.dsts = dests;
-            $.ajax({
-                url: 'controllers/Ctl_Billing.php',
-                type: 'GET',
-                contentType: "application/json",
-                data: {json: JSON.stringify(datos)},
-                success: function (msg) {
-                    window.location.href = "index.php?page=ListBilling";
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    debugger;
-                    console.log("Error al ejecutar => " + textStatus + " - " + errorThrown);
-                }
-            });
+            if (datos.dsts.length > 0 && datos.dest_prec.length > 0) {
+                $.ajax({
+                    url: 'controllers/Ctl_Billing.php',
+                    type: 'GET',
+                    contentType: "application/json",
+                    data: {json: JSON.stringify(datos)},
+                    success: function (msg) {
+                        window.location.href = "index.php?page=ListBilling";
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        debugger;
+                        console.log("Error al ejecutar => " + textStatus + " - " + errorThrown);
+                    }
+                });
+            }
         });
     });
 </script>

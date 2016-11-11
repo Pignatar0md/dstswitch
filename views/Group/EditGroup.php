@@ -79,7 +79,7 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
             success: function (msg) {
                 var json = JSON.parse(msg);
                 $("#nameGroup").val(json.nomgrupo);
-                $("#billing option[value='"+json.tarifa+"']").prop('selected', true);
+                $("#billing option[value='" + json.tarifa + "']").prop('selected', true);
                 var Jarrexts = json.extensiones[0];
                 var Jarrpins = json.pines[0];
                 var Jarrdsts = json.destinos[0];
@@ -133,19 +133,21 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
             datos.pin = pins;
             datos.ext = exts;
             datos.billing = $("#billing").val();
-            $.ajax({
-                url: 'controllers/Ctl_Group.php',
-                type: 'GET',
-                contentType: "application/json",
-                data: {json: JSON.stringify(datos)},
-                success: function (msg) {
-                    window.location.href = "index.php?page=ListGroup";
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    debugger;
-                    console.log("Error al ejecutar => " + textStatus + " - " + errorThrown);
-                }
-            });
+            if (datos.dsts.length > 0 && (datos.pin.length > 0 || datos.ext.length > 0)) {
+                $.ajax({
+                    url: 'controllers/Ctl_Group.php',
+                    type: 'GET',
+                    contentType: "application/json",
+                    data: {json: JSON.stringify(datos)},
+                    success: function (msg) {
+                        window.location.href = "index.php?page=ListGroup";
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        debugger;
+                        console.log("Error al ejecutar => " + textStatus + " - " + errorThrown);
+                    }
+                });
+            }
         });
     });
 </script>
