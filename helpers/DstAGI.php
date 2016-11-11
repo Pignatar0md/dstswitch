@@ -17,7 +17,7 @@ if ($boolPin) {
     $res = $controllerDst->traerDstPorPin($arrPinExten);
     $idgrupo = $controllerPin->traerIdGrupo($arrPinExten);
 } else {
-    $arrPinExten[0] = $argv[3];//Agi->get_variable('agi_callerid'); // extension del llamante
+    $arrPinExten[0] = $argv[3]; //Agi->get_variable('agi_callerid'); // extension del llamante
     $res = $controllerDst->traerDstPorExt($arrPinExten);
     $idgrupo = $controllerGrp->traerIdGrupo($arrPinExten);
 }
@@ -37,6 +37,8 @@ foreach ($idgrupo as $key => $value) {
         foreach ($value as $k => $v) {
             if ($k == "id_grupo") {
                 $idgrupo = $v;
+            } else {
+                
             }
         }
     }

@@ -2,6 +2,7 @@
 //ini_set('display_errors', 'On');
 //error_reporting(E_ALL);
 include_once '../config.php';
+include_once '../helpers/bd_helper.php';
 
 /**
  * Description of Mdl_Group
@@ -97,7 +98,7 @@ class Mdl_Group {
         $query = $cnn->prepare($sql);
         $query->bindParam(":id", $id);
         $query->bindParam(":desc", $arrData[1]);
-        //$query->execute();
+        $query->execute();
         $sql = "select exten from grupo_exten where id_grupo = :id";
         $query = $cnn->prepare($sql);
         $query->bindParam(":id", $id);

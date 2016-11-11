@@ -16,7 +16,6 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
             dataType: "html",
             data: 'op=getBillingList',
             success: function (msg) {
-                debugger;
                 $("#tablaBilling").html(msg);
             },
             error: function (jqXHR, textStatus, errorThrown) {

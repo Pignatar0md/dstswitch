@@ -54,9 +54,6 @@ class Ctl_Billing {
 
 }
 
-/* $_POST['op'] = 'saveDestiny';
-  $_POST["name"] = "sdsdsdsd"; */
-
 $operation = isset($_POST['op']) ? $_POST['op'] : '';
 $ctlBill = new Ctl_Billing();
 if (!$operation) {
@@ -124,17 +121,19 @@ if ($operation) {
             $res;
             break;
         case "updateBilling":
-            /* if (isset($_POST['id']) && isset($_POST['name'])) {
-              $arr[0] = $_POST['id'];
-              $arr[1] = $_POST['name'];
-              $res = $ctlDest->actualizar($arr);
+             if (isset($jsonGet['id']) && isset($jsonGet['name'])) {
+              $arr[0] = $jsonGet['id'];
+              $arr[1] = $jsonGet['name'];
+              $arr[2] = $jsonGet['dest_prec'];
+              $arr[3] = $jsonGet['dsts'];
+              $res = $ctlBill->actualizar($arr);
               }
-              echo $res; */
+              echo $res; 
             break;
         case "deleteBilling":
-            /* $arr[0] = $_POST['id'];
-              $res = $ctlDest->eliminar($arr);
-              echo $res; */
+             $arr[0] = $_POST['id'];
+              $res = $ctlBill->eliminar($arr);
+              echo $res;
             break;
         case "getBillingId":
             $arrDatos[] = $jsonGet['name'];
@@ -161,19 +160,29 @@ if ($id) {
         $_GET[$key] = str_replace('"', '', $value);
     }
     $arr[0] = $id;
+    $i = 0;
     $res = $ctlBill->traerPorId($arr);
     foreach ($res as $key => $value) {
         if (is_array($value)) {
             foreach ($value as $k => $v) {
-                if ($k == "id") {
-                    $jsonStr .= '"id":"' . $v . '",';
-                } else if ($k == "descr") {
-                    $jsonStr .= '"name":"' . $v . '"}';
+                if ($k == "descr") {
+                    if ($v != $repetido) {
+                        $jsonStr .= '"desc":"' . $v . '",';
+                        $repetido = $v;
+                    }
+                } else if ($k == "id_destino") {
+                    $jsonDestStr .= '"' . $i . '":"' . $v . '",';
+                    $jsonSubstr .= '"' . $v . '":';
+                    $i++;
+                } else if ($k == "precio") {
+                    $jsonSubstr .= '"' . $v . '",';
                 }
             }
         }
     }
-    echo $jsonStr;
+    $jsonDestStr = substr($jsonDestStr, 0, -1);
+    $jsonSubstr = substr($jsonSubstr, 0, -1);
+    echo $jsonStr.'"destinos_precios":[{'.$jsonSubstr.'}],"destinos":[{'.$jsonDestStr.'}]}';
 }
 //debug
 //$ctl = new Ctl_Destiny();
