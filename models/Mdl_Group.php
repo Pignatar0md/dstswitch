@@ -206,7 +206,8 @@ class Mdl_Group {
                 $query->execute();
             }
         }
-        $sql = "update tarifa_destino set id_grupo = :id where id_tarifa = :idt";
+        $sql = "update tarifa_destino set id_tarifa = :idt where id_grupo = :id";
+        //$sql = "update tarifa_destino set id_grupo = :id where id_tarifa = :idt";
         $query = $cnn->prepare($sql);
         $query->bindParam(":id", $id);
         $query->bindParam(":idt", $arrData[5]);

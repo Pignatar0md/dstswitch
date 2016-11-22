@@ -99,7 +99,7 @@ class Ctl_Report {
                     } else if ($cla == 'dst') {
                         $cad .="<td>$val</td>";
                     } else if ($cla == 'duration') {
-                        $cad .="<td>$val</td>";
+                        //$cad .="<td>$val</td>";
                     } else if ($cla == 'billsec') {
                         $cad .="<td>$val</td></tr>";
                     }
@@ -132,7 +132,7 @@ class Ctl_Report {
                         } else if ($cla == 'dst') {
                             $cad .="<td>$val</td>";
                         } else if ($cla == 'duration') {
-                            $cad .="<td>$val</td>";
+                          //  $cad .="<td>$val</td>";
                         } else if ($cla == 'billsec') {
                             $cad .="<td>$val</td></tr>";
                         }
@@ -165,7 +165,7 @@ class Ctl_Report {
                         } else if ($cla == 'dst') {
                             $cad .="<td>$val</td>";
                         } else if ($cla == 'duration') {
-                            $cad .="<td>$val</td>";
+                            //$cad .="<td>$val</td>";
                         } else if ($cla == 'billsec') {
                             $cad .="<td>$val</td></tr>";
                         }
@@ -198,7 +198,7 @@ class Ctl_Report {
                         } else if ($cla == 'dst') {
                             $cad .="<td>$val</td>";
                         } else if ($cla == 'duration') {
-                            $cad .="<td>$val</td>";
+                            //$cad .="<td>$val</td>";
                         } else if ($cla == 'billsec') {
                             $cad .="<td>$val</td></tr>";
                         }
@@ -231,7 +231,7 @@ class Ctl_Report {
                         } else if ($cla == 'dst') {
                             $cad .="<td>$val</td>";
                         } else if ($cla == 'duration') {
-                            $cad .="<td>$val</td>";
+                            //$cad .="<td>$val</td>";
                         } else if ($cla == 'billsec') {
                             $cad .="<td>$val</td></tr>";
                         }

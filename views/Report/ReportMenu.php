@@ -32,29 +32,18 @@
             pickDate: false,
             format: 'HH:mm'
         });
-        $('#hora2').change(function () {
-            var x = $('#hora1').val();
-            var y = $('#hora2').val();
-            var msg = validate_hour(x, y);
-            if (msg) {
-                alert(msg);
-                $('#hora1').val('');
-                $('#hora2').val('');
-            }
-        });
-        $('#ctlfecha2').change(function () {
-            var x = $('#ctlfecha1').val();
-            var y = $('#ctlfecha2').val();
-            var msg = validate_fechaMayorQue(x, y);
-            if (msg) {
-                alert(msg);
-                $('#ctlfecha1').val('');
-                $('#ctlfecha2').val('');
-            }
-        });
+        var getReporte = document.getElementById("getReport");
+        getReporte.onclick = function() {
+          if($('#hora1').val() && $('#hora2').val() && $('#ctlfecha1').val() && $('#ctlfecha2').val()) {
+            document.getElementById("formForReport").submit();
+          } else {
+            document.getElementById("fecha1").focus();
+            alert('Por favor ingresar rango horario y/o rango de fechas');
+          }
+        };
     });
 </script>
-<form method="POST" action="index.php?page=dataReport"><br>
+<form method="POST" action="index.php?page=dataReport" id="formForReport"><br>
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
             <div class="col-md-4">
@@ -107,7 +96,7 @@
                 </div>
             </div><br>
             <div class="col-md-4">
-                <input type="submit" id="getReport" class="btn btn-sm btn-success" value="Ver Reporte"/>
+                <input type="button" id="getReport" class="btn btn-sm btn-success" value="Ver Reporte"/>
             </div>
         </div>
     </div><br>

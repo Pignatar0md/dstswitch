@@ -31,6 +31,11 @@ class Ctl_Exension {
         $res = $this->mdl->select();
         return $res;
     }
+    
+    function traer2() {
+        $res = $this->mdl->select2();
+        return $res;
+    }
 
     function traerPorId($arr) {
         $res = $this->mdl->selectById($arr);
@@ -54,6 +59,7 @@ if ($operation) {
     switch ($operation) {
         case "getAllExt":
             $res = $ctlExt->traer();
+            $res2 = $ctlExt->traer2();
             foreach ($res as $key => $value) {
                 if (is_array($value)) {
                     foreach ($value as $k => $v) {
@@ -63,10 +69,22 @@ if ($operation) {
                         } else {
                             $cadena .= " ($v)</option>";
                         }
-                        echo $cadena;
                     }
                 }
             }
+            foreach ($res2 as $key => $value) {
+                if (is_array($value)) {
+                    foreach ($value as $k => $v) {
+                        if ($k == "extension") {
+                            $cadena .= "<option value='$v'>$v";
+                        } else {
+                            $cadena .= " ($v)</option>";
+                        }
+//                        echo $cadena;
+                    }
+                }
+            }
+            echo $cadena;
             break;
     }
 }

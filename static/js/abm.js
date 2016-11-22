@@ -75,7 +75,7 @@ $(function () {
             
         }
         datos.dest_prec = dest_precio;
-         if (datos.dest_prec.length) {
+//         if (datos.dest_prec.length) {
             $.ajax({
                 url: 'controllers/Ctl_Billing.php',
                 type: 'GET',
@@ -89,9 +89,9 @@ $(function () {
                     console.log("Error al ejecutar => " + textStatus + " - " + errorThrown);
                 }
             });
-        } else {
-            alert("Por favor ingrese pines y/o extensiones");
-        }
+//        } else {
+//            alert("Por favor ingrese pines y/o extensiones");
+//        }
     });
     $("#confGroup").click(function () {
         var datos = {op: 'confGroup',
@@ -113,7 +113,7 @@ $(function () {
         datos.pin = pins;
         datos.ext = exts;
         datos.billing = $("#billing").val();
-        if (datos.dst.length > 0 && (datos.pin.length > 0 || datos.ext.length > 0 ||datos.dst.length > 0)) {
+  //      if (datos.dst.length > 0 && (datos.pin.length > 0 || datos.ext.length > 0 ||datos.dst.length > 0)) {
             $.ajax({
                 url: 'controllers/Ctl_Group.php',
                 type: 'GET',
@@ -127,9 +127,9 @@ $(function () {
                     console.log("Error al ejecutar => " + textStatus + " - " + errorThrown);
                 }
             });
-        } else {
-            alert("Por favor ingrese pines y/o extensiones");
-        }
+//        } else {
+//            alert("Por favor ingrese pines y/o extensiones");
+//        }
     });
 
     $("#saveTarif").click(function () {

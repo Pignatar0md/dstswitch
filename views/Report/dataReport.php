@@ -298,9 +298,9 @@ function ReverseAndReplace($fecha) {
                             <th>
                                 Destino
                             </th>
-                            <th>
+                            <!--<th>
                                 Duracion
-                            </th>
+                            </th>-->
                             <th>
                                 Segundos Tarifados
                             </th>
@@ -326,7 +326,18 @@ function ReverseAndReplace($fecha) {
     <div class="row">
         <div class="col-md-4 col-lg-offset-6">
             <input type='hidden' id="groupid" value="<?php echo $_POST['group'] ?>"/>
-            De la fecha <label id='fechaDe'><?php echo $arrDatos[1] ?></label> al <label id='fechaHasta'><?php echo $arrDatos[2] ?></label>, entre las <label id='horaDe'><?php echo $arrDatos[3] ?></label> y <label id='horaHasta'><?php echo $arrDatos[4] ?></label> hs.
+            <?php 
+            if($arrDatos[1] != $arrDatos[2]){
+                echo 'De la fecha <label id="fechaDe">'.$arrDatos[1].'</label> al <label id="fechaHasta">'.$arrDatos[2].'</label>';
+            } else {
+                echo 'En la fecha <label id="fechaDe">'.$arrDatos[1].'</label>';
+            }
+             if($arrDatos[3] != $arrDatos[4]){
+                echo ', entre las <label id="horaDe">'.$arrDatos[3].'</label> y <label id="horaHasta">'.$arrDatos[4].'</label> hs.';
+            } else {
+                echo ', a las <label id="horaDe">'.$arrDatos[3].'</label> hs.';
+            } 
+            ?>
         </div>
     </div><br>
     <div class="row">
