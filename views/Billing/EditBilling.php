@@ -16,7 +16,10 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
         </div>
     </div><br>
     <div class="row">
-        <div class="col-sm-2 col-md-offset-5">
+        <div class="col-md-offset-3 col-sm-1">
+            <label>Precios</label>
+        </div>
+        <div class="col-sm-offset-1 col-sm-1">
             <label>Destinos</label>
         </div>
     </div>
@@ -85,7 +88,7 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
             }
             datos.dest_prec = dest_precio;
             datos.dsts = dests;
-            if (datos.dsts.length > 0 && datos.dest_prec.length > 0) {
+    //        if (datos.dsts.length > 0 && datos.dest_prec.length > 0) {
                 $.ajax({
                     url: 'controllers/Ctl_Billing.php',
                     type: 'GET',
@@ -99,7 +102,7 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
                         console.log("Error al ejecutar => " + textStatus + " - " + errorThrown);
                     }
                 });
-            }
+        //    }
         });
     });
 </script>

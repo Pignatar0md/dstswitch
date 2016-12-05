@@ -241,4 +241,40 @@ $(function () {
     $("#tblReport").on('click', '.detailedReport', function () {
         $("#modalDetailedRep").modal('show');
     });
+    $("#updateGroup").click(function () {
+            var datos = {op: 'updateGroup',
+                id: $("#idGroup").val()};
+            datos.name = $("#nameGroup").val();
+            var dsts = [];
+            for (i = 0; i < $("#dual6")[0].length; i++) {
+                dsts[i] = $("#dual6").children()[i].value;
+            }
+            var pins = [];
+            for (i = 0; i < $("#dual4")[0].length; i++) {
+                pins[i] = $("#dual4").children()[i].value;
+            }
+            var exts = [];
+            for (i = 0; i < $("#dual2")[0].length; i++) {
+                exts[i] = $("#dual2").children()[i].value;
+            }
+            datos.dst = dsts;
+            datos.pin = pins;
+            datos.ext = exts;
+            datos.billing = $("#billing").val();
+//            if (datos.dsts.length > 0 && (datos.pin.length > 0 || datos.ext.length > 0)) {
+                $.ajax({
+                    url: 'controllers/Ctl_Group.php',
+                    type: 'GET',
+                    contentType: "application/json",
+                    data: {json: JSON.stringify(datos)},
+                    success: function (msg) {
+                        window.location.href = "index.php?page=ListGroup";
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        debugger;
+                        console.log("Error al ejecutar => " + textStatus + " - " + errorThrown);
+                    }
+                });
+  //          }
+        });
 });

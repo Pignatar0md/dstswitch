@@ -15,12 +15,12 @@
             <div class="row-fluid">
                 <?php
                 session_start();
+                include('helpers/path_helper.php');
                 if (isset($_SESSION["Usuario"])) {
                     //echo $_SESSION["Usuario"];
                     $_SESSION['REMOTE_ADDR'] = $_SERVER['REMOTE_ADDR'];
                     $_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
                     include_once 'helpers/navbar.php';
-                    include('helpers/path_helper.php');
                 } else {
                     include_once 'views/login.php';
                 }
@@ -28,7 +28,9 @@
             </div>
             <div class="row-fluid">
                 <?php
-                include obtenerPath();
+                if (isset($_SESSION["Usuario"])) {
+                    include obtenerPath();
+                }
                 ?>
             </div>
         </div>

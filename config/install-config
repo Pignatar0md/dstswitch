@@ -1,0 +1,7 @@
+1- Copiar la carpeta completa dentro del document root del servidor apache
+2- En la carpeta config, dentro de la carpeta de proyecto, se encuentra Dump11-11.sql. Ejecutar comando 
+   mysql -u [usuario] -p < Dump11-11.sql
+3- Crear o settear en el archivo config.php ubicado en la raiz del proyecto, los usuarios correctos
+   para mysql de elastix y local.
+4- Dar permisos para acceso, escritura y lectura de tablas en bases de datos asteriskcdrdb y Dstswitch
+   en los host elastix y local, a los usuarios mysql creados o setteados en config.php.

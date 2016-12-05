@@ -80,11 +80,11 @@ $minsTotalesCU = date("H:i:s", mktime(0, 0, $segsCelurb, 1, 1, 1970));
 $minsTotalesCI = date("H:i:s", mktime(0, 0, $segsCelinter, 1, 1, 1970));
 $minsTotalesI = date("H:i:s", mktime(0, 0, $segsInternac, 1, 1, 1970));
 // precios totales por tipo de llam
-$costoTotalFU = round(($pfu * ($segsFijosUrb / 60)), 2);
-$costoTotalFI = round(($pfi * ($segsFijosInter / 60)), 2);
-$costoTotalCU = round(($pcu * ($segsCelurb / 60)), 2);
-$costoTotalCI = round(($pci * ($segsCelinter / 60)), 2);
-$costoTotalI = round(($pi * ($segsInternac / 60)), 2);
+$costoTotalFU = round(($pfu * ceil(($segsFijosUrb / 60))), 2);
+$costoTotalFI = round(($pfi * ceil(($segsFijosInter / 60))), 2);
+$costoTotalCU = round(($pcu * ceil(($segsCelurb / 60))), 2);
+$costoTotalCI = round(($pci * ceil(($segsCelinter / 60))), 2);
+$costoTotalI = round(($pi * ceil(($segsInternac / 60))), 2);
 //calculo costo total
 $costoTotal = ($costoTotalCU + $costoTotalCI + $costoTotalFU + $costoTotalFI + $costoTotalI);
 //fila 3

@@ -60,10 +60,10 @@ if ($operation) {
         case "getAllExt":
             $res = $ctlExt->traer();
             $res2 = $ctlExt->traer2();
+            $cadena = '';
             foreach ($res as $key => $value) {
                 if (is_array($value)) {
                     foreach ($value as $k => $v) {
-                        $cadena = "";
                         if ($k == "extension") {
                             $cadena .= "<option value='$v'>$v";
                         } else {
@@ -80,7 +80,6 @@ if ($operation) {
                         } else {
                             $cadena .= " ($v)</option>";
                         }
-//                        echo $cadena;
                     }
                 }
             }

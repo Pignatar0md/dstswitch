@@ -1,9 +1,6 @@
 <?php
-//ini_set('display_errors', 'On');
-//error_reporting(E_ALL);
 include_once '../config.php';
 include_once '../helpers/bd_helper.php';
-
 /**
  * Description of Mdl_Group
  *
@@ -206,11 +203,8 @@ class Mdl_Group {
                 $query->execute();
             }
         }
-        $sql = "update tarifa_destino set id_tarifa = :idt where id_grupo = :id";
-        //$sql = "update tarifa_destino set id_grupo = :id where id_tarifa = :idt";
+        $sql = "update tarifa_destino set id_tarifa = $arrData[5] where id_grupo = $id";
         $query = $cnn->prepare($sql);
-        $query->bindParam(":id", $id);
-        $query->bindParam(":idt", $arrData[5]);
         $query->execute();
         $cnn = NULL;
     }
