@@ -50,6 +50,11 @@ class Ctl_Destiny {
         $res = $this->mdl->selectDstByPin($arr);
         return $res;
     }
+    
+    function traerIdyNom() {
+        $res = $this->mdl->selectIdNomDst();
+        return $res;
+    }
 
 }
 

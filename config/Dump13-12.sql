@@ -28,7 +28,7 @@ CREATE TABLE `destiny` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `descr` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +37,7 @@ CREATE TABLE `destiny` (
 
 LOCK TABLES `destiny` WRITE;
 /*!40000 ALTER TABLE `destiny` DISABLE KEYS */;
-INSERT INTO `destiny` VALUES (1,'FijosLocales'),(2,'CelularesLocales'),(3,'CelularesInterurbanos'),(4,'FijosInterurbanos'),(5,'Internacionales'),(6,'CeroOchocientos');
+INSERT INTO `destiny` VALUES (1,'FijosLocales'),(2,'FijosInterurbanos'),(3,'CelularesUrbanos'),(4,'CelularesInterurbanos'),(5,'Internacionales'),(6,'CeroOchocientos');
 /*!40000 ALTER TABLE `destiny` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -52,7 +52,7 @@ CREATE TABLE `grupo` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `descr` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -90,6 +90,29 @@ CREATE TABLE `grupo_dest` (
 LOCK TABLES `grupo_dest` WRITE;
 /*!40000 ALTER TABLE `grupo_dest` DISABLE KEYS */;
 /*!40000 ALTER TABLE `grupo_dest` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `exten`
+--
+DROP TABLE IF EXISTS `exten`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `exten` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `extension` VARCHAR(45) NULL,
+  `name` VARCHAR(45) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `exten`
+--
+
+LOCK TABLES `exten` WRITE;
+/*!40000 ALTER TABLE `exten` DISABLE KEYS */;
+/*!40000 ALTER TABLE `exten` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -158,7 +181,7 @@ CREATE TABLE `tarifa` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `descr` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -183,6 +206,8 @@ CREATE TABLE `tarifa_destino` (
   `id_tarifa` int(11) NOT NULL,
   `id_grupo` int(11) DEFAULT NULL,
   `precio` float(5,2) DEFAULT NULL,
+  `precio_minimo` FLOAT(5,2) NULL,
+  `tiempo_precio_minimo` INT(11),
   PRIMARY KEY (`id`),
   KEY `id_destino` (`id_destino`),
   KEY `id_tarifa` (`id_tarifa`),
@@ -190,7 +215,7 @@ CREATE TABLE `tarifa_destino` (
   CONSTRAINT `tarifa_destino_ibfk_1` FOREIGN KEY (`id_destino`) REFERENCES `destiny` (`id`),
   CONSTRAINT `tarifa_destino_ibfk_2` FOREIGN KEY (`id_tarifa`) REFERENCES `tarifa` (`id`),
   CONSTRAINT `tarifa_destino_ibfk_3` FOREIGN KEY (`id_grupo`) REFERENCES `grupo` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -214,7 +239,7 @@ CREATE TABLE `user` (
   `name` varchar(45) DEFAULT NULL,
   `pass` blob,
   PRIMARY KEY (`iduser`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -226,6 +251,25 @@ LOCK TABLES `user` WRITE;
 INSERT INTO `user` VALUES (1,'admin',aes_encrypt('clave','admin'));
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `mycdr`
+--
+
+DROP TABLE IF EXISTS `mycdr`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `mycdr` (
+`calldate` datetime NOT NULL,
+`src` varchar(80) NOT NULL,
+`dst` varchar(80) NOT NULL,
+`billsec` int(11) NOT NULL,
+`accountcode` varchar(32) NOT NULL,
+`groupid` int(11) NOT NULL,
+`amount` float(4,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -236,4 +280,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-03 17:20:09
+-- Dump completed on 2016-11-11 18:17:04

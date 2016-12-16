@@ -8,122 +8,92 @@ if ($_SESSION['REMOTE_ADDR'] != $_SERVER['REMOTE_ADDR'] ||
     header('Location: ../index.php');
 }
 ?>
-<form><br>
+<form class="form-inline">
+    <br>
     <div class="row">
-        <div class="col-sm-2 col-md-offset-4">
+        <div class="col-sm-3 col-md-offset-1">
             <input type="hidden" id="BillingId" value="<?php echo $_GET['id'] ?>"/>
-            <input type="text" class="form-control" id="billingName"/>
+            <label>Tarifa:&nbsp;</label><input type="text" class="form-control" id="billingName"/>
         </div>
     </div><br>
     <div class="row">
-        <div class="col-md-offset-3 col-sm-1">
-            <label>Precios</label>
-        </div>
         <div class="col-sm-offset-1 col-sm-1">
             <label>Destinos</label>
         </div>
+        <div class="col-md-offset-3 col-sm-2">
+            <label>Precio Por Minuto</label>
+        </div>
+        <div class="col-sm-2">
+            <label>Precio Minimo</label>
+        </div>
+        <div class="col-sm-2">
+            <label>Tiempo Precio Minimo</label>
+        </div>
     </div>
     <div class="row">
-        <div class="col-sm-6 col-md-offset-2">
-            <div class="col-md-2">
-                <button id="updateBill" type="button" class="btn btn-sm btn-success">Guardar</button>
-            </div>
+        <div class="col-sm-4 col-md-push-1">
             <select id="dual5" name="destselect" multiple="multiple" class="fieldLoader" size='10'>
             </select>
             <input id="anadirDst" class="btn btn-sm btn-warning" type="button" value="->"/>
             <input id="quitarDst" class="btn btn-sm btn-warning" type="button" value="<-"/>
             <select id="dual6" multiple="multiple" name="destselected[]" class="fieldLoader" size='10'>
             </select>
-            <div class="col-md-3" id="prices">
-            </div>
+        </div>
+        <div class="col-md-2 col-md-push-1" id="prices">
+        </div>
+        <div class="col-md-2 col-md-push-1" id="minPrices">
+        </div>
+        <div class="col-md-2 col-md-push-1" id="timeMinPrices">
+        </div>
+    </div><br>
+    <div class="row">
+        <div class="col-md-2 col-md-offset-6">
+            <button id="updateBill" type="button" class="btn btn-sm btn-success">Actualizar</button>
         </div>
     </div>
 </form>
 <script>
-    $(function () {
-        var id = <?php echo $_GET['id'] ?>;
-        $.ajax({
-            url: 'controllers/Ctl_Billing.php',
-            type: 'GET',
-            dataType: "html",
-            data: 'id=' + id,
-            success: function (msg) {
-                var json = JSON.parse(msg);
-                var Jarrdsts = json.destinos[0];
-                var Jarrdst_prec = json.destinos_precios[0];
-                var arrdsts = [];
-                var arrdst_prec = [];
-                for (var x in Jarrdsts) {
-                    arrdsts.push(Jarrdsts[x]);
-                }
-                for (var a = 0; a < arrdsts.length; a++) {
-                    var opt = quitAndMake(arrdsts[a], $("#dual5"));
-                    $("#dual6").append(opt);
-                }
-                $("#billingName").val(json.desc);
-                for (var a in Jarrdst_prec) {
-                    var priceText = document.getElementById(a);
-                    if (priceText) {
-                        priceText.value = Jarrdst_prec[a];
-                    }
-                }
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                debugger;
-                console.log("Error al ejecutar => " + textStatus + " - " + errorThrown);
-            }
-        });
-        $("#updateBill").click(function () {
-            var datos = {op: 'updateBilling',
-                id: $("#BillingId").val()};
 
-            datos.name = $("#billingName").val();
-            var dest_precio = [];
-            var dests = [];
-            for (i = 0; i < $("#dual6")[0].length; i++) {
-                var dest = $("#dual6").children()[i].value;
-                var a = $("#" + dest).val();
-                dest_precio[dest] = a;
-                dests[i] = dest;
-            }
-            datos.dest_prec = dest_precio;
-            datos.dsts = dests;
-    //        if (datos.dsts.length > 0 && datos.dest_prec.length > 0) {
-                $.ajax({
-                    url: 'controllers/Ctl_Billing.php',
-                    type: 'GET',
-                    contentType: "application/json",
-                    data: {json: JSON.stringify(datos)},
-                    success: function (msg) {
-                        window.location.href = "index.php?page=ListBilling";
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        debugger;
-                        console.log("Error al ejecutar => " + textStatus + " - " + errorThrown);
-                    }
-                });
-        //    }
-        });
-    });
-</script>
-<script>
-    var count = 0;
     var dual6 = document.getElementById('dual6');
-    dual6.addEventListener("DOMNodeInserted", crearInputPrecio, true);
-    dual6.addEventListener("DOMNodeRemoved", quitarInputPrecio, true);
-    function crearInputPrecio(evt) {
-        var priceinput = document.createElement('input');
-        priceinput.type = "text";
-        priceinput.className = "form-control input-sm";
-        //priceinput.value = 
+
+    dual6.addEventListener("DOMNodeInserted", generarInput, true);
+    dual6.addEventListener("DOMNodeRemoved", quitarInput, true);
+    var count = 0;
+
+    function generarInput(evt) {
+
+        var priceinput = crearInput();
         priceinput.id = evt.currentTarget[count].value;
         priceinput.placeholder = evt.currentTarget[count].innerHTML;
         var prices = document.getElementById('prices');
         prices.appendChild(priceinput);
+        var pricemininput = crearInput();
+        pricemininput.id = 'min' + evt.currentTarget[count].value;
+        pricemininput.placeholder = evt.currentTarget[count].innerHTML;
+        var minprices = document.getElementById('minPrices');
+        minprices.appendChild(pricemininput);
+        var minpricetimeinput = crearInput();
+        minpricetimeinput.id = 'timemin' + evt.currentTarget[count].value;
+        minpricetimeinput.placeholder = evt.currentTarget[count].innerHTML;
+        var minpricestime = document.getElementById('timeMinPrices');
+        minpricestime.appendChild(minpricetimeinput);
+
         count++;
     }
-    function quitarInputPrecio(evt) {
+
+    function quitarInput(evt) {
         var priceToQuit = document.getElementById(evt.target.value);
+        var minPriceToQuit = document.getElementById('min'+evt.target.value);
+        var timeMinPriceToQuit = document.getElementById('timemin'+evt.target.value);
         priceToQuit.parentNode.removeChild(priceToQuit);
+        minPriceToQuit.parentNode.removeChild(minPriceToQuit);
+        timeMinPriceToQuit.parentNode.removeChild(timeMinPriceToQuit);
+    }
+
+    function crearInput() {
+        var input = document.createElement('input');
+        input.type = "text";
+        input.className = "form-control input-sm";
+        return input;
     }
 </script>

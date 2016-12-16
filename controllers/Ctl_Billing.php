@@ -10,7 +10,6 @@ include '../helpers/json_helper.php';
  */
 class Ctl_Billing {
 
-    //put your code here
     private $mdl;
 
     function __construct() {
@@ -40,6 +39,20 @@ class Ctl_Billing {
     function traerPorNom($arr) {
         $res = $this->mdl->selectByName($arr);
         return $res;
+    }
+
+    function traerPrecioMinimo($arr) {
+        $res = $this->mdl->getMinimalPrice($arr);
+        return $res;
+    }
+
+    function traerTiempoPrecioMinimo($arr) {
+        $res = $this->mdl->getTimeMinimalPrice($arr);
+        return $res;
+    }
+
+    function actualizarPrecioTotal($price, $phone) {
+        $this->mdl->updateAmount($price, $phone);
     }
 
     function actualizar($arr) {
@@ -83,10 +96,19 @@ if ($operation) {
             }
             break;
         case "confBilling":
-            $arrDatos[0] = $jsonGet['id'];
-            $arrDatos[1] = $jsonGet['dest_prec'];
-            $res = $ctlBill->configurar($arrDatos);
-            echo $res;
+            $arrObjBillDest = array();
+            //---------------------------RECIBIR Y DAR TRATAMIENTO A ARRAY
+            $destprec = array_filter($jsonGet['dest_prec'], function($var){return !is_null($var);});
+            $minprec = array_filter($jsonGet['min_prec'], function($var){return !is_null($var);});
+                                                        //function($value) { return $value !== ''; }
+                                                        //create_function('$value', 'return $value !== "";')
+            $timeminprec = array_filter($jsonGet['tiempo_min_prec'], function($var){return !is_null($var);});
+            //------------------------------------------------------------
+            foreach ($destprec as $dest => $price) {
+                $objBillDest = new Billing_Destiny($dest, 'NULL', $jsonGet['id'], $price, $minprec[$dest], $timeminprec[$dest]);
+                $arrObjBillDest[] = $objBillDest;
+            }
+            $res = $ctlBill->configurar($arrObjBillDest);
             break;
         case "getBillingList":
             $res = $ctlBill->traer();
@@ -121,19 +143,21 @@ if ($operation) {
             $res;
             break;
         case "updateBilling":
-             if (isset($jsonGet['id']) && isset($jsonGet['name'])) {
-              $arr[0] = $jsonGet['id'];
-              $arr[1] = $jsonGet['name'];
-              $arr[2] = $jsonGet['dest_prec'];
-              $arr[3] = $jsonGet['dsts'];
-              $res = $ctlBill->actualizar($arr);
-              }
-              echo $res; 
+            if (isset($jsonGet['id']) && isset($jsonGet['name'])) {
+                $arr[0] = $jsonGet['id'];
+                $arr[1] = $jsonGet['name'];
+                $arr[2] = $jsonGet['dest_prec'];
+                $arr[3] = $jsonGet['dsts'];
+                $arr[4] = $jsonGet['min_prec'];
+                $arr[5] = $jsonGet['tiempo_min_prec'];
+                $res = $ctlBill->actualizar($arr);
+            }
+            echo $res;
             break;
         case "deleteBilling":
-             $arr[0] = $_POST['id'];
-              $res = $ctlBill->eliminar($arr);
-              echo $res;
+            $arr[0] = $_POST['id'];
+            $res = $ctlBill->eliminar($arr);
+            echo $res;
             break;
         case "getBillingId":
             $arrDatos[] = $jsonGet['name'];
@@ -173,16 +197,27 @@ if ($id) {
                 } else if ($k == "id_destino") {
                     $jsonDestStr .= '"' . $i . '":"' . $v . '",';
                     $jsonSubstr .= '"' . $v . '":';
+                    $jsonSubstr2 .= '"' . $v . '":';
+                    $jsonSubstr3 .= '"' . $v . '":';
                     $i++;
                 } else if ($k == "precio") {
                     $jsonSubstr .= '"' . $v . '",';
+                } elseif ($k == "precio_minimo") {
+                    $jsonSubstr2 .= '"' . $v . '",';
+                } elseif ($k == "tiempo_precio_minimo") {
+                    $jsonSubstr3 .= '"' . $v . '",';
                 }
             }
         }
     }
     $jsonDestStr = substr($jsonDestStr, 0, -1);
     $jsonSubstr = substr($jsonSubstr, 0, -1);
-    echo $jsonStr.'"destinos_precios":[{'.$jsonSubstr.'}],"destinos":[{'.$jsonDestStr.'}]}';
+    $jsonSubstr2 = substr($jsonSubstr2, 0, -1);
+    $jsonSubstr3 = substr($jsonSubstr3, 0, -1);
+    echo $jsonStr . '"destinos_precios":[{' . $jsonSubstr . '}],'
+    . '"destinos":[{' . $jsonDestStr . '}],'
+    . '"precios_min":[{' . $jsonSubstr2 . '}],'
+    . '"tiempo_precios_min":[{' . $jsonSubstr3 . '}]}';
 }
 //debug
 //$ctl = new Ctl_Destiny();

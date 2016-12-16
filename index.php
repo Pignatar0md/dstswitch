@@ -8,7 +8,6 @@
     </head>
     <body>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-        <script src="static/js/abm.js"></script>
         <script src="static/js/validate.js"></script>
         <script src="static/js/boxes.js"></script>
         <div class="container-fluid">
@@ -34,6 +33,7 @@
                 ?>
             </div>
         </div>
+        <script src="static/js/abm.js"></script>
     </body>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </html>

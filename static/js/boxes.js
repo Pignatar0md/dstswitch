@@ -120,15 +120,6 @@ function quitarDestinos() {
         z++;
     }
 }
-/*function quitSelectedFromSelect(select, selected) {
- for(i = 0; i < selected[0].length; i++) {
- for(a = 0; a < select[0].length; a++) {
- if(select.children()[a].value === selected.children()[i].value) {
- select.children()[a].parentNode.removeChild(select.children()[a]);
- }
- }
- }
- }*/
 //funcion que quita un elem de un dual y devuelve un elem para agregar al otro dual
 function quitAndMake(value, dualToQuit) {
     var optToReturn;

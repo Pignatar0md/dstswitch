@@ -26,11 +26,13 @@
         });
         $('#hora1').datetimepicker({
             pickDate: false,
-            format: 'HH:mm'
+            format: 'HH:mm',
+            defaultDate: '00:00'
         });
         $('#hora2').datetimepicker({
             pickDate: false,
-            format: 'HH:mm'
+            format: 'HH:mm',
+            defaultDate: '23:59'
         });
         var getReporte = document.getElementById("getReport");
         getReporte.onclick = function() {

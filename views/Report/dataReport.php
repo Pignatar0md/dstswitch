@@ -3,9 +3,11 @@
 //error_reporting(E_ALL);
 include 'controllers/Ctl_Report.php';
 include 'controllers/Ctl_Group.php';
+include 'controllers/Ctl_Destiny.php';
 //creo objetos de controlador
 $ctlGroup = new Ctl_Group();
 $ctlRep = new Ctl_Report();
+//$ctlDest = new Ctl_Destiny();
 $nomGrupo = $nomTarifa = '';
 //recibo params por POST
 $arrDatos[0] = isset($_POST['group']) ? $_POST['group'] : '';
@@ -14,10 +16,14 @@ $arrDatos[2] = isset($_POST['dateTo']) ? ReverseAndReplace($_POST['dateTo']) : '
 $arrDatos[3] = isset($_POST['timeSince']) ? $_POST['timeSince'] : '';
 $arrDatos[4] = isset($_POST['timeTo']) ? $_POST['timeTo'] : '';
 //traigo precios para cada tipo de llam. y tarifa a grupo
+/*$destResult = $ctlDest->traerIdyNom();
+foreach ($destResult as $clave => $valor) {
+    echo $clave.'-'.$valor;
+}*/
 $precioFijosUrb = $ctlRep->traerPrecioId($arrDatos[0], '1');
-$precioFijosInter = $ctlRep->traerPrecioId($arrDatos[0], '4');
-$precioCelUrb = $ctlRep->traerPrecioId($arrDatos[0], '2');
-$precioCelInter = $ctlRep->traerPrecioId($arrDatos[0], '3');
+$precioFijosInter = $ctlRep->traerPrecioId($arrDatos[0], '2');
+$precioCelUrb = $ctlRep->traerPrecioId($arrDatos[0], '3');
+$precioCelInter = $ctlRep->traerPrecioId($arrDatos[0], '4');
 $precioInternac = $ctlRep->traerPrecioId($arrDatos[0], '5');
 //extraigo los valores de las tarifas
 foreach ($precioFijosUrb as $clave => $valor) {
