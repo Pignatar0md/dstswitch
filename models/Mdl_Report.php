@@ -11,9 +11,9 @@ class Mdl_Report {
 
 //put your code here
     function countCallsReport($arrData) {
-        $cnn = new Connection("asteriskcdr");
+        $cnn = new Connection("Dstswitch");
         $cnn->Connect();
-        $sql = "SELECT count(*) as cdadLlam FROM cdr where accountcode = $arrData[0] ";
+        $sql = "SELECT count(*) as cdadLlam FROM mycdr where accountcode = $arrData[0] ";
         if ($arrData[1] != $arrData[2]) {//fecha ini distinto de fecha fin
             if ($arrData[3] != $arrData[4]) {// hora ini distinto de hora fin
                 $sql .= " and calldate between '$arrData[1] $arrData[3]%' and '$arrData[2] $arrData[4]%' ";
@@ -52,9 +52,9 @@ class Mdl_Report {
     }
 
     function sumBillsecDuration($arrData) {
-        $cnn = new Connection("asteriskcdr");
+        $cnn = new Connection("Dstswitch");
         $cnn->Connect();
-        $sql = "SELECT SUM(billsec) as segundosTarifados from cdr where accountcode = $arrData[0] ";
+        $sql = "SELECT SUM(billsec) as segundosTarifados from mycdr where accountcode = $arrData[0] ";
         if ($arrData[1] != $arrData[2]) {//fecha ini distinto de fecha fin
             if ($arrData[3] != $arrData[4]) {// hora ini distinto de hora fin
                 $sql .= " and calldate between '$arrData[1] $arrData[3]%' and '$arrData[2] $arrData[4]%' ";
@@ -92,10 +92,10 @@ class Mdl_Report {
     }
 
     function InternacCallsReport($arrData) {
-        $cnn = new Connection("asteriskcdr");
+        $cnn = new Connection("Dstswitch");
         $cnn->Connect();
         $sql = "SELECT 'Internacionales' as tipollm,date_format(calldate,'%d/%m/%Y') as fecha,date_format(calldate,'%H:%i') as hora,
-                src,userfield,dst,duration,billsec FROM cdr where accountcode = $arrData[0] ";
+                src,accountcode,dst,billsec FROM mycdr where accountcode = $arrData[0] ";
         if ($arrData[1] != $arrData[2]) {//fecha ini distinto de fecha fin
             if ($arrData[3] != $arrData[4]) {// hora ini distinto de hora fin
                 $sql .= " and calldate between '$arrData[1] $arrData[3]%' and '$arrData[2] $arrData[4]%' ";
@@ -121,10 +121,10 @@ class Mdl_Report {
     }
 
     function UrbanCelCallsReport($arrData) {
-        $cnn = new Connection("asteriskcdr");
+        $cnn = new Connection("Dstswitch");
         $cnn->Connect();
         $sql = "SELECT 'Cel.Urbanos' as tipollm,date_format(calldate,'%d/%m/%Y') as fecha,date_format(calldate,'%H:%i') as hora,
-                src,userfield,dst,duration,billsec FROM cdr where accountcode = $arrData[0] ";
+                src,accountcode,dst,billsec FROM mycdr where accountcode = $arrData[0] ";
         if ($arrData[1] != $arrData[2]) {//fecha ini distinto de fecha fin
             if ($arrData[3] != $arrData[4]) {// hora ini distinto de hora fin
                 $sql .= " and calldate between '$arrData[1] $arrData[3]%' and '$arrData[2] $arrData[4]%' ";
@@ -150,10 +150,10 @@ class Mdl_Report {
     }
 
     function InterurbanCelCallsReport($arrData) {
-        $cnn = new Connection("asteriskcdr");
+        $cnn = new Connection("Dstswitch");
         $cnn->Connect();
         $sql = "SELECT 'Cel.Interurbanos' as tipollm,date_format(calldate,'%d/%m/%Y') as fecha,date_format(calldate,'%H:%i') as hora,
-              src,userfield,dst,duration,billsec FROM cdr where accountcode = $arrData[0] ";
+              src,accountcode,dst,billsec FROM mycdr where accountcode = $arrData[0] ";
         if ($arrData[1] != $arrData[2]) {//fecha ini distinto de fecha fin
             if ($arrData[3] != $arrData[4]) {// hora ini distinto de hora fin
                 $sql .= " and calldate between '$arrData[1] $arrData[3]%' and '$arrData[2] $arrData[4]%' ";
@@ -179,10 +179,10 @@ class Mdl_Report {
     }
 
     function InterurbanPhoneCallsReport($arrData) {
-        $cnn = new Connection("asteriskcdr");
+        $cnn = new Connection("Dstswitch");
         $cnn->Connect();
         $sql = "SELECT 'Fijos Interurbanos' as tipollm,date_format(calldate,'%d/%m/%Y') as fecha,date_format(calldate,'%H:%i') as hora,
-                src,userfield,dst,duration,billsec FROM cdr where accountcode = $arrData[0] ";
+                src,accountcode,dst,billsec FROM mycdr where accountcode = $arrData[0] ";
         if ($arrData[1] != $arrData[2]) {//fecha ini distinto de fecha fin
             if ($arrData[3] != $arrData[4]) {// hora ini distinto de hora fin
                 $sql .= " and calldate between '$arrData[1] $arrData[3]%' and '$arrData[2] $arrData[4]%' ";
@@ -208,10 +208,10 @@ class Mdl_Report {
     }
 
     function UrbanPhoneCallsReport($arrData) {
-        $cnn = new Connection("asteriskcdr");
+        $cnn = new Connection("Dstswitch");
         $cnn->Connect();
         $sql = "SELECT 'Fijos Urbanos' as tipollm,date_format(calldate,'%d/%m/%Y') as fecha,date_format(calldate,'%H:%i') as hora
-                 ,src,userfield,dst,duration,billsec FROM cdr where accountcode = $arrData[0] "; //groupid = $arrData[0]
+                 ,src,accountcode,dst,duration,billsec FROM mycdr where accountcode = $arrData[0] "; //groupid = $arrData[0]
         if ($arrData[1] != $arrData[2]) {//fecha ini distinto de fecha fin
             if ($arrData[3] != $arrData[4]) {// hora ini distinto de hora fin
                 $sql .= " and calldate between '$arrData[1] $arrData[3]%' and '$arrData[2] $arrData[4]%' ";
@@ -239,8 +239,8 @@ class Mdl_Report {
     function getColumns() {
         $sql = "SELECT 'tipoLlam' as 'tipoLlam','fecha' as 'fecha','hora' as 'hora','extension' as 'extension',
 		'pin' as 'pin','destino' as 'destino','duracion' as 'duration','segundosTarifados' as 'segundosTarifados' 
-                FROM cdr group by tipoLlam";
-        $cnn = new Connection("asteriskcdr");
+                FROM mycdr group by tipoLlam";
+        $cnn = new Connection("Dstswitch");
         $cnn->Connect();
         $lnk = $cnn->GetLink();
         $result = mysqli_query($lnk, $sql);

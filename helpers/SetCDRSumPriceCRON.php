@@ -1,10 +1,11 @@
 <?php
 
 include '/var/www/html/dstswitch/config.php';
-include '/var/www/html/dstswitch/models/Mdl_Billing.php';
+include '/var/www/html/dstswitch/controllers/Ctl_Billing.php';
 
-$Modelo_Tarifa = new Mdl_Billing('Dstswitch');
-$resultado = $Modelo_Tarifa->CopyCDR();
+$Modelo_Tarifa_LocalDB = new Mdl_Billing('Dstswitch');
+$Modelo_Tarifa_AsteriskDB = new Mdl_Billing('asteriskcdr');
+$resultado = $Modelo_Tarifa_LocalDB->CopyCDR();
 $TelTiempoGrupo = array();
 $f = 0;
 // DATOS DE CDR.ASTERISKCDR
@@ -27,7 +28,7 @@ foreach ($resultado as $clave => $valor) {
         $DatosIns[6] = $valor;
         $TelTiempoGrupo[$f][2] = $valor;
     }
-    $Modelo_Tarifa->PasteCDR($DatosIns);
+    $Modelo_Tarifa_AsteriskDB->PasteCDR($DatosIns);
     $f++;
 }
 $a = 0;
@@ -37,6 +38,7 @@ $a = 0;
  *$fila[x][1] TIEMPO DE LLAMADA
  *$fila[x][2] GRUPO
  */
+$CtlBilling = new Ctl_Billing();
 foreach ($arrTelTiempoGrupo as $fila/*$tel => $tiempo*/) {
     if (strlen($fila[$a][0]) === 15 && substr($fila[$a][0], 1, 1) == '0') {
         //13 digitos con 0 al ppio = celular larga distancia

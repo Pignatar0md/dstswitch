@@ -21,7 +21,7 @@ class Ctl_Report {
     private $mdlR, $mdlB;
 
     function __construct() {
-        $this->mdlR = new Mdl_Report('asteriskcdrdb');
+        $this->mdlR = new Mdl_Report(AstDB);
         $this->mdlB = new Mdl_Billing('Dstswitch');
     }
 

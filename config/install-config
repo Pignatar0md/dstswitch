@@ -5,5 +5,7 @@
    para mysql de elastix y local.
 4- Dar permisos para acceso, escritura y lectura de tablas en bases de datos asteriskcdrdb y Dstswitch
    en los host elastix y local, a los usuarios mysql creados o setteados en config.php.
+5- Mover DstAGI.php a la carpeta donde se encuentre phpagi.php
+6- Settear una regla en cron.d para que se ejecute todas las noches el script SetCDRSumPriceCRON.php
 
 EN MODELS SE SUELE TENER QUE MODIFICAR EL NOMBRE DE LAS BASES DE DATOS 
