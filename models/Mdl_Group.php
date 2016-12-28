@@ -205,7 +205,7 @@ class Mdl_Group {
         }
         $sql = "update tarifa_destino set id_tarifa = $arrData[5] where id_grupo = $id";
         $query = $cnn->prepare($sql);
-        $query->execute();
+        $query->execute();return $sql;
         $cnn = NULL;
     }
 

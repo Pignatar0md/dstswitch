@@ -43,18 +43,15 @@ class Mdl_Report {
             case "celinter":
                 $sql .= "and length(dst) = 13 and dst like '0%' ";
                 break;
-            case "ceroochos":
-                $sql .= "and length(dst) = 11 and dst like '08%' ";
-                break;
         }
         $lnk = $cnn->GetLink();
         $result = mysqli_query($lnk, $sql);
         $cnn->Connect_close($lnk);
-    return $result->fetch_assoc();
+        return $result->fetch_assoc();
         //return $sql;
     }
-
-    function sumTotalPrice($arrData) {
+    
+    function sumTotalPrice ($arrData) {
         $cnn = new Connection("Dstswitch");
         $cnn->Connect();
         $sql = "SELECT SUM(amount) as montoTotal from mycdr where accountcode = $arrData[0] ";
@@ -87,14 +84,12 @@ class Mdl_Report {
             case "celinter":
                 $sql .= "and length(dst) = 13 and dst like '0%' ";
                 break;
-            case "ceroochos":
-                $sql .= "and length(dst) = 11 and dst like '08%' ";
-                break;
         }
         $lnk = $cnn->GetLink();
         $result = mysqli_query($lnk, $sql);
         $cnn->Connect_close($lnk);
-                return $result->fetch_assoc();
+        return $result->fetch_assoc();
+//echo $sql;
     }
 
     function sumBillsecDuration($arrData) {
@@ -130,9 +125,6 @@ class Mdl_Report {
             case "celinter":
                 $sql .= "and length(dst) = 13 and dst like '0%' ";
                 break;
-            case "ceroochos":
-                $sql .= "and length(dst) = 11 and dst like '08%' ";
-                break;
         }
         $lnk = $cnn->GetLink();
         $result = mysqli_query($lnk, $sql);
@@ -144,7 +136,7 @@ class Mdl_Report {
         $cnn = new Connection("Dstswitch");
         $cnn->Connect();
         $sql = "SELECT 'Internacionales' as tipollm,date_format(calldate,'%d/%m/%Y') as fecha,date_format(calldate,'%H:%i') as hora,
-                src,accountcode,userfield,dst,amount,billsec FROM mycdr where accountcode = $arrData[0] ";
+                src,accountcode,userfield,dst,billsec FROM mycdr where accountcode = $arrData[0] ";
         if ($arrData[1] != $arrData[2]) {//fecha ini distinto de fecha fin
             if ($arrData[3] != $arrData[4]) {// hora ini distinto de hora fin
                 $sql .= " and calldate between '$arrData[1] $arrData[3]%' and '$arrData[2] $arrData[4]%' ";
@@ -173,7 +165,7 @@ class Mdl_Report {
         $cnn = new Connection("Dstswitch");
         $cnn->Connect();
         $sql = "SELECT 'Cel.Urbanos' as tipollm,date_format(calldate,'%d/%m/%Y') as fecha,date_format(calldate,'%H:%i') as hora,
-                src,accountcode,userfield,dst,amount,billsec FROM mycdr where accountcode = $arrData[0] ";
+                src,accountcode,userfield,dst,billsec FROM mycdr where accountcode = $arrData[0] ";
         if ($arrData[1] != $arrData[2]) {//fecha ini distinto de fecha fin
             if ($arrData[3] != $arrData[4]) {// hora ini distinto de hora fin
                 $sql .= " and calldate between '$arrData[1] $arrData[3]%' and '$arrData[2] $arrData[4]%' ";
@@ -202,7 +194,7 @@ class Mdl_Report {
         $cnn = new Connection("Dstswitch");
         $cnn->Connect();
         $sql = "SELECT 'Cel.Interurbanos' as tipollm,date_format(calldate,'%d/%m/%Y') as fecha,date_format(calldate,'%H:%i') as hora,
-              src,accountcode,userfield,dst,amount,billsec FROM mycdr where accountcode = $arrData[0] ";
+              src,accountcode,userfield,dst,billsec FROM mycdr where accountcode = $arrData[0] ";
         if ($arrData[1] != $arrData[2]) {//fecha ini distinto de fecha fin
             if ($arrData[3] != $arrData[4]) {// hora ini distinto de hora fin
                 $sql .= " and calldate between '$arrData[1] $arrData[3]%' and '$arrData[2] $arrData[4]%' ";
@@ -231,7 +223,7 @@ class Mdl_Report {
         $cnn = new Connection("Dstswitch");
         $cnn->Connect();
         $sql = "SELECT 'Fijos Interurbanos' as tipollm,date_format(calldate,'%d/%m/%Y') as fecha,date_format(calldate,'%H:%i') as hora,
-                src,accountcode,userfield,dst,amount,billsec FROM mycdr where accountcode = $arrData[0] ";
+                src,accountcode,userfield,dst,billsec FROM mycdr where accountcode = $arrData[0] ";
         if ($arrData[1] != $arrData[2]) {//fecha ini distinto de fecha fin
             if ($arrData[3] != $arrData[4]) {// hora ini distinto de hora fin
                 $sql .= " and calldate between '$arrData[1] $arrData[3]%' and '$arrData[2] $arrData[4]%' ";
@@ -260,7 +252,7 @@ class Mdl_Report {
         $cnn = new Connection("Dstswitch");
         $cnn->Connect();
         $sql = "SELECT 'Fijos Urbanos' as tipollm,date_format(calldate,'%d/%m/%Y') as fecha,date_format(calldate,'%H:%i') as hora
-                 ,src,accountcode,userfield,dst,amount,billsec FROM mycdr where accountcode = $arrData[0] "; //groupid = $arrData[0]
+                 ,src,accountcode,userfield,dst,billsec FROM mycdr where accountcode = $arrData[0] "; //groupid = $arrData[0]
         if ($arrData[1] != $arrData[2]) {//fecha ini distinto de fecha fin
             if ($arrData[3] != $arrData[4]) {// hora ini distinto de hora fin
                 $sql .= " and calldate between '$arrData[1] $arrData[3]%' and '$arrData[2] $arrData[4]%' ";
@@ -282,8 +274,9 @@ class Mdl_Report {
             $arregloRes[] = $row;
         }
         return $arregloRes;
+        //return $sql;
     }
-
+    
     function getColumns() {
         $sql = "SELECT 'tipoLlam' as 'tipoLlam','fecha' as 'fecha','hora' as 'hora','extension' as 'extension',
 		'pin' as 'pin','destino' as 'destino','segundosTarifados' as 'segundosTarifados' 
@@ -299,33 +292,28 @@ class Mdl_Report {
         return $arregloRes;
     }
 
-    function ZeroEightCallsReport($arrData) {
-        $cnn = new Connection("Dstswitch");
-        $cnn->Connect();
-        $sql = "SELECT 'Fijos Urbanos' as tipollm,date_format(calldate,'%d/%m/%Y') as fecha,date_format(calldate,'%H:%i') as hora
-                 ,src,accountcode,userfield,dst,amount,billsec FROM mycdr where accountcode = $arrData[0] "; //groupid = $arrData[0]
-        if ($arrData[1] != $arrData[2]) {//fecha ini distinto de fecha fin
-            if ($arrData[3] != $arrData[4]) {// hora ini distinto de hora fin
-                $sql .= " and calldate between '$arrData[1] $arrData[3]%' and '$arrData[2] $arrData[4]%' ";
-            } else {
-                $sql .= " and calldate between '$arrData[1] $arrData[3]%' and '$arrData[2] $arrData[3]%' ";
-            }
-        } else {
-            if ($arrData[3] != $arrData[4]) {// hora ini distinto de hora fin
-                $sql .= " and calldate between '$arrData[1] $arrData[3]%' and '$arrData[1] $arrData[4]%' ";
-            } else {
-                $sql .= " and calldate like '$arrData[1] $arrData[3]%' ";
-            }
-        }
-        //cero ochocientos
-        $sql .= "and length(dst) = 11 and dst like '08%' ";
-        $lnk = $cnn->GetLink();
-        $result = mysqli_query($lnk, $sql);
-        $cnn->Connect_close($lnk);
-        while ($row = $result->fetch_assoc()) {
-            $arregloRes[] = $row;
-        }
-        return $arregloRes;
-    }
+    /* function ZeroEightCallsReport($arrData) {
+      $cnn = new Connection("asteriskcdrdb");
+      $cnn->Connect();
+      $sql = "SELECT date_format(calldate,'%d-%m-%Y') as fecha,date_format(calldate,'%H:%i') as hora,
+      src,dst,billsec FROM cdr where groupid = $arrData[0] ";
 
+      if ($arrData[1] != $arrData[2]) {//fecha ini distinto de fecha fin
+      $sql .= " and date_format(calldate,'%d/%m/%Y') between '$arrData[1]' and '$arrData[2]' ";
+      } else {
+      $sql .= " and date_format(calldate,'%d/%m/%Y') like '$arrData[1]' ";
+      }
+      if ($arrData[3] != $arrData[4]) {// hora ini distinto de hora fin
+      $sql .= "and date_format(calldate,'%H:%i') between '$arrData[3]' and '$arrData[4]' ";
+      } else {
+      $sql .= "and date_format(calldate,'%H:%i') like '$arrData[3]' ";
+      }
+      //cero ochocientos
+      $sql .= "and length(dst) = 13 and dst like '08%' ";
+      $sql .= " order by fecha";
+      $lnk = $cnn->GetLink();
+      $result = mysqli_query($lnk, $sql);
+      $cnn->Connect_close($lnk);
+      return $result->fetch_assoc();
+      } */
 }

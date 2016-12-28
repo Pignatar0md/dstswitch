@@ -1,7 +1,6 @@
 <?php
 
 include '/var/www/html/dstswitch/models/Mdl_Billing.php';
-include '../helpers/json_helper.php';
 
 /**
  * Description of Ctl_Destiny
@@ -45,14 +44,19 @@ class Ctl_Billing {
         $res = $this->mdl->getMinimalPrice($arr);
         return $res;
     }
+    
+    function traerPrecioPorMin($arr) {
+        $res = $this->mdl->getPricePerMinute($arr);
+        return $res;
+    }
 
     function traerTiempoPrecioMinimo($arr) {
         $res = $this->mdl->getTimeMinimalPrice($arr);
         return $res;
     }
 
-    function actualizarPrecioTotal($price, $phone) {
-        $this->mdl->updateAmount($price, $phone);
+    function actualizarPrecioTotal($price, $phone, $uid) {
+        $this->mdl->updateAmount($price, $phone, $uid);
     }
 
     function actualizar($arr) {

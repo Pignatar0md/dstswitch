@@ -36,10 +36,10 @@
             <label>Precio Por Minuto</label>
         </div>
         <div class="col-sm-2">
-            <label>Precio Minimo</label>
+            <label>Precio Minimo (ej: 1.2)</label>
         </div>
         <div class="col-sm-2">
-            <label>Tiempo Precio Minimo</label>
+            <label>Tiempo Minimo (segs)</label>
         </div>
     </div>
     <div class="row">

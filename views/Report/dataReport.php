@@ -25,6 +25,7 @@ $precioFijosInter = $ctlRep->traerPrecioId($arrDatos[0], '2');
 $precioCelUrb = $ctlRep->traerPrecioId($arrDatos[0], '3');
 $precioCelInter = $ctlRep->traerPrecioId($arrDatos[0], '4');
 $precioInternac = $ctlRep->traerPrecioId($arrDatos[0], '5');
+$precioCeroOcho = $ctlRep->traerPrecioId($arrDatos[0], '6');
 //extraigo los valores de las tarifas
 foreach ($precioFijosUrb as $clave => $valor) {
     $pfu = $valor['precio'];
@@ -41,8 +42,11 @@ foreach ($precioCelInter as $clave => $valor) {
 foreach ($precioInternac as $clave => $valor) {
     $pi = $valor['precio'];
 }
+foreach ($precioCeroOcho as $clave => $valor) {
+    $pco = $valor['precio'];
+}
 // fila 1
-$preciosPorMin = "<tr><td style='font-size: 16px;color: darkgreen'>Precio Por Minuto ($)</td><td>$pfu</td><td>$pfi</td><td>$pcu</td><td>$pci</td><td>$pi</td><td style='color:darkred'>---</td>";
+$preciosPorMin = "<tr><td style='font-size: 16px;color: darkgreen'>Precio Por Minuto ($)</td><td>$pfu</td><td>$pfi</td><td>$pcu</td><td>$pci</td><td>$pi</td><td>$pco</td><td style='color:darkred'>---</td>";
 //traigo total de llamadas de cada tipo
 $arrDatos[5] = "fijosurb";
 $cdadLlmFijosUrb = $ctlRep->cdadTotalLlam($arrDatos);
@@ -54,6 +58,8 @@ $arrDatos[5] = "celinter";
 $cdadLlmCelinter = $ctlRep->cdadTotalLlam($arrDatos);
 $arrDatos[5] = "internac";
 $cdadLlmInternac = $ctlRep->cdadTotalLlam($arrDatos);
+$arrDatos[5] = "ceroochos";
+$cdadLlmCeroOcho = $ctlRep->cdadTotalLlam($arrDatos);
 // calculo cdad total de llam
 $totalLlamadas = ($cdadLlmFijosUrb + $cdadLlmFijosInter + $cdadLlmCelurb + $cdadLlmCelinter + $cdadLlmInternac);
 //fila 2
@@ -63,6 +69,7 @@ $llamsTotalesPorTipo = "<tr><td style='font-size: 16px;color: darkgreen'>Cdad. d
         . "<td>$cdadLlmCelurb</label></td>"
         . "<td>$cdadLlmCelinter</label></td>"
         . "<td>$cdadLlmInternac</label></td>"
+        . "<td>$cdadLlmCeroOcho</label></td>"
         . "<td style='color:darkred;text-decoration: underline' class='detailedReport'>$totalLlamadas</td>";
 //traigo segundos totales para cada tipo de llamadas
 $arrDatos[5] = "fijosurb";
@@ -75,8 +82,10 @@ $arrDatos[5] = "celinter";
 $segsCelinter = $ctlRep->segundosTotales($arrDatos);
 $arrDatos[5] = "internac";
 $segsInternac = $ctlRep->segundosTotales($arrDatos);
+$arrDatos[5] = "ceroochos";
+$segsCeroOchos = $ctlRep->segundosTotales($arrDatos);
 // calculo segundos totales
-$segsTotales = ($segsFijosUrb + $segsFijosInter + $segsCelurb + $segsCelinter + $segsInternac);
+$segsTotales = ($segsFijosUrb + $segsFijosInter + $segsCelurb + $segsCelinter + $segsInternac + $segsCeroOchos);
 // calculo minutos totales
 $minsTotales = date("H:i:s", mktime(0, 0, $segsTotales, 1, 1, 1970));
 //minutos totales por tipo
@@ -85,16 +94,24 @@ $minsTotalesFI = date("H:i:s", mktime(0, 0, $segsFijosInter, 1, 1, 1970));
 $minsTotalesCU = date("H:i:s", mktime(0, 0, $segsCelurb, 1, 1, 1970));
 $minsTotalesCI = date("H:i:s", mktime(0, 0, $segsCelinter, 1, 1, 1970));
 $minsTotalesI = date("H:i:s", mktime(0, 0, $segsInternac, 1, 1, 1970));
+$minsTotalesCO = date("H:i:s", mktime(0, 0, $segsCeroOchos, 1, 1, 1970));
 // precios totales por tipo de llam
-$costoTotalFU = round(($pfu * ceil(($segsFijosUrb / 60))), 2);
-$costoTotalFI = round(($pfi * ceil(($segsFijosInter / 60))), 2);
-$costoTotalCU = round(($pcu * ceil(($segsCelurb / 60))), 2);
-$costoTotalCI = round(($pci * ceil(($segsCelinter / 60))), 2);
-$costoTotalI = round(($pi * ceil(($segsInternac / 60))), 2);
+$arrDatos[5] = "fijosurb";
+$costoTotalFU = $ctlRep->traerPreciosTotales($arrDatos);
+$arrDatos[5] = "fijosinter";
+$costoTotalFI = $ctlRep->traerPreciosTotales($arrDatos);//round(($pfi * ceil(($segsFijosInter / 60))), 2);
+$arrDatos[5] = "celurb";
+$costoTotalCU = $ctlRep->traerPreciosTotales($arrDatos);
+$arrDatos[5] = "celinter";
+$costoTotalCI = $ctlRep->traerPreciosTotales($arrDatos);
+$arrDatos[5] = "internac";
+$costoTotalI = $ctlRep->traerPreciosTotales($arrDatos);
+$arrDatos[5] = "ceroochos";
+$costoTotalCO = $ctlRep->traerPreciosTotales($arrDatos);
 //calculo costo total
-$costoTotal = ($costoTotalCU + $costoTotalCI + $costoTotalFU + $costoTotalFI + $costoTotalI);
+$costoTotal = ($costoTotalCU + $costoTotalCI + $costoTotalFU + $costoTotalFI + $costoTotalI + $costoTotalCO);
 //fila 3
-$minsTotalesPorTipo = "<tr><td style='font-size: 16px;color: darkgreen'>Tiempo Consumido (hh:mm:ss)</td><td>$minsTotalesFU</td><td>$minsTotalesFI</td><td>$minsTotalesCU</td><td>$minsTotalesCI</td><td>$minsTotalesI</td><td style='color:darkred'>$minsTotales</td></tr>";
+$minsTotalesPorTipo = "<tr><td style='font-size: 16px;color: darkgreen'>Tiempo Consumido (hh:mm:ss)</td><td>$minsTotalesFU</td><td>$minsTotalesFI</td><td>$minsTotalesCU</td><td>$minsTotalesCI</td><td>$minsTotalesI</td><td>$minsTotalesCO</td><td style='color:darkred'>$minsTotales</td></tr>";
 //fila 4
 $costosTotalesPorTipo = "<tr>"
         . "<td style='font-size: 16px;color: darkgreen'>Costo Total ($)</td>"
@@ -103,6 +120,7 @@ $costosTotalesPorTipo = "<tr>"
         . "<td>$costoTotalCU</td>"
         . "<td>$costoTotalCI</td>"
         . "<td>$costoTotalI</td>"
+        . "<td>$costoTotalCO</td>"
         . "<td style='color:darkred'>$costoTotal</td>"
         . "</tr>";
 //traigo grupo para titulo
@@ -125,12 +143,14 @@ $filasFI = $ctlRep->llamsFijosInterurb($arrDatos, 1);
 $filasCU = $ctlRep->llamsCelsUrb($arrDatos, 1);
 $filasCI = $ctlRep->llamsCelsInterurb($arrDatos, 1);
 $filasI = $ctlRep->llamsInternac($arrDatos, 1);
+$filasCO = $ctlRep->llamsCeroOchos($arrDatos, 1);
 //creo el archivo csv para exportacion de reporte de llamadas
 $datosFU = $ctlRep->llamsFijosUrb($arrDatos, false);
 $datosFI = $ctlRep->llamsFijosInterurb($arrDatos, false);
 $datosCU = $ctlRep->llamsCelsUrb($arrDatos, false);
 $datosCI = $ctlRep->llamsCelsInterurb($arrDatos, false);
 $datosI = $ctlRep->llamsInternac($arrDatos, false);
+$datosCO = $ctlRep->llamsCeroOchos($arrDatos, false);
 $nombre_fichero = '/tmp/callsPlainReport.csv';
 $Columnas = $ctlRep->traerColumnas();
 $fileHandler = fopen($nombre_fichero, 'w');
@@ -150,7 +170,7 @@ foreach ($datosFU as $clave => $valor) {
             $cad .="$val,";
         } else if ($cla == 'dst') {
             $cad .="$val,";
-        } else if ($cla == 'duration') {
+        } else if ($cla == 'amount') {
             $cad .="$val,";
         } else if ($cla == 'billsec') {
             $cad .="$val,";
@@ -171,7 +191,7 @@ foreach ($datosFI as $clave => $valor) {
             $cad .="$val,";
         } else if ($cla == 'dst') {
             $cad .="$val,";
-        } else if ($cla == 'duration') {
+        } else if ($cla == 'amount') {
             $cad .="$val,";
         } else if ($cla == 'billsec') {
             $cad .="$val,";
@@ -192,7 +212,7 @@ foreach ($datosCU as $clave => $valor) {
             $cad .="$val,";
         } else if ($cla == 'dst') {
             $cad .="$val,";
-        } else if ($cla == 'duration') {
+        } else if ($cla == 'amount') {
             $cad .="$val,";
         } else if ($cla == 'billsec') {
             $cad .="$val,";
@@ -213,7 +233,7 @@ foreach ($datosCI as $clave => $valor) {
             $cad .="$val,";
         } else if ($cla == 'dst') {
             $cad .="$val,";
-        } else if ($cla == 'duration') {
+        } else if ($cla == 'amount') {
             $cad .="$val,";
         } else if ($cla == 'billsec') {
             $cad .="$val,";
@@ -234,7 +254,28 @@ foreach ($datosI as $clave => $valor) {
             $cad .="$val,";
         } else if ($cla == 'dst') {
             $cad .="$val,";
-        } else if ($cla == 'duration') {
+        } else if ($cla == 'amount') {
+            $cad .="$val,";
+        } else if ($cla == 'billsec') {
+            $cad .="$val,";
+        }
+    }
+    fwrite($fileHandler, $cad);
+}
+foreach ($datosCO as $clave => $valor) {
+    $cad = '';
+    foreach ($valor as $cla => $val) {
+        if ($cla == 'tipollm') {
+            $cad .= PHP_EOL . "$val,";
+        } else if ($cla == 'fecha') {
+            $cad .="$val,";
+        } else if ($cla == 'hora') {
+            $cad .="$val,";
+        } else if ($cla == 'src') {
+            $cad .="$val,";
+        } else if ($cla == 'dst') {
+            $cad .="$val,";
+        } else if ($cla == 'amount') {
             $cad .="$val,";
         } else if ($cla == 'billsec') {
             $cad .="$val,";
@@ -304,9 +345,9 @@ function ReverseAndReplace($fecha) {
                             <th>
                                 Destino
                             </th>
-                            <!--<th>
-                                Duracion
-                            </th>-->
+                            <th>
+                                Precio
+                            </th>
                             <th>
                                 Segundos Tarifados
                             </th>
@@ -318,6 +359,7 @@ function ReverseAndReplace($fecha) {
                                 echo $filasCU;
                                 echo $filasCI;
                                 echo $filasI;
+                                echo $filasCO;
                                 ?>
                             </tbody>
                         </table>
@@ -372,6 +414,9 @@ function ReverseAndReplace($fecha) {
                 </th>
                 <th>
                     Internacionales
+                </th>
+                <th>
+                    Cero Ochoscientos
                 </th>
                 <th>
                     Total

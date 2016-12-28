@@ -4,6 +4,8 @@ include '/var/www/html/dstswitch/config.php';
 include '/var/www/html/dstswitch/controllers/Ctl_Destiny.php';
 include '/var/www/html/dstswitch/controllers/Ctl_Pin.php';
 include '/var/www/html/dstswitch/controllers/Ctl_Group.php';
+include 'phpagi.php';
+include 'php-asmanager.php';
 
 $Agi = new AGI();
 $controllerDst = new Ctl_Destiny();

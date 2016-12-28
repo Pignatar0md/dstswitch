@@ -265,8 +265,9 @@ CREATE TABLE `mycdr` (
 `dst` varchar(80) NOT NULL,
 `billsec` int(11) NOT NULL,
 `accountcode` varchar(32) NOT NULL,
-`groupid` int(11) NOT NULL,
-`amount` float(4,2) DEFAULT NULL
+`userfield` int(11) DEFAULT NULL,
+`amount` float(4,2) DEFAULT NULL,
+`uniqueid` varchar(60) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

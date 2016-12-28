@@ -82,32 +82,32 @@ class Ctl_Report {
     function llamsFijosUrb($arr, $boolTable) {
         $resu = $this->mdlR->UrbanPhoneCallsReport($arr);
         $cad = '';
-        if($boolTable) {
-        foreach ($resu as $valor) {
-            if (is_array($valor)) {
-                foreach ($valor as $cla => $val) {
-                    if ($cla == 'tipollm') {
-                        $cad .="<tr><td>$val</td>";
-                    } else if ($cla == 'fecha') {
-                        $cad .="<td>$val</td>";
-                    } else if ($cla == 'hora') {
-                        $cad .="<td>$val</td>";
-                    } else if ($cla == 'src') {
-                        $cad .="<td>$val</td>";
-                    } else if ($cla == 'userfield') {
-                        $cad .="<td>$val</td>";
-                    } else if ($cla == 'dst') {
-                        $cad .="<td>$val</td>";
-                    } else if ($cla == 'duration') {
-                        //$cad .="<td>$val</td>";
-                    } else if ($cla == 'billsec') {
-                        $cad .="<td>$val</td></tr>";
+        if ($boolTable) {
+            foreach ($resu as $valor) {
+                if (is_array($valor)) {
+                    foreach ($valor as $cla => $val) {
+                        if ($cla == 'tipollm') {
+                            $cad .="<tr><td>$val</td>";
+                        } else if ($cla == 'fecha') {
+                            $cad .="<td>$val</td>";
+                        } else if ($cla == 'hora') {
+                            $cad .="<td>$val</td>";
+                        } else if ($cla == 'src') {
+                            $cad .="<td>$val</td>";
+                        } else if ($cla == 'userfield') {
+                            $cad .="<td>$val</td>";
+                        } else if ($cla == 'dst') {
+                            $cad .="<td>$val</td>";
+                        } else if ($cla == 'amount') {
+                            $cad .="<td>$val</td>";
+                        } else if ($cla == 'billsec') {
+                            $cad .="<td>$val</td></tr>";
+                        }
                     }
                 }
             }
-        }
-        return $cad;
-    } else {
+            return $cad;
+        } else {
             return $resu;
         }
     }
@@ -131,8 +131,8 @@ class Ctl_Report {
                             $cad .="<td>$val</td>";
                         } else if ($cla == 'dst') {
                             $cad .="<td>$val</td>";
-                        } else if ($cla == 'duration') {
-                          //  $cad .="<td>$val</td>";
+                        } else if ($cla == 'amount') {
+                              $cad .="<td>$val</td>";
                         } else if ($cla == 'billsec') {
                             $cad .="<td>$val</td></tr>";
                         }
@@ -164,8 +164,8 @@ class Ctl_Report {
                             $cad .="<td>$val</td>";
                         } else if ($cla == 'dst') {
                             $cad .="<td>$val</td>";
-                        } else if ($cla == 'duration') {
-                            //$cad .="<td>$val</td>";
+                        } else if ($cla == 'amount') {
+                            $cad .="<td>$val</td>";
                         } else if ($cla == 'billsec') {
                             $cad .="<td>$val</td></tr>";
                         }
@@ -176,6 +176,21 @@ class Ctl_Report {
         } else {
             return $res;
         }
+    }
+
+    function traerPreciosTotales($arrDatos) {
+        $res = $this->mdlR->sumTotalPrice($arrDatos);
+        $precio = '';
+        foreach ($res as $clave => $valor) {
+            if (is_array($valor)) {
+                foreach ($valor as $cla => $val) {
+                    $precio = $val;
+                }
+            } else {
+                $precio = $valor;
+            }
+        }
+        return $precio;
     }
 
     function llamsCelsInterurb($arr, $boolTable) {
@@ -194,11 +209,11 @@ class Ctl_Report {
                         } else if ($cla == 'src') {
                             $cad .="<td>$val</td>";
                         } else if ($cla == 'userfield') {
-                        $cad .="<td>$val</td>";
+                            $cad .="<td>$val</td>";
                         } else if ($cla == 'dst') {
                             $cad .="<td>$val</td>";
-                        } else if ($cla == 'duration') {
-                            //$cad .="<td>$val</td>";
+                        } else if ($cla == 'amount') {
+                            $cad .="<td>$val</td>";
                         } else if ($cla == 'billsec') {
                             $cad .="<td>$val</td></tr>";
                         }
@@ -230,8 +245,41 @@ class Ctl_Report {
                             $cad .="<td>$val</td>";
                         } else if ($cla == 'dst') {
                             $cad .="<td>$val</td>";
-                        } else if ($cla == 'duration') {
-                            //$cad .="<td>$val</td>";
+                        } else if ($cla == 'amount') {
+                            $cad .="<td>$val</td>";
+                        } else if ($cla == 'billsec') {
+                            $cad .="<td>$val</td></tr>";
+                        }
+                    }
+                }
+            }
+            return $cad;
+        } else {
+            return $res;
+        }
+    }
+    
+    function llamsCeroOchos($arr, $boolTable) {
+        $res = $this->mdlR->ZeroEightCallsReport($arr);
+        $cad = '';
+        if ($boolTable) {
+            foreach ($res as $clave => $valor) {
+                if (is_array($valor)) {
+                    foreach ($valor as $cla => $val) {
+                        if ($cla == 'tipollm') {
+                            $cad .="<tr><td>$val</td>";
+                        } else if ($cla == 'fecha') {
+                            $cad .="<td>$val</td>";
+                        } else if ($cla == 'hora') {
+                            $cad .="<td>$val</td>";
+                        } else if ($cla == 'src') {
+                            $cad .="<td>$val</td>";
+                        } else if ($cla == 'userfield') {
+                            $cad .="<td>$val</td>";
+                        } else if ($cla == 'dst') {
+                            $cad .="<td>$val</td>";
+                        } else if ($cla == 'amount') {
+                            $cad .="<td>$val</td>";
                         } else if ($cla == 'billsec') {
                             $cad .="<td>$val</td></tr>";
                         }
