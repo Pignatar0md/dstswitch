@@ -47,7 +47,7 @@ $(function () {
             console.log("Error al ejecutar => " + textStatus + " - " + errorThrown);
         }
     });
-    $.ajax({
+    $.ajax({// TRAE TODOS LOS DESTINOS PARA EL LISTADO
         url: 'controllers/Ctl_Destiny.php',
         type: 'POST',
         dataType: "html",
@@ -63,7 +63,7 @@ $(function () {
             console.log("Error al ejecutar => " + textStatus + " - " + errorThrown);
         }
     });
-    $.ajax({
+    $.ajax({// TRAE TODOS LOS GRUPOS PARA EL LISTADO
         url: 'controllers/Ctl_Group.php',
         type: 'POST',
         dataType: "html",
@@ -139,11 +139,11 @@ $(function () {
             contentType: "application/json",
             data: {json: JSON.stringify(datos)},
             success: function (msg) {
-                window.location.href = "index.php?page=ListGroup";
+              window.location.href = "index.php?page=ListGroup";
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                debugger;
-                console.log("Error al ejecutar => " + textStatus + " - " + errorThrown);
+              debugger;
+              console.log("Error al ejecutar => " + textStatus + " - " + errorThrown);
             }
         });
 //        } else {
@@ -342,6 +342,7 @@ $(function () {
     });
 
     function fillBoxes(id) {
+        console.log(id);
         $.ajax({
             url: 'controllers/Ctl_Group.php',
             type: 'GET',
@@ -355,9 +356,7 @@ $(function () {
                 var Jarrpins = json.pines[0];
                 var Jarrdsts = json.destinos[0];
                 var arrexts = [];
-                /*        for (var x in Jarrexts) {
-                 arrexts.push(Jarrexts[x]);
-                 }*/
+                
                 var arrpins = [];
                 for (var x in Jarrpins) {
                     arrpins.push(Jarrpins[x]);

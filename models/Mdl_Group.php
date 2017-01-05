@@ -1,6 +1,8 @@
 <?php
+
 include_once '../config.php';
 include_once '../helpers/bd_helper.php';
+
 /**
  * Description of Mdl_Group
  *
@@ -52,7 +54,8 @@ class Mdl_Group {
             $res = $query->execute();
         }
 
-        $sql = "update tarifa_destino set id_grupo = $arrData[0] where id_tarifa = $arrData[4]";
+        $sql = "insert into tarifaDestino_grupo (id_tarifaDestino, id_grupo) 
+                values ($arrData[4], $arrData[0])";
         $query = $cnn->prepare($sql);
         $res = $query->execute();
 
@@ -64,6 +67,7 @@ class Mdl_Group {
         $query = $cnn->prepare($sql);
         $query->execute();
         $cnn = NULL;
+        return $res;
     }
 
     function Quit($fromDB, $toDB) {
@@ -170,7 +174,7 @@ class Mdl_Group {
         }
         $sql = "select id from pin where id_grupo = :id";
         $query = $cnn->prepare($sql);
-        $query->bindParam(":id", $arrData[0]);
+        $query->bindParam(":id", $id);
         $query->execute();
         $Pines = $query->fetchAll(PDO::FETCH_ASSOC);
         if ($Pines) {
@@ -202,26 +206,16 @@ class Mdl_Group {
                 $query->bindParam(":idp", $val);
                 $query->execute();
             }
-        }
-        $sql = "update tarifa_destino set id_tarifa = $arrData[5] where id_grupo = $id";
+        }$sql = "update tarifaDestino_grupo set id_tarifaDestino = :idtd where id_grupo = :idg";
         $query = $cnn->prepare($sql);
-        $query->execute();return $sql;
+        $query->bindParam(":idg", $id);
+        $query->bindParam(":idtd", $arrData[5]);
+        $query->execute();
         $cnn = NULL;
     }
 
     function delete($arrData) {
-        $sql = "delete from grupo where id = :id";
-        try {
-            $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
-            $query = $cnn->prepare($sql);
-            $query->bindParam(":id", $arrData[0]);
-            $query->execute();
-            $result = $query->fetchAll(PDO::FETCH_ASSOC);
-            $cnn = NULL;
-        } catch (PDOException $ex) {
-            return $ex->getMessage();
-        }
-        $sql = "update tarifa_destino set id_grupo = null where id_grupo = :id";
+        $sql = "delete from tarifaDestino_grupo where id_grupo = :id";
         try {
             $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
             $query = $cnn->prepare($sql);
@@ -265,6 +259,18 @@ class Mdl_Group {
         } catch (PDOException $ex) {
             return $ex->getMessage();
         }
+        $sql = "delete from grupo where id = :id";
+        try {
+            $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
+            $query = $cnn->prepare($sql);
+            $query->bindParam(":id", $arrData[0]);
+            $query->execute();
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);
+            $cnn = NULL;
+        } catch (PDOException $ex) {
+            return $ex->getMessage();
+        }
+        
     }
 
     function select() { // usado para el list group
@@ -354,8 +360,8 @@ class Mdl_Group {
             $query->bindParam(':id', $id);
             $query->execute();
             $resultArr[2] = $query->fetchAll(PDO::FETCH_ASSOC);
-            $sql = "select id_tarifa from tarifa_destino 
-                            where id_grupo = :id";
+            $sql = "select id_tarifa from tarifa_destino td join tarifaDestino_grupo tDg on 
+                           td.id_tarifa = tDg.id_tarifaDestino and tDg.id_grupo = :id";
             $query = $cnn->prepare($sql);
             $query->bindParam(':id', $id);
             $query->execute();

@@ -80,18 +80,10 @@ class Mdl_Billing {
     function PasteCDR($ObjData) {
         $FilaCDR = new BillingRow(0, 0, 0, 0, 0, 0, 0, 0);
         $FilaCDR = $ObjData;
-//        $sql = "insert into mycdr(calldate, src, dst, billsec, accountcode, groupid, amount) "
-//                . "values(:calldate, :src, :dst, :billsec, :accountcode, :uniqueid, :groupid, NULL)";
         $sql = "insert into mycdr(calldate, src, dst, billsec, accountcode, userfield, amount, uniqueid) "
                 . "values('".  $FilaCDR->getCalldate() ."', '".$FilaCDR->getSource()."', '".$FilaCDR->getDest()."', '".$FilaCDR->getBillingsec()."', '".$FilaCDR->getAccountcode()."',".$FilaCDR->getUserfield().", NULL,'".$FilaCDR->getUniqueid()."')";
         $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
         $query = $cnn->prepare($sql);
-        /*$query->bindParam(":calldate", $FilaCDR->getCalldate());
-        $query->bindParam(":src", $FilaCDR->getSource());
-        $query->bindParam(":dst", $FilaCDR->getDest());
-        $query->bindParam(":billsec", $FilaCDR->getBillingsec());
-        $query->bindParam(":accountcode", $FilaCDR->getAccountcode());
-        $query->bindParam(":groupid", $FilaCDR->getGroupid());*/
         $query->execute();
     }
 
@@ -125,7 +117,7 @@ class Mdl_Billing {
     }
 
     function update($arrData) {
-        // Actualizo la descripcionde la tarifa
+        // Actualizo la descripcion de la tarifa
         $sql = "update tarifa set descr = :descr where id = :id";
         $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
         $query = $cnn->prepare($sql);
@@ -229,8 +221,8 @@ class Mdl_Billing {
     function getPrice($idg, $idd) {
         try {
             $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
-            $sql = "select precio from tarifa_destino 
-                where id_destino = :Idd and id_grupo = :id";
+            $sql = "select precio from tarifa_destino td join tarifaDestino_grupo tDg
+                on td.id = tDg.id_tarifaDestino_grupo and td.id_destino = :Idd and tDg.id_grupo = :id";
             $query = $cnn->prepare($sql);
             $query->bindParam(":id", $idg);
             $query->bindParam(":Idd", $idd);
@@ -246,8 +238,8 @@ class Mdl_Billing {
     function getPricePerMinute($arrData) {
         try {
             $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
-            $sql = "select precio from tarifa_destino 
-                where id_destino = $arrData[1] and id_grupo = ".$arrData[0];
+            $sql = "select precio from tarifa_destino td join tarifaDestino_grupo tDg
+                on td.id = tDg.id_tarifaDestino_grupo and td.id_destino = $arrData[1] and tDg.id_grupo = ".$arrData[0];
             $query = $cnn->prepare($sql);
             $query->execute();
             $result = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -261,8 +253,8 @@ class Mdl_Billing {
     function getMinimalPrice($arrData) {
         try {
             $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
-            $sql = "select precio_minimo from tarifa_destino 
-                where id_destino = :Idd and id_grupo = :idg";
+            $sql = "select precio_minimo from tarifa_destino td join tarifaDestino_grupo tDg
+                on td.id = tDg.id_tarifaDestino_grupo and td.id_destino = :Idd and tDg.id_grupo = :id";
             $query = $cnn->prepare($sql);
             $query->bindParam(":idg", $arrData[0]);
             $query->bindParam(":Idd", $arrData[1]);
@@ -278,8 +270,8 @@ class Mdl_Billing {
     function getTimeMinimalPrice($arrData) {
         try {
             $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
-            $sql = "select tiempo_precio_minimo from tarifa_destino 
-                where id_destino = :Idd and id_grupo = :idg";
+            $sql = "select tiempo_precio_minimo from tarifa_destino td join tarifaDestino_grupo tDg
+                on td.id = tDg.id_tarifaDestino_grupo and td.id_destino = :Idd and tDg.id_grupo = :id";
             $query = $cnn->prepare($sql);
             $query->bindParam(":idg", $arrData[0]);
             $query->bindParam(":Idd", $arrData[1]);
@@ -326,7 +318,10 @@ class Mdl_Billing {
     }
 
     function getBillingName($idg) {
-        $sql = "SELECT distinct trf.descr  as billName FROM tarifa trf join tarifa_destino trds on trf.id = trds.id_tarifa join grupo gr on trds.id_grupo = gr.id and gr.id = :id";
+        $sql = "SELECT distinct trf.descr as billName 
+                FROM tarifa trf JOIN tarifa_destino trds ON trf.id = trds.id_tarifa 
+                JOIN tarifaDestino_grupo tDg ON trds.id = tDg.id_tarifaDestino_grupo 
+                JOIN grupo gr ON tDg.id_grupo = gr.id AND gr.id = :id";//join grupo gr on trds.id_grupo = gr.id and gr.id = :id";
         try {
             $cnn = new PDO($this->argPdo, MySQL_USER, MySQL_PASS);
             $query = $cnn->prepare($sql);
@@ -345,13 +340,11 @@ class Mdl_Billing {
         foreach ($ArrBillDestObj as $ObjBillDest) {
             $BllDst = $ObjBillDest;
             $sql = "insert into tarifa_destino (id_destino, 
-                                                id_grupo, 
                                                 id_tarifa, 
                                                 precio, 
                                                 precio_minimo, 
                                                 tiempo_precio_minimo) 
                                         values (" . $BllDst->getDest_id() . ","
-                    . $BllDst->getGroup_id() . ","
                     . $BllDst->getBilling_id() . ","
                     . $BllDst->getMinute_price() . ","
                     . $BllDst->getMinimal_price() . ","

@@ -78,8 +78,8 @@ CREATE TABLE `grupo_dest` (
   PRIMARY KEY (`id`),
   KEY `id_grupo` (`id_grupo`),
   KEY `id_dest` (`id_dest`),
-  CONSTRAINT `grupo_dest_ibfk_1` FOREIGN KEY (`id_grupo`) REFERENCES `grupo` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  CONSTRAINT `grupo_dest_ibfk_2` FOREIGN KEY (`id_dest`) REFERENCES `destiny` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+  CONSTRAINT `grupo_dest_ibfk_1` FOREIGN KEY (`id_grupo`) REFERENCES `grupo` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `grupo_dest_ibfk_2` FOREIGN KEY (`id_dest`) REFERENCES `destiny` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -129,7 +129,7 @@ CREATE TABLE `grupo_exten` (
   UNIQUE (`exten`), 
   PRIMARY KEY (`id`),
   KEY `id_grupo` (`id_grupo`),
-  CONSTRAINT `grupo_exten_ibfk_1` FOREIGN KEY (`id_grupo`) REFERENCES `grupo` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+  CONSTRAINT `grupo_exten_ibfk_1` FOREIGN KEY (`id_grupo`) REFERENCES `grupo` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -157,7 +157,7 @@ CREATE TABLE `pin` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `pinNumber_UNIQUE` (`pinNumber`),
   KEY `id_grupo` (`id_grupo`),
-  CONSTRAINT `pin_ibfk_1` FOREIGN KEY (`id_grupo`) REFERENCES `grupo` (`id`) ON DELETE SET NULL ON UPDATE NO ACTION
+  CONSTRAINT `pin_ibfk_1` FOREIGN KEY (`id_grupo`) REFERENCES `grupo` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -204,17 +204,14 @@ CREATE TABLE `tarifa_destino` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_destino` int(11) NOT NULL,
   `id_tarifa` int(11) NOT NULL,
-  `id_grupo` int(11) DEFAULT NULL,
   `precio` float(5,2) DEFAULT NULL,
   `precio_minimo` FLOAT(5,2) NULL,
   `tiempo_precio_minimo` INT(11),
   PRIMARY KEY (`id`),
   KEY `id_destino` (`id_destino`),
   KEY `id_tarifa` (`id_tarifa`),
-  KEY `id_grupo` (`id_grupo`),
   CONSTRAINT `tarifa_destino_ibfk_1` FOREIGN KEY (`id_destino`) REFERENCES `destiny` (`id`),
-  CONSTRAINT `tarifa_destino_ibfk_2` FOREIGN KEY (`id_tarifa`) REFERENCES `tarifa` (`id`),
-  CONSTRAINT `tarifa_destino_ibfk_3` FOREIGN KEY (`id_grupo`) REFERENCES `grupo` (`id`)
+  CONSTRAINT `tarifa_destino_ibfk_2` FOREIGN KEY (`id_tarifa`) REFERENCES `tarifa` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -225,6 +222,30 @@ CREATE TABLE `tarifa_destino` (
 LOCK TABLES `tarifa_destino` WRITE;
 /*!40000 ALTER TABLE `tarifa_destino` DISABLE KEYS */;
 /*!40000 ALTER TABLE `tarifa_destino` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tarifaDestino_Grupo`
+--
+
+DROP TABLE IF EXISTS `tarifaDestino_grupo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tarifaDestino_grupo` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_tarifaDestino` int(11) NOT NULL,
+  `id_grupo` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_grupo` (`id_grupo`),
+  KEY `id_tarifaDestino` (`id_tarifaDestino`),
+  CONSTRAINT `tarifaDestino_grupo_ibfk_1` FOREIGN KEY (`id_tarifaDestino`) REFERENCES `tarifa_destino` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `tarifaDestino_grupo_ibfk_2` FOREIGN KEY (`id_grupo`) REFERENCES `grupo` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+LOCK TABLES `tarifaDestino_grupo` WRITE;
+/*!40000 ALTER TABLE `tarifaDestino_grupo` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tarifaDestino_grupo` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
