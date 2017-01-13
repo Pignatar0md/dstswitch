@@ -26,6 +26,8 @@ $precioCelUrb = $ctlRep->traerPrecioId($arrDatos[0], '3');
 $precioCelInter = $ctlRep->traerPrecioId($arrDatos[0], '4');
 $precioInternac = $ctlRep->traerPrecioId($arrDatos[0], '5');
 $precioCeroOcho = $ctlRep->traerPrecioId($arrDatos[0], '6');
+echo $precioFijosUrb;echo $precioFijosInter;echo $precioCelUrb; echo $precioCelInter; echo $precioInternac;
+echo $precioCeroOcho;
 //extraigo los valores de las tarifas
 foreach ($precioFijosUrb as $clave => $valor) {
     $pfu = $valor['precio'];
